@@ -11,6 +11,8 @@ public class Stacker {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setTitle("Construction Crane Chaos");
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
 		
 	}
 

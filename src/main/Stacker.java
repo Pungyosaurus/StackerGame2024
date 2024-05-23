@@ -25,7 +25,7 @@ public class Stacker extends GamePanel{
 	}
 	
 	public void setup() {
-		System.out.println("HsI");
+		System.out.println("HsdfssI");
 	}
 	
 	public void update() {

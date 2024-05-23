@@ -14,8 +14,16 @@ public class Stacker {
 		window.setTitle("Construction Crane Chaos");
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-		System.out.println("coomasdlk;fjasdlfkj");
 		
+		GamePanel gamePanel = new GamePanel();
+		window.add(gamePanel);
+		
+		window.pack();
+		
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+		
+		gamePanel.startGameThread();		
 	}
 
 }

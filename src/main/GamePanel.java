@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -75,7 +77,22 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 
 	}
+	/**
+	 * paintComponent() handles the graphics of the program<br>
+	 * pre: none<br>
+	 * post: tileM, cannon, target, ui, and bar should be drawn and disposed each frame
+	 */
 
+		public void paintComponent(Graphics g) {
+
+			super.paintComponent(g);
+
+			Graphics2D g2 = (Graphics2D) g;
+
+
+
+			g2.dispose();
+		}
 	private void update() {
 		// TODO Auto-generated method stub
 		

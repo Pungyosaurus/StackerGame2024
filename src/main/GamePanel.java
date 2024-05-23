@@ -93,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 			g2.dispose();
 		}
-	private void update() {
+	public void update() {
 		// TODO Auto-generated method stub
 		
 	}

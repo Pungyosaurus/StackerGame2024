@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ import entities.Ground;
 public class Stacker extends GamePanel{
 
 	private Ground ground;
-	private BufferedImage iGround;
+	private BufferedImage iGround, resizediGround;
 
 	
 	public static void main(String[] args) {
@@ -40,18 +42,31 @@ public class Stacker extends GamePanel{
 	public void getImages(){
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
-//			resizedBricks = bricks.getScaledInstance(width, length, Image.SCALE_SMOOTH);
+			// Image is 800x600 and needs to be scaled down			
+            resizediGround = resizeImage(iGround, 160, 120);
+			//resizediGround = iGround.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+        BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.drawImage(originalImage, 0, 0, width, height, null);
+        g2d.dispose();
+        return resizedImage;
+    }
 	
 	public void setup() {
 		
 		getImages();
 		
 		
-		ground = new Ground(100, 100, iGround);
+		ground = new Ground(200, 150, resizediGround);
 		ground.setX(100);
 		ground.setY(100);
 		ground.setColor(Color.blue);

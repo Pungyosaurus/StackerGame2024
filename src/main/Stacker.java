@@ -29,7 +29,7 @@ public class Stacker extends GamePanel{
 	}
 	
 	public void update() {
-		System.out.println("pooo");
+		System.out.println("poooS");
 	}
 	
 	

@@ -39,7 +39,7 @@ public class Stacker extends GamePanel{
 	
 	public void getImages(){
 		try {
-			iGround = ImageIO.read(getClass().getResourceAsStream("IsoGround.png"));
+			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
 //			resizedBricks = bricks.getScaledInstance(width, length, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			e.printStackTrace();

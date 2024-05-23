@@ -1,7 +1,11 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import entities.Ground;
@@ -9,6 +13,9 @@ import entities.Ground;
 public class Stacker extends GamePanel{
 
 	private Ground ground;
+	private BufferedImage iGround;
+
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -30,8 +37,20 @@ public class Stacker extends GamePanel{
 		stacker.startGameThread();		
 	}
 	
+	public void getImages(){
+		try {
+			iGround = ImageIO.read(getClass().getResourceAsStream(""));
+			resizedBricks = bricks.getScaledInstance(width, length, Image.SCALE_SMOOTH);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void setup() {
-		System.out.println("HsdfssI");
+		
+		getImages();
+		
+		
 		ground = new Ground(100, 100, null);
 		ground.setX(100);
 		ground.setY(100);

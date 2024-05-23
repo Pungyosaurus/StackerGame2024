@@ -37,8 +37,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public void startGameThread() {
 		this.frame = new JFrame();
 		gameThread = new Thread(this);
-		gameThread.start();
 		setup();
+		gameThread.start();
 
 	}
 
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 			if (delta >= 1) {
 				update();
-				repaint();
+//				repaint();
 				delta--;
 				drawCount++;
 			}

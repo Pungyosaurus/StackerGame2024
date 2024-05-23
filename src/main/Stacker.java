@@ -21,6 +21,7 @@ public class Stacker extends GamePanel{
 		Stacker stacker = new Stacker();
 		window.add(stacker);
 		
+	
 		window.pack();
 		
 		window.setLocationRelativeTo(null);
@@ -39,7 +40,8 @@ public class Stacker extends GamePanel{
 	}
 	
 	public void update() {
-//		ground.setX(ground.getX() + 1);
+		System.out.println(ground);
+		ground.setX(ground.getX()+1);
 		
 	}
 	

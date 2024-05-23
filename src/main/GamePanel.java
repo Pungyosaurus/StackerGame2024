@@ -77,11 +77,7 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 
 	}
-	/**
-	 * paintComponent() handles the graphics of the program<br>
-	 * pre: none<br>
-	 * post: tileM, cannon, target, ui, and bar should be drawn and disposed each frame
-	 */
+
 
 //		public void paintComponent(Graphics g) {
 //

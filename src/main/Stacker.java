@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
 import entities.Ground;
@@ -32,10 +34,12 @@ public class Stacker extends GamePanel{
 		ground = new Ground(100,100,null);
 		ground.setX(100);
 		ground.setY(100);
+		ground.setColor(Color.blue);
 		add(ground);
 	}
 	
 	public void update() {
+//		ground.setX(ground.getX() + 1);
 		
 	}
 	

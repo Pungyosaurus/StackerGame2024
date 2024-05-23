@@ -31,7 +31,7 @@ public class Stacker extends GamePanel{
 	
 	public void setup() {
 		System.out.println("HsdfssI");
-		ground = new Ground(100,100,null);
+		ground = new Ground(100, 100, null);
 		ground.setX(100);
 		ground.setY(100);
 		ground.setColor(Color.blue);
@@ -39,7 +39,7 @@ public class Stacker extends GamePanel{
 	}
 	
 	public void update() {
-//		ground.setX(ground.getX() + 1);
+		ground.setX(400);
 		
 	}
 	

@@ -8,6 +8,7 @@ public class Stacker {
 		// TODO Auto-generated method stub
 		System.out.println("kalsdfj;lkasdjfsk davebettersersedfsdfsffs");
 		System.out.println("sfdfsdfsdfsdfsdf");
+
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);

@@ -43,14 +43,14 @@ public class Stacker extends GamePanel{
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
 			// Image is 800x600 and needs to be scaled down	
-            resizediGround = resizeImage(iGround, 120, 90);
+            resizediGround = resizeBuffImage(iGround, 120, 90);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+	private BufferedImage resizeBuffImage(BufferedImage originalImage, int width, int height) {
         Image temp = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         resizedImage.getGraphics().drawImage(temp, 0, 0, null);

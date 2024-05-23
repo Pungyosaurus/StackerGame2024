@@ -19,23 +19,17 @@ public class Stacker extends GamePanel{
 
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setTitle("Construction Crane Chaos");
-		
+		window.setUndecorated(true);
 		Stacker stacker = new Stacker();
 		window.add(stacker);
-		
-	
 		window.pack();
-		
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-		
 		stacker.startGameThread();		
 	}
 	

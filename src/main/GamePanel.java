@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,18 +14,22 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final int FPS = 60;
 	private JFrame frame;
 	private Thread gameThread;
+	
+	// Screen Settings
 	private final int originalTileSize = 16;
 	private final int scale = 3;
-
-	private final int tileSize = originalTileSize * scale;
+	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	final static double screenWidth = screenSize.getWidth();
+	final static double screenHeight = screenSize.getHeight();
+	private final int tileSize = originalTileSize / scale;
 	private final int maxScreenCol = 24;
 	private final int maxScreenRow = 14;
-	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
-	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
+//	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
+//	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
 	private long startTime;
 
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+		this.setPreferredSize(screenSize);
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.setFocusable(true);

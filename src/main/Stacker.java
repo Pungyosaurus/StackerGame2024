@@ -2,7 +2,7 @@ package main;
 
 import javax.swing.JFrame;
 
-public class Stacker {
+public class Stacker extends GamePanel{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -13,15 +13,26 @@ public class Stacker {
 		window.setResizable(false);
 		window.setTitle("Construction Crane Chaos");
 		
-		GamePanel gamePanel = new GamePanel();
-		window.add(gamePanel);
+		Stacker stacker = new Stacker();
+		window.add(stacker);
 		
 		window.pack();
 		
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 		
-		gamePanel.startGameThread();		
+		stacker.startGameThread();		
 	}
+	
+	public void setup() {
+		System.out.println("HI");
+	}
+	
+	public void update() {
+		System.out.println("pooo");
+	}
+	
+	
+	
 
 }

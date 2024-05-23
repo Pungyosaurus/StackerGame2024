@@ -40,8 +40,6 @@ public class Stacker extends GamePanel{
 	}
 	
 	public void update() {
-		ground.setX(400);
-		System.out.println(ground);
 		ground.setX(ground.getX()+1);
 		
 	}

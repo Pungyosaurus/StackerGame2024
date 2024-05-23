@@ -2,8 +2,11 @@ package main;
 
 import javax.swing.JFrame;
 
+import entities.Ground;
+
 public class Stacker extends GamePanel{
 
+	private Ground ground;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -26,10 +29,14 @@ public class Stacker extends GamePanel{
 	
 	public void setup() {
 		System.out.println("HsdfssI");
+		ground = new Ground(100,100,null);
+		ground.setX(100);
+		ground.setY(100);
+		add(ground);
 	}
 	
 	public void update() {
-		System.out.println("poooS");
+		
 	}
 	
 	

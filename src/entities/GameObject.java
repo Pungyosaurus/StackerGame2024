@@ -168,7 +168,9 @@ public abstract class GameObject extends JComponent {
 		// if no image set, then just draw a rectangle
 		if (sprite == null) {
 			g.setColor(c);
+			System.out.println("porint");
 			g.fillRect(0, 0, (int) getBounds().getWidth(), (int) getBounds().getHeight());
+//			g.fillRect(10, 10, 100, 100);
 		} else {
 			try {
 				AffineTransform at = new AffineTransform();

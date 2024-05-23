@@ -83,15 +83,15 @@ public class GamePanel extends JPanel implements Runnable {
 	 * post: tileM, cannon, target, ui, and bar should be drawn and disposed each frame
 	 */
 
-		public void paintComponent(Graphics g) {
-
-			super.paintComponent(g);
-
-			Graphics2D g2 = (Graphics2D) g;
-
-
-			g2.dispose();
-		}
+//		public void paintComponent(Graphics g) {
+//
+//			super.paintComponent(g);
+//
+//			Graphics2D g2 = (Graphics2D) g;
+//
+//
+//			g2.dispose();
+//		}
 	public void update() {
 		// TODO Auto-generated method stub
 		

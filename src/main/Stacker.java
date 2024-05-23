@@ -12,10 +12,16 @@ public class Stacker {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setTitle("Construction Crane Chaos");
+		
+		GamePanel gamePanel = new GamePanel();
+		window.add(gamePanel);
+		
+		window.pack();
+		
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-		System.out.println("coomasdlk;fjasdlfkj");
 		
+		gamePanel.startGameThread();		
 	}
 
 }

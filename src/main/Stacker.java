@@ -42,31 +42,38 @@ public class Stacker extends GamePanel{
 	public void getImages(){
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
-			// Image is 800x600 and needs to be scaled down			
-            resizediGround = resizeImage(iGround, 160, 120);
-			//resizediGround = iGround.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+			// Image is 800x600 and needs to be scaled down	
+            resizediGround = resizeImage(iGround, 120, 90);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
-        BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
-        Graphics2D g2d = resizedImage.createGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(originalImage, 0, 0, width, height, null);
-        g2d.dispose();
+        Image temp = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        resizedImage.getGraphics().drawImage(temp, 0, 0, null);
         return resizedImage;
-    }
+	}
+	
+//	private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+//        BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
+//        Graphics2D g2d = resizedImage.createGraphics();
+//        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+//        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+//        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        g2d.drawImage(originalImage, 0, 0, width, height, null);
+//        g2d.dispose();
+//        return resizedImage;
+//    }
 	
 	public void setup() {
 		
 		getImages();
 		
 		
-		ground = new Ground(200, 150, resizediGround);
+		ground = new Ground(120, 90, resizediGround);
 		ground.setX(100);
 		ground.setY(100);
 		ground.setColor(Color.blue);
@@ -74,7 +81,8 @@ public class Stacker extends GamePanel{
 	}
 	
 	public void update() {
-		ground.setX(ground.getX()+1);
+		ground.setX(400);
+//		ground.setX(ground.getX()+1);
 		
 	}
 	

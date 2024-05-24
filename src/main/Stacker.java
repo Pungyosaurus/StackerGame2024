@@ -55,6 +55,7 @@ public class Stacker extends GamePanel{
 		ground.setY(100);
 		ground.setColor(Color.blue);
 		add(ground);
+		System.out.println("hi dave");
 	}
 	
 	public void update() {

@@ -4,8 +4,9 @@ import java.awt.image.BufferedImage;
 
 public class Ground extends GameObject{
 
-	public Ground(int w, int h, BufferedImage image) {
-		super(w, h, image);
+	public Ground(int x, int y, int w, int h, BufferedImage image) {
+		super(x, y, w, h, image);
+		
         BufferedImage resizediGround = resizeBuffImage(image, w, h);
         setSprite(resizediGround);
 		// TODO Auto-generated constructor stub

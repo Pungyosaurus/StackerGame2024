@@ -10,12 +10,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import entities.Crane;
 import entities.Ground;
 
 public class Stacker extends GamePanel{
 
 	private Ground ground;
-	private BufferedImage iGround, resizediGround;
+	private BufferedImage iGround, iCrane;
 
 	
 	public static void main(String[] args) {
@@ -36,7 +37,7 @@ public class Stacker extends GamePanel{
 	public void getImages(){
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
-			// Image is 800x600 and needs to be scaled down	
+			iCrane = ImageIO.read(getClass().getResourceAsStream("/crane.jpg"));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,15 +48,11 @@ public class Stacker extends GamePanel{
 	public void setup() {
 		
 		getImages();
+		Crane crane1 = new Crane(800, 800, iCrane);
 		
-		
-		ground = new Ground(120, 90, iGround);
-//		ground.setSprite("/IsoGround.png");
-		ground.setX(100);
-		ground.setY(100);
+		ground = new Ground(100, 100, 120, 90, iGround);
 		ground.setColor(Color.blue);
 		add(ground);
-		System.out.println("hi dave");
 	}
 	
 	public void update() {

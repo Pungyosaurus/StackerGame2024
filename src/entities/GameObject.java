@@ -28,6 +28,19 @@ public abstract class GameObject extends JComponent {
 		setSize(w, h);
 		sprite = image;
 	}
+	/**
+	 * Overloaded constructor!
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param image
+	 */
+	public GameObject(int x, int y, int w, int h, BufferedImage image) {
+		this(w, h, image);
+		setX(x);
+		setY(y);
+	}
 
 	public void setSize(int width, int height) {
 		super.setSize(width, height);

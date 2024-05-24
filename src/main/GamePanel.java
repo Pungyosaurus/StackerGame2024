@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private final int tileSize = originalTileSize / scale;
 	private final int maxScreenCol = 24;
 	private final int maxScreenRow = 14;
+    private BufferedImage backgroundImage;
 //	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
 //	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
 
@@ -81,8 +84,21 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 
 	}
+	
+	public void setBackgroundImage(BufferedImage backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+	
+	public void paintComponent(Graphics g) {
+		
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
 
+        if (backgroundImage != null) {
+            g2.drawImage(backgroundImage, 0, 0, (int)screenWidth, (int)screenHeight, null);
+        }
 
+	}
 	public void update() {
 		// TODO Auto-generated method stub
 		

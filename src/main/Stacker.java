@@ -19,7 +19,7 @@ public class Stacker extends GamePanel{
 	private Ground ground;
 	private Crane crane1;
 	private KeyHandler keyH;
-	private BufferedImage iGround, iCrane;
+	private BufferedImage background, iGround, iCrane;
 
 	
 	public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class Stacker extends GamePanel{
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
-
+			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -49,10 +49,11 @@ public class Stacker extends GamePanel{
 	
 	
 	public void setup() {
-		
 		keyH = new KeyHandler();
 		
 		getImages();
+		setBackgroundImage(background);
+		
 		int startCraneX = (int)(screenWidth / 8);
 		int startCraneY = (int)(screenHeight / 8);
 		

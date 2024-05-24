@@ -143,7 +143,7 @@ public abstract class GameObject extends JComponent {
 	public BufferedImage setSprite(String fileName) {
 		Image image = null;
 		try {
-			image = ImageIO.read(new File("img/" + fileName));
+			image = ImageIO.read(getClass().getResourceAsStream(fileName));
 		} catch (IOException e) {
 		}
 
@@ -162,6 +162,18 @@ public abstract class GameObject extends JComponent {
 		g2d.drawImage(image, 0, 0, null);
 		g2d.dispose();
 		return bufferedImage;
+	}
+	
+	public void setSprite(BufferedImage image) {
+		sprite = image;
+	}
+	
+	
+	public BufferedImage resizeBuffImage(BufferedImage originalImage, int width, int height) {
+        Image temp = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        resizedImage.getGraphics().drawImage(temp, 0, 0, null);
+        return resizedImage;
 	}
 
 	public void paintComponent(Graphics g) {

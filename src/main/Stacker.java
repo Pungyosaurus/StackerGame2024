@@ -13,12 +13,14 @@ import javax.swing.JFrame;
 import entities.Crane;
 import entities.Ground;
 import listeners.KeyHandler;
+import listeners.MouseHandler;
 
 public class Stacker extends GamePanel{
 
 	private Ground ground;
 	private Crane crane1;
 	private KeyHandler keyH;
+	private MouseHandler mouseH;
 	private BufferedImage background, iGround, iCrane;
 
 	
@@ -50,7 +52,9 @@ public class Stacker extends GamePanel{
 	
 	public void setup() {
 		keyH = new KeyHandler();
-		
+		mouseH = new MouseHandler();
+		addMouseListener(mouseH);
+
 		getImages();
 		setBackgroundImage(background);
 		
@@ -69,7 +73,11 @@ public class Stacker extends GamePanel{
 	
 	public void update() {
 		
-		
+		if(mouseH.isClicked() == true) {
+			mouseH.setClicked(false);
+			System.out.println("clicked");
+			
+		}
 		ground.setX(400);
 //		ground.setX(ground.getX()+1);
 		

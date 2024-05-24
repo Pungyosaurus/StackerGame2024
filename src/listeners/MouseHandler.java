@@ -5,7 +5,7 @@ import java.awt.event.MouseListener;
 
 public class MouseHandler implements MouseListener{
 
-	private boolean pressed, released, running;
+	private boolean clicked, pressed, released;
 	private static int mouseX, mouseY;
 	
 /**
@@ -14,7 +14,6 @@ public class MouseHandler implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		pressed = true;
-		running = true;
 		mouseX = e.getX();
 		mouseY = e.getY();
 
@@ -30,17 +29,34 @@ public class MouseHandler implements MouseListener{
 	}
 
 	
-	// Ignore these methods, they are not being used
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		setClicked(true);
+//		mouseX = e.getX();
+//		mouseY = e.getY();
 	}
+	
+	// Ignore these methods, they are not being used
+
 	@Override
 	public void mouseEntered(MouseEvent e) {		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {	
+	}
+	/**
+	 * @return the clicked
+	 */
+	public boolean isClicked() {
+		return clicked;
+	}
+	/**
+	 * @param clicked the clicked to set
+	 */
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
 	}
 
 }

@@ -12,10 +12,13 @@ import javax.swing.JFrame;
 
 import entities.Crane;
 import entities.Ground;
+import listeners.KeyHandler;
 
 public class Stacker extends GamePanel{
 
 	private Ground ground;
+	private Crane crane1;
+	private KeyHandler keyH;
 	private BufferedImage iGround, iCrane;
 
 	
@@ -37,7 +40,7 @@ public class Stacker extends GamePanel{
 	public void getImages(){
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
-			iCrane = ImageIO.read(getClass().getResourceAsStream("/crane.jpg"));
+			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,15 +50,25 @@ public class Stacker extends GamePanel{
 	
 	public void setup() {
 		
+		keyH = new KeyHandler();
+		
 		getImages();
-		Crane crane1 = new Crane(800, 800, iCrane);
+		int startCraneX = (int)(screenWidth / 8);
+		int startCraneY = (int)(screenHeight / 8);
+		
+		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
+		add(crane1);
+		
 		
 		ground = new Ground(100, 100, 120, 90, iGround);
-		ground.setColor(Color.blue);
 		add(ground);
+		
+		repaint();
 	}
 	
 	public void update() {
+		
+		
 		ground.setX(400);
 //		ground.setX(ground.getX()+1);
 		

@@ -16,17 +16,19 @@ public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;
 	
 	// Screen Settings
-	private final int originalTileSize = 16;
-	private final int scale = 3;
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	final static double screenWidth = screenSize.getWidth();
 	final static double screenHeight = screenSize.getHeight();
+	
+	// old screen settings
+	private final int originalTileSize = 16;
+	private final int scale = 3;
+
 	private final int tileSize = originalTileSize / scale;
 	private final int maxScreenCol = 24;
 	private final int maxScreenRow = 14;
 //	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
 //	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
-	private long startTime;
 
 	public GamePanel() {
 		this.setPreferredSize(screenSize);
@@ -49,9 +51,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		this.startTime = System.currentTimeMillis();
-
 		// Setting the frame cap to 60
 		double drawInterval = 1000000000 / FPS;
 		double delta = 0;
@@ -84,15 +83,6 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 
-//		public void paintComponent(Graphics g) {
-//
-//			super.paintComponent(g);
-//
-//			Graphics2D g2 = (Graphics2D) g;
-//
-//
-//			g2.dispose();
-//		}
 	public void update() {
 		// TODO Auto-generated method stub
 		

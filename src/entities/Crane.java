@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 
 public class Crane extends GameObject {
 
-	public Crane(int w, int h, BufferedImage image) {
-		super(w, h, image);
+	public Crane(int x, int y, int w, int h, BufferedImage image) {
+		super(x, y, w, h, image);
 		BufferedImage resizedCrane = resizeBuffImage(image, w, h);
         setSprite(resizedCrane);
 		

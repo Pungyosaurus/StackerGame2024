@@ -15,7 +15,7 @@ import entities.Ground;
 import listeners.KeyHandler;
 import listeners.MouseHandler;
 
-public class Stacker extends GamePanel{
+public class Stacker extends GamePanel {
 
 	private Ground ground;
 	private Crane crane1;
@@ -23,7 +23,6 @@ public class Stacker extends GamePanel{
 	private MouseHandler mouseH;
 	private BufferedImage background, iGround, iCrane;
 
-	
 	public static void main(String[] args) {
 
 		JFrame window = new JFrame();
@@ -36,10 +35,10 @@ public class Stacker extends GamePanel{
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-		stacker.startGameThread();		
+		stacker.startGameThread();
 	}
-	
-	public void getImages(){
+
+	public void getImages() {
 		try {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
@@ -48,42 +47,43 @@ public class Stacker extends GamePanel{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void setup() {
 		keyH = new KeyHandler();
 		mouseH = new MouseHandler();
 		addMouseListener(mouseH);
 		addKeyListener(keyH);
-		
+
 		getImages();
 		setBackgroundImage(background);
-		
-		int startCraneX = (int)(screenWidth / 8);
-		int startCraneY = (int)(screenHeight / 8);
-		
+
+		int startCraneX = (int) (screenWidth / 8);
+		int startCraneY = (int) (screenHeight / 8);
+
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
 		add(crane1);
-		
-		
+
 		ground = new Ground(100, 100, 120, 90, iGround);
 		add(ground);
-		
+
 		repaint();
 	}
-	
+
 	public void update() {
-		
-		if(mouseH.isClicked() == true || keyH.isSpacebar()) {
-			mouseH.setClicked(false);
-			keyH.setSpacebar(false);
-			// add code to drop the block here
+
+		if (keyH.isEscape()) {
+			keyH.setEscape(false);
+			isPaused = !isPaused;
 		}
-		ground.setX(ground.getX() + 1);
-		
+		if (!isPaused) {
+
+			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
+				mouseH.setClicked(false);
+				keyH.setSpacebar(false);
+				// add code to drop the block here
+			}
+			ground.setX(ground.getX() + 1);
+		}
 	}
-	
-	
-	
 
 }

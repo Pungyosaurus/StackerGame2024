@@ -16,7 +16,8 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final int FPS = 60;
 	private JFrame frame;
 	private Thread gameThread;
-	
+    protected boolean isPaused = false;
+
 	// Screen Settings
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public final static double screenWidth = screenSize.getWidth();
@@ -70,7 +71,7 @@ public class GamePanel extends JPanel implements Runnable {
 			lastTime = currentTime;
 
 			if (delta >= 1) {
-				update();
+                update();
 //				repaint();
 				delta--;
 				drawCount++;

@@ -19,8 +19,8 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Screen Settings
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	final static double screenWidth = screenSize.getWidth();
-	final static double screenHeight = screenSize.getHeight();
+	public final static double screenWidth = screenSize.getWidth();
+	public static double screenHeight = screenSize.getHeight();
 	
 	// old screen settings
 	private final int originalTileSize = 16;
@@ -89,8 +89,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.backgroundImage = backgroundImage;
     }
 	
+	
+	
 	public void paintComponent(Graphics g) {
-		
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 

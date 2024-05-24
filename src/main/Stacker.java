@@ -54,7 +54,8 @@ public class Stacker extends GamePanel{
 		keyH = new KeyHandler();
 		mouseH = new MouseHandler();
 		addMouseListener(mouseH);
-
+		addKeyListener(keyH);
+		
 		getImages();
 		setBackgroundImage(background);
 		
@@ -73,13 +74,12 @@ public class Stacker extends GamePanel{
 	
 	public void update() {
 		
-		if(mouseH.isClicked() == true) {
+		if(mouseH.isClicked() == true || keyH.isSpacebar()) {
 			mouseH.setClicked(false);
-			System.out.println("clicked");
-			
+			keyH.setSpacebar(false);
+			// add code to drop the block here
 		}
-		ground.setX(400);
-//		ground.setX(ground.getX()+1);
+		ground.setX(ground.getX() + 1);
 		
 	}
 	

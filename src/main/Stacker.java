@@ -88,7 +88,7 @@ public class Stacker extends GamePanel {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-   				add(new Ground(groundWidth*i - 36*i + j%2*30, (int) (groundHeight*.25)*-j +200, groundWidth, groundHeight, iGround));
+   				add(new Ground(groundWidth*i - 36*i + j%2*30, (int) (groundHeight*.25)*j +200, groundWidth, groundHeight, iGround),j);
    				repaint();
 
 			}

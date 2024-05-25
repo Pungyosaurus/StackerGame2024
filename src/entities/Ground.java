@@ -1,9 +1,11 @@
 package entities;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Ground extends GameObject{
-
+	
+			
 	public Ground(int x, int y, int w, int h, BufferedImage image) {
 		super(x, y, w, h, image);
 		

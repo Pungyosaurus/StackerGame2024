@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -18,6 +20,8 @@ import listeners.MouseHandler;
 public class Stacker extends GamePanel {
 
 	private Ground ground;
+	private ArrayList<Ground> groundObjectList = new ArrayList<Ground>();
+
 	private Crane crane1;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
@@ -63,10 +67,36 @@ public class Stacker extends GamePanel {
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
 		add(crane1);
 
-		ground = new Ground(100, 100, 120, 90, iGround);
-		add(ground);
+		//create and place ground objects
+		int groundWidth = 120;
+		int groundHeight = 90;
+		int groundDepth = 2;
+//		for(int i = 0; i<screenWidth/groundWidth;i++) {
+//			for(int j = groundDepth; j>0;j--) {
+//				
+//				ground = new Ground(groundWidth*i-36*i+j%2*30, (int) (screenHeight-j*groundHeight*-.25)-1000, groundWidth, groundHeight, iGround);
+//				add(ground);
+//				
+//			}
+//		}
+//		
+		for(int j = 0; j<2;j++) {
+			for(int i = 0; i<5;i++) {
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+   				add(new Ground(groundWidth*i - 36*i + j%2*30, (int) (groundHeight*.25)*-j +200, groundWidth, groundHeight, iGround));
+   				repaint();
 
-		repaint();
+			}
+		}
+		add(new Ground(120,70+200,90,125,iGround));
+		
+		
+
 	}
 
 	public void update() {
@@ -82,7 +112,7 @@ public class Stacker extends GamePanel {
 				keyH.setSpacebar(false);
 				// add code to drop the block here
 			}
-			ground.setX(ground.getX() + 1);
+//			ground.setX(ground.getX() + 1);
 		}
 	}
 

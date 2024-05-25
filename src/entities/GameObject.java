@@ -190,6 +190,7 @@ public abstract class GameObject extends JComponent {
 	}
 
 	public void paintComponent(Graphics g) {
+		System.out.println(this.toString());
 		// if no image set, then just draw a rectangle
 		if (sprite == null) {
 			g.setColor(c);

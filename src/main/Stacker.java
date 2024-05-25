@@ -88,12 +88,13 @@ public class Stacker extends GamePanel {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-   				add(new Ground(groundWidth*i - 36*i + j%2*30, (int) (groundHeight*.25)*-j +200, groundWidth, groundHeight, iGround));
+   				add(new Ground(groundWidth*i - 36*i + j%2*30, (int) (groundHeight*.25)*j +200, groundWidth, groundHeight, iGround), j);
    				repaint();
 
 			}
 		}
-		add(new Ground(120,70+200,90,125,iGround));
+		ground = new Ground (120,150,90,125,iGround);
+		add(ground);
 		
 		
 
@@ -112,7 +113,7 @@ public class Stacker extends GamePanel {
 				keyH.setSpacebar(false);
 				// add code to drop the block here
 			}
-//			ground.setX(ground.getX() + 1);
+			ground.setX(ground.getX() + 1);
 		}
 	}
 

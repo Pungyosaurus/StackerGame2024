@@ -122,7 +122,7 @@ public class Stacker extends GamePanel {
 		
 	}
 	int counter =0;
-	int counter2 = 10;
+	int counter2 = 11;
 	public void update() {
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);

@@ -93,8 +93,7 @@ public class Stacker extends GamePanel {
 
 			}
 		}
-		ground = new Ground (120,150,90,125,iGround);
-		add(ground);
+	
 		
 		
 

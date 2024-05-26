@@ -122,7 +122,6 @@ public class Stacker extends GamePanel {
 //					e.printStackTrace();
 //				}
 //				setComponentZOrder(ground, 1);
-				System.out.println(j);
 				list.add(ground);
 				repaint();
 			

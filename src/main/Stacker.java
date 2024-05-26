@@ -20,7 +20,7 @@ import listeners.MouseHandler;
 public class Stacker extends GamePanel {
 
 	private Ground ground;
-	private int groundWidth = 120;
+	private int groundWidth = 90;
 	private int groundHeight = 90;
 	
 	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
@@ -49,7 +49,7 @@ public class Stacker extends GamePanel {
 
 	public void getImages() {
 		try {
-			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
+			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
 		} catch (IOException e) {
@@ -102,13 +102,15 @@ public class Stacker extends GamePanel {
 			}
 			
 			for(int i = 0; i<=amount;i++) {
-//				try {
-//					TimeUnit.MILLISECONDS.sleep(1);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-				Ground ground = new Ground( startX + groundWidth*i - 40*i -40*amount , startY + (int) (j*groundHeight*.24) , groundWidth, groundHeight, iGround, 180/depth*j);
+				try {
+					TimeUnit.MILLISECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//				Ground ground = new Ground( startX + groundWidth*i - 40*i -40*amount , startY + (int) (j*groundHeight*.25) , groundWidth, groundHeight, iGround, 180/depth*j);
+				Ground ground = new Ground( startX + (groundWidth)*i - (groundWidth/2)*amount , startY + (int) (j*groundHeight*.25) , groundWidth, groundHeight, iGround, 180/depth*j);
+
 				add(ground,1);
 //				setComponentZOrder(ground, 1);
 				System.out.println(j);

@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import entities.Cable;
 import entities.Crane;
 import entities.Ground;
 import listeners.KeyHandler;
@@ -19,18 +20,18 @@ import listeners.MouseHandler;
 
 public class Stacker extends GamePanel {
 
-	private Ground ground;
 	private int groundWidth = 120;
 	private int groundHeight = 90;
-	
+
 	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
 	private ArrayList<Ground> groundObjectList2 = new ArrayList<Ground>();
 
-
+	private Ground ground;
+	private Cable cable;
 	private Crane crane1;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
-	private BufferedImage background, iGround, iCrane;
+	private BufferedImage background, iGround, iCrane, rope;
 
 	public static void main(String[] args) {
 
@@ -52,6 +53,7 @@ public class Stacker extends GamePanel {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IsoGround.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
+			rope = ImageIO.read(getClass().getResourceAsStream("/noTrim.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -71,80 +73,81 @@ public class Stacker extends GamePanel {
 
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
 		add(crane1);
+		cable = new Cable(200, 200, 600, 600, rope);
+		add(cable);
+		// create and place ground objects
 
-		//create and place ground objects
-		
-		//keep odd
-		
-		
-		makePlatform(10, (int) (screenWidth/4), (int) (screenHeight/4*2.8), groundObjectList1);
-		makePlatform(10, (int) (screenWidth/4*3), (int) (screenHeight/4*2.8), groundObjectList2);
+		// keep odd
+
+		makePlatform(10, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
+		makePlatform(10, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
 
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);
 //		add(ground);
 //		
-		
 
 	}
-	
+
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
 		int amount = -1;
 		setLayout(null);
-		
-		for(int j = 0; j<depth;j++) {
-			
-			if(j >= (depth+1)/2) {
-				amount-=1;
-			}else {
-				amount+=1;
+
+		for (int j = 0; j < depth; j++) {
+
+			if (j >= (depth + 1) / 2) {
+				amount -= 1;
+			} else {
+				amount += 1;
 
 			}
-			
-			for(int i = 0; i<=amount;i++) {
+
+			for (int i = 0; i <= amount; i++) {
 //				try {
 //					TimeUnit.MILLISECONDS.sleep(1);
 //				} catch (InterruptedException e) {
 //					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
-				Ground ground = new Ground( startX + groundWidth*i - 40*i -40*amount , startY + (int) (j*groundHeight*.24) , groundWidth, groundHeight, iGround, 180/depth*j);
-				add(ground,1);
+				Ground ground = new Ground(startX + groundWidth * i - 40 * i - 40 * amount,
+						startY + (int) (j * groundHeight * .24), groundWidth, groundHeight, iGround, 180 / depth * j);
+				add(ground, 1);
 //				setComponentZOrder(ground, 1);
 				System.out.println(j);
 				list.add(ground);
 				repaint();
 			}
-			
-						
 
 		}
-		
+
 	}
-	int counter =0;
+
+	int counter = 0;
 	int counter2 = 11;
+
 	public void update() {
+		
+		
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);
 			isPaused = !isPaused;
 		}
 		if (!isPaused) {
+			cable.act();
 
 			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
 				mouseH.setClicked(false);
 				keyH.setSpacebar(false);
 				// add code to drop the block here
 			}
-			
+
 			groundObjectList1.get(counter).act();
 			groundObjectList1.get(counter2).act();
 
-			
-			
-			if(counter == groundObjectList1.size()-1) {
+			if (counter == groundObjectList1.size() - 1) {
 				counter = -1;
 			}
-			if(counter2 == groundObjectList1.size()-1) {
+			if (counter2 == groundObjectList1.size() - 1) {
 				counter2 = -1;
 			}
 			counter++;

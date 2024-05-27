@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,18 +16,26 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final int FPS = 60;
 	private JFrame frame;
 	private Thread gameThread;
+    protected boolean isPaused = false;
+
+	// Screen Settings
+	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public final static double screenWidth = screenSize.getWidth();
+	public static double screenHeight = screenSize.getHeight();
+	
+	// old screen settings
 	private final int originalTileSize = 16;
 	private final int scale = 3;
 
-	private final int tileSize = originalTileSize * scale;
+	private final int tileSize = originalTileSize / scale;
 	private final int maxScreenCol = 24;
 	private final int maxScreenRow = 14;
-	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
-	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
-	private long startTime;
+    private BufferedImage backgroundImage;
+//	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
+//	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
 
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+		this.setPreferredSize(screenSize);
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.setFocusable(true);
@@ -44,9 +55,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		this.startTime = System.currentTimeMillis();
-
 		// Setting the frame cap to 60
 		double drawInterval = 1000000000 / FPS;
 		double delta = 0;
@@ -63,31 +71,30 @@ public class GamePanel extends JPanel implements Runnable {
 			lastTime = currentTime;
 
 			if (delta >= 1) {
-				update();
-//				repaint();
+                update();
+				repaint();
 				delta--;
 				drawCount++;
-			}
-			// FPS Display
-			if (timer >= 1000000000) {
-				System.out.println("FPS: " + drawCount);
-				drawCount = 0;
-				timer = 0;
 			}
 		}
 
 	}
+	
+	public void setBackgroundImage(BufferedImage backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+	
+	
+	
+	public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
 
+        if (backgroundImage != null) {
+            g2.drawImage(backgroundImage, 0, 0, (int)screenWidth, (int)screenHeight, null);
+        }
 
-//		public void paintComponent(Graphics g) {
-//
-//			super.paintComponent(g);
-//
-//			Graphics2D g2 = (Graphics2D) g;
-//
-//
-//			g2.dispose();
-//		}
+	}
 	public void update() {
 		// TODO Auto-generated method stub
 		

@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import entities.Building;
 import entities.Cable;
 import entities.Crane;
 import entities.Ground;
@@ -22,16 +23,19 @@ public class Stacker extends GamePanel {
 
 	private int groundWidth = 90;
 	private int groundHeight = 90;
+	
 
 	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
 	private ArrayList<Ground> groundObjectList2 = new ArrayList<Ground>();
-
+	
 
 	private Cable cable;
 	private Crane crane1;
+	private Building building;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
-	private BufferedImage background, iGround, iCrane, rope;
+	private BufferedImage background, iGround, iCrane,  rope;
+	
 
 	public static void main(String[] args) {
 
@@ -75,13 +79,18 @@ public class Stacker extends GamePanel {
 		add(crane1);
 		cable = new Cable(200, 200, 600, 600, rope);
 		add(cable);
+		
+		
+		
 		// create and place ground objects
 
 		// keep odd
 
 		makePlatform(10, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
 		makePlatform(10, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
-
+		
+		
+		
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);
 //		add(ground);
@@ -110,7 +119,7 @@ public class Stacker extends GamePanel {
 					e.printStackTrace();
 				}
 //				Ground ground = new Ground( startX + groundWidth*i - 40*i -40*amount , startY + (int) (j*groundHeight*.25) , groundWidth, groundHeight, iGround, 180/depth*j);
-				Ground ground = new Ground( startX + (groundWidth)*i - (groundWidth/2)*amount , startY + (int) (j*groundHeight*.25) , groundWidth, groundHeight, iGround, 180/depth*j);
+				Ground ground = new Ground( startX + (groundWidth-30)*i - ((groundWidth-30)/2)*amount , startY + (int) (j*groundHeight*.20) , groundWidth, groundHeight, iGround, 180/depth*j);
 
 				add(ground,1);
 
@@ -141,11 +150,23 @@ public class Stacker extends GamePanel {
 			isPaused = !isPaused;
 		}
 		if (!isPaused) {
+			
+			if(building == null){
+				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth,groundHeight,iGround);
+				add(building);
+			}
+			if(building!= null){
+				building.act();
+				
+			}
 			cable.act();
 
 			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
 				mouseH.setClicked(false);
 				keyH.setSpacebar(false);
+				if(building!=null){
+					building.drop();
+				}
 				// add code to drop the block here
 			}
 

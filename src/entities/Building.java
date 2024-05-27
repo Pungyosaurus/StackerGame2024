@@ -24,6 +24,7 @@ public class Building extends GameObject {
 		ySpeed=0;
 		while(getY()<1000){
 			setY(getY()+1);
+
 			repaint();
 		}
 		

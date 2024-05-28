@@ -98,6 +98,65 @@ public class Stacker extends GamePanel {
 
 	}
 
+	
+
+	int counter = 0;
+	int counter2 = 11;
+
+	public void update() {
+		if (keyH.isEscape()) {
+			keyH.setEscape(false);
+			isPaused = !isPaused;
+		}
+		if (!isPaused) {
+			
+			if(building == null){
+				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth,groundHeight,iGround);
+				add(building);
+			}
+			if(building!= null){
+				building.act();
+				
+				if (mouseH.isClicked() == true || keyH.isSpacebar()) {
+					mouseH.setClicked(false);
+					keyH.setSpacebar(false);
+					
+					while(building.getY()<1000){
+						building.drop();
+						repaint();
+					}
+
+
+				}
+			}
+			cable.act();
+			// add code to drop the block here
+
+			groundObjectList1.get(counter).act();
+			groundObjectList1.get(counter2).act();
+
+			if (counter == groundObjectList1.size() - 1) {
+				counter = -1;
+			}
+			if (counter2 == groundObjectList1.size() - 1) {
+				counter2 = -1;
+			}
+			counter++;
+			counter2++;
+
+//			ground.setX(ground.getX() + 1);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
 		int amount = -1;
 		setLayout(null);
@@ -137,53 +196,6 @@ public class Stacker extends GamePanel {
 		}
 
 	}
-	}
-
-	int counter = 0;
-	int counter2 = 11;
-
-	public void update() {
-		
-		
-		if (keyH.isEscape()) {
-			keyH.setEscape(false);
-			isPaused = !isPaused;
-		}
-		if (!isPaused) {
-			
-			if(building == null){
-				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth,groundHeight,iGround);
-				add(building);
-			}
-			if(building!= null){
-				building.act();
-				
-			}
-			cable.act();
-
-			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
-				mouseH.setClicked(false);
-				keyH.setSpacebar(false);
-				if(building!=null){
-					building.drop();
-				}
-				// add code to drop the block here
-			}
-
-			groundObjectList1.get(counter).act();
-			groundObjectList1.get(counter2).act();
-
-			if (counter == groundObjectList1.size() - 1) {
-				counter = -1;
-			}
-			if (counter2 == groundObjectList1.size() - 1) {
-				counter2 = -1;
-			}
-			counter++;
-			counter2++;
-
-//			ground.setX(ground.getX() + 1);
-		}
 	}
 
 }

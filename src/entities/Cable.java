@@ -10,8 +10,8 @@ public class Cable extends GameObject {
 
 	// zero is moving to the left, 1 is moving to the right
 	private boolean direction;
-	private double da = 50;
-	private final double d2a = 2;
+	private double da = 30;
+	private final double d2a = 1;
 
 	public Cable(int x, int y, int w, int h, BufferedImage image) {
 		super(x, y, w, h, image);
@@ -45,11 +45,8 @@ public class Cable extends GameObject {
 		else
 			da += d2a;
 
-		if (direction)
-			setSize(getWidth() + (int)(da / 5), getHeight() + (int)(da / 5));
-		else
-			setSize(getWidth() + (int)(da / 5), getHeight() + (int)(da / 5));
-		spriteAngle += Math.toRadians(da / 10);
+		setSize(getWidth() + (int) (da / 4), getHeight() + (int) (da / 4));
+		spriteAngle += Math.toRadians(da / 15);
 
 	}
 

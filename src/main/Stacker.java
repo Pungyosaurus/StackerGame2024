@@ -86,8 +86,8 @@ public class Stacker extends GamePanel {
 
 		// keep odd
 
-		makePlatform(13, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
-		makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
+		makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight/4 *3), groundObjectList1);
+		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
 		
 		
 		
@@ -111,7 +111,7 @@ public class Stacker extends GamePanel {
 		if (!isPaused) {
 			
 			if(building == null){
-				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth*5,groundHeight*5,iGround);
+				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth*7,groundHeight*7,iGround);
 				add(building,3);
 				System.out.println("in");
 			}

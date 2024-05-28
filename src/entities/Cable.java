@@ -38,6 +38,7 @@ public class Cable extends GameObject {
 				da -= d2a;
 
 			else
+				
 				// going to the left and not past 90 (speeding up)
 				da += d2a;
 		} else if (!direction) // cases when da = 0;
@@ -79,5 +80,15 @@ public class Cable extends GameObject {
 	public double getSpriteAngle() {
 		return this.spriteAngle;
 	}
+	
+	public double getEndX(){
+		return  getX()-getWidth();
+
+	
+	}
+	public double getEndY(){
+		return  getY()+getHeight();
+	}
+
 
 }

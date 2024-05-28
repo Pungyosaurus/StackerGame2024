@@ -57,7 +57,7 @@ public class Stacker extends GamePanel {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
-			rope = ImageIO.read(getClass().getResourceAsStream("/noTrim.png"));
+			rope = ImageIO.read(getClass().getResourceAsStream("/bgANGLED.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

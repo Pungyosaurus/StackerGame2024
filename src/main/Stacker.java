@@ -22,7 +22,7 @@ import listeners.MouseHandler;
 public class Stacker extends GamePanel {
 
 	private int groundWidth = 90;
-	private int groundHeight = 90;
+	private int groundHeight = 80;
 	
 
 	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
@@ -86,8 +86,8 @@ public class Stacker extends GamePanel {
 
 		// keep odd
 
-		makePlatform(10, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
-		makePlatform(10, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
+		makePlatform(15, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
+		makePlatform(15, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
 		
 		
 		
@@ -122,12 +122,9 @@ public class Stacker extends GamePanel {
 					mouseH.setClicked(false);
 					keyH.setSpacebar(false);
 					
-					while(building.getY()<1000){
-						building.drop();
-						repaint();
-					}
+					building.drop();
 					
-					building = null;
+					
 
 				}
 			}

@@ -23,7 +23,7 @@ public class Building extends GameObject {
 	public void drop(){
 		
 		xSpeed = 0;
-		ySpeed=0;
-		setY(getY()+1);
+		ySpeed=2;
+		
 	}
 }

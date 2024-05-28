@@ -93,6 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (backgroundImage != null) {
             g2.drawImage(backgroundImage, 0, 0, (int)screenWidth, (int)screenHeight, null);
         }
+        
 
 	}
 	public void update() {

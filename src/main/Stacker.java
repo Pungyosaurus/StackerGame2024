@@ -86,8 +86,8 @@ public class Stacker extends GamePanel {
 
 		// keep odd
 
-		makePlatform(15, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
-		makePlatform(15, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
+		makePlatform(13, (int) (screenWidth / 4), (int) (screenHeight / 4 * 2.8), groundObjectList1);
+		makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 2.8), groundObjectList2);
 		
 		
 		

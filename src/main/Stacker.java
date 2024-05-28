@@ -57,7 +57,7 @@ public class Stacker extends GamePanel {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
-			rope = ImageIO.read(getClass().getResourceAsStream("/bgANGLED.png"));
+			rope = ImageIO.read(getClass().getResourceAsStream("/noTrim.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,8 +76,8 @@ public class Stacker extends GamePanel {
 		int startCraneY = (int) (screenHeight / 8+200);
 
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
-//		add(crane1);
-		cable = new Cable(600, 200, 300, 300, rope);
+		add(crane1);
+		cable = new Cable(600, 200, 600, 600, rope);
 		add(cable);
 		
 		
@@ -116,7 +116,6 @@ public class Stacker extends GamePanel {
 				System.out.println("in");
 			}
 			if(building!= null){
-				System.out.println("test");
 				building.act();
 				
 				if (mouseH.isClicked() == true || keyH.isSpacebar()) {

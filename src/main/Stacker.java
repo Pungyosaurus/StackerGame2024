@@ -116,7 +116,7 @@ public class Stacker extends GamePanel {
 				System.out.println("in");
 			}
 			if(building!= null){
-				
+				System.out.println("test");
 				building.act();
 				
 				if (mouseH.isClicked() == true || keyH.isSpacebar()) {

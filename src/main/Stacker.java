@@ -72,8 +72,8 @@ public class Stacker extends GamePanel {
 		getImages();
 		setBackgroundImage(background);
 
-		int startCraneX = (int) (screenWidth / 8);
-		int startCraneY = (int) (screenHeight / 8);
+		int startCraneX = (int) (screenWidth / 8-600);
+		int startCraneY = (int) (screenHeight / 8+200);
 
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
 		add(crane1);
@@ -111,8 +111,9 @@ public class Stacker extends GamePanel {
 		if (!isPaused) {
 			
 			if(building == null){
-				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth,groundHeight,iGround);
-				add(building);
+				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth*5,groundHeight*5,iGround);
+				add(building,3);
+				System.out.println("in");
 			}
 			if(building!= null){
 				building.act();
@@ -125,7 +126,8 @@ public class Stacker extends GamePanel {
 						building.drop();
 						repaint();
 					}
-
+					
+					building = null;
 
 				}
 			}

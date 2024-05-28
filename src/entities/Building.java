@@ -12,11 +12,11 @@ public class Building extends GameObject {
 		}
 	
 	public void act() {
-		if(getX() >= 600){
+		if(getX() >= 900 || getX()<100){
 			xSpeed = -xSpeed;
 			ySpeed = -ySpeed;
 		}
-		System.out.println(getX()+ " " + getY());
+//		System.out.println(getX()+ " " + getY());
 		setX(getX()+xSpeed);
 		setY(getY()+ySpeed);
 	}

@@ -18,8 +18,8 @@ public class Ground extends GameObject{
 	@Override
 	public void act() {
 		// TODO Auto-generated method stub
-		setY(getY()+ Math.sin(sinStart)*3);
-		sinStart+=5;
+		setY(getY()+ Math.sin(sinStart));
+		sinStart+=20;
 	}
 	
 	

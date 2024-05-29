@@ -97,7 +97,12 @@ public class Cable extends GameObject {
 	}
 	
 	public double getDx(){
-		return  (Math.cos(spriteAngle - Math.toRadians(10))*5);
+		
+		if(direction) {
+			return -Math.cos(spriteAngle) * 10;
+		}
+		
+		return  Math.cos(spriteAngle) * 10;
 	}
 	public double getDy(){
 		return  (Math.sin(spriteAngle - Math.toRadians(10))*5);

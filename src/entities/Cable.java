@@ -95,6 +95,15 @@ public class Cable extends GameObject {
 	public int getScale() {
 		return (int) da/2;
 	}
+	
+	public double getDx(){
+		System.out.println(Math.toDegrees(Math.toRadians(da)+Math.PI/4));
+		return  (Math.cos(Math.toRadians(da)-Math.PI/4)*5);
+	}
+	public double getDy(){
+		return  (Math.sin(Math.toRadians(da)-Math.PI/4)*5);
+
+	}
 
 
 }

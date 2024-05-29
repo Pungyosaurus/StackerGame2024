@@ -4,7 +4,10 @@ import java.awt.image.BufferedImage;
 
 public class Building extends GameObject {
 	private int width, height;
-	private int xSpeed=0,ySpeed=0;
+	private double xSpeed=0,ySpeed=0;
+	private int gravity = 1;
+	private boolean drop = false;
+	
 	public Building(int x, int y, int width, int height, BufferedImage image ){
 		 super(x , y, width, height, image);
 		 BufferedImage resizediGround = resizeBuffImage(image, width, height);
@@ -17,14 +20,19 @@ public class Building extends GameObject {
 //			ySpeed = -ySpeed;
 //		}
 //		System.out.println(getX()+ " " + getY());
-		setY(getY()+ySpeed);
+		ySpeed += gravity;
+		setY(getY()+(int)ySpeed);
+		setX(getX()+(int)xSpeed);
 		
 	}
 	
-	public void drop(){
-		
-		xSpeed = 0;
-		ySpeed=2;
-		
+	public void drop(double dx, double dy){
+		xSpeed = -dx*3;
+		ySpeed= dy;
+		drop = true;
+	}
+	
+	public boolean getDrop(){
+		return drop;
 	}
 }

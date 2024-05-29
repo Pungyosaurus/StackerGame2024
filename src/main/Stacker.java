@@ -78,7 +78,7 @@ public class Stacker extends GamePanel {
 
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
 		add(crane1);
-		cable = new Cable(600, 200, 550, 550, rope);
+		cable = new Cable(600, -200, 550, 550, rope);
 		add(cable);
 		
 		
@@ -118,21 +118,28 @@ public class Stacker extends GamePanel {
 				System.out.println("in");
 			}
 			if(building!= null){
-//				building.act();
-				building.setX(cable.getEndX()*2+100);
-				building.setY(cable.getEndY());
-				building.setSize(building.getWidth()+cable.getScale(),building.getHeight()+cable.getScale());
+				if(!building.getDrop()){
+//					building.act();
+					building.setX(cable.getEndX()*2+100);
+					building.setY(cable.getEndY());
+					building.setSize(building.getWidth()+cable.getScale(),building.getHeight()+cable.getScale());
+//					System.out.println(cable.getDx()+" "+cable.getDy());
+					cable.getDx();
+					if (mouseH.isClicked() == true || keyH.isSpacebar()) {
+						mouseH.setClicked(false);
+						keyH.setSpacebar(false);
+						
+						building.drop(cable.getDx(),cable.getDy());
+						
+						
 
-				if (mouseH.isClicked() == true || keyH.isSpacebar()) {
-					mouseH.setClicked(false);
-					keyH.setSpacebar(false);
+					}
+				}else{
+					building.act();
 					
-					building.drop();
-					
-					
-
 				}
 			}
+			
 			cable.act();
 			// add code to drop the block here
 

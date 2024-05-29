@@ -89,6 +89,9 @@ public class Cable extends GameObject {
 	public double getEndY(){
 		return  getY()+getHeight();
 	}
+	public int getScale() {
+		return (int) da/2;
+	}
 
 
 }

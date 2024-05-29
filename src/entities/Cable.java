@@ -53,8 +53,9 @@ public class Cable extends GameObject {
 
 	@Override
 	public void paintComponent(Graphics g) {
-
-		Graphics2D g2d = (Graphics2D) g;
+		
+		System.out.println("im goignhcrazy");
+		Graphics2D g2d = (Graphics2D) g;		
 		try {
 			if (spriteAngle != 0) {
 
@@ -74,6 +75,8 @@ public class Cable extends GameObject {
 			g.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 
 		}
+		
+
 
 	}
 

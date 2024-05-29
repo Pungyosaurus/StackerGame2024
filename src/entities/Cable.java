@@ -16,6 +16,7 @@ public class Cable extends GameObject {
 	public Cable(int x, int y, int w, int h, BufferedImage image) {
 		super(x, y, w, h, image);
 		spriteAngle = Math.PI / 4;
+		System.out.println(Math.toDegrees(spriteAngle));
 	}
 
 	@Override
@@ -48,13 +49,12 @@ public class Cable extends GameObject {
 
 		setSize(getWidth() + (int) (da / 2), getHeight() + (int) (da / 2));
 		spriteAngle += Math.toRadians(da / 15);
-
+//		System.out.println(Math.abs(Math.toDegrees(spriteAngle) - 45));
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		
-		System.out.println("im goignhcrazy");
 		Graphics2D g2d = (Graphics2D) g;		
 		try {
 			if (spriteAngle != 0) {
@@ -85,7 +85,7 @@ public class Cable extends GameObject {
 	}
 	
 	public double getEndX(){
-		return  getX()-getWidth();
+		return getX()-getWidth();
 
 	
 	}
@@ -97,11 +97,10 @@ public class Cable extends GameObject {
 	}
 	
 	public double getDx(){
-		System.out.println(Math.toDegrees(Math.toRadians(da)+Math.PI/4));
-		return  (Math.cos(Math.toRadians(da)-Math.PI/4)*5);
+		return  (Math.cos(spriteAngle - Math.toRadians(10))*5);
 	}
 	public double getDy(){
-		return  (Math.sin(Math.toRadians(da)-Math.PI/4)*5);
+		return  (Math.sin(spriteAngle - Math.toRadians(10))*5);
 
 	}
 

@@ -81,7 +81,7 @@ public class Cable extends GameObject {
 	}
 
 	public double getSpriteAngle() {
-		System.out.println(((this.spriteAngle-Math.PI/4))*5);
+		System.out.println(((this.spriteAngle-Math.PI/4))*6);
 		return Math.abs((this.spriteAngle-Math.PI/4))*5;
 	}
 	

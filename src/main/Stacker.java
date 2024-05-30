@@ -78,7 +78,7 @@ public class Stacker extends GamePanel {
 
 		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
 		add(crane1);
-		cable = new Cable(600, -200, 550, 550, rope);
+		cable = new Cable((int)screenWidth/4, -200, 550, 550, rope);
 		add(cable);
 		
 		
@@ -115,7 +115,6 @@ public class Stacker extends GamePanel {
 //				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth*7,groundHeight*7,iGround);
 				building = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*7,groundHeight*7,iGround);
 				add(building,3);
-				System.out.println("in");
 			}
 			if(building!= null){
 				if(!building.getDrop()){
@@ -129,13 +128,16 @@ public class Stacker extends GamePanel {
 						mouseH.setClicked(false);
 						keyH.setSpacebar(false);
 						
-						building.drop(cable.getDx(),cable.getDy());
+						building.drop(cable.getDx(),cable.getDy(), cable.getDirection());
 						
 						
 
 					}
 				}else{
 					building.act();
+					if(building.getY()>4000){
+						building = null;
+					}
 					
 				}
 			}

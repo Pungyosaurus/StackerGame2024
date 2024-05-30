@@ -81,7 +81,8 @@ public class Cable extends GameObject {
 	}
 
 	public double getSpriteAngle() {
-		return this.spriteAngle;
+		System.out.println(((this.spriteAngle-Math.PI/4))*5);
+		return Math.abs((this.spriteAngle-Math.PI/4))*5;
 	}
 	
 	public double getEndX(){
@@ -94,6 +95,9 @@ public class Cable extends GameObject {
 	}
 	public int getScale() {
 		return (int) da/2;
+	}
+	public boolean getDirection(){
+		return direction;
 	}
 	
 	public double getDx(){

@@ -36,6 +36,10 @@ public class Building extends GameObject {
 		ySpeed= dy;
 
 		
+	public void drop(double dx, double dy){
+		xSpeed = -dx*3;
+		ySpeed =   1 +dy;
+		System.out.println(dx + " : " + dy);
 		drop = true;
 	}
 	

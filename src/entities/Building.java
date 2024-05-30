@@ -29,9 +29,9 @@ public class Building extends GameObject {
 	public void drop(double dx, double dy, boolean direction){
 		
 		if(direction){
-			xSpeed = dx*3;
+			xSpeed = dx*1.5;
 		}else{
-			xSpeed=-dx*3;
+			xSpeed=-dx*1.5;
 		}
 		ySpeed= dy;
 		drop = true;
@@ -43,8 +43,7 @@ public class Building extends GameObject {
 		System.out.println(dx + " : " + dy);
 		drop = true;
 	}
-	
-	public boolean getDrop(){
+		public boolean getDrop(){
 		return drop;
 	}
 }

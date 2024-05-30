@@ -38,7 +38,7 @@ public class Cable extends GameObject {
 				da -= d2a;
 
 			else
-				
+
 				// going to the left and not past 90 (speeding up)
 				da += d2a;
 		} else if (!direction) // cases when da = 0;
@@ -48,13 +48,13 @@ public class Cable extends GameObject {
 
 		setSize(getWidth() + (int) (da / 2), getHeight() + (int) (da / 10));
 		spriteAngle += Math.toRadians(da / 15);
-//		System.out.println(Math.abs(Math.toDegrees(spriteAngle) - 45) * 5);
+		// System.out.println(Math.abs(Math.toDegrees(spriteAngle) - 45) * 5);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		
-		Graphics2D g2d = (Graphics2D) g;		
+
+		Graphics2D g2d = (Graphics2D) g;
 		try {
 			if (spriteAngle != 0) {
 
@@ -74,43 +74,39 @@ public class Cable extends GameObject {
 			g.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 
 		}
-		
-
 
 	}
 
 	public double getSpriteAngle() {
-		System.out.println(((this.spriteAngle-Math.PI/4))*6);
-		return Math.abs((this.spriteAngle-Math.PI/4))*5;
+		// System.out.println(((this.spriteAngle-Math.PI/4))*6);
+		return Math.abs((this.spriteAngle - Math.PI / 4)) * 5;
 	}
-	
-	public double getEndX(){
+
+	public double getEndX() {
 		return getX() - getWidth();
 
-	
 	}
-	public double getEndY(){
-		return  getY()+getHeight();
+
+	public double getEndY() {
+		return getY() + getHeight();
 	}
+
 	public int getScale() {
-		return (int) da/2;
+		return (int) da / 2;
 	}
-	public boolean getDirection(){
+
+	public boolean getDirection() {
 		return direction;
 	}
-	
-	public double getDx(){
-		
-//		if(direction) {
-//			return -Math.cos(spriteAngle) * 10;
-//		}
-//		
-		return  Math.cos(spriteAngle) * 10;
-	}
-	public double getDy(){
-		return  (Math.sin(spriteAngle - Math.toRadians(10))*5);
 
+	public double getDx() {
+
+		return Math.cos(spriteAngle) * 10;
 	}
 
+	public double getDy() {
+		return (Math.sin(spriteAngle - Math.toRadians(10)) * 5);
+
+	}
 
 }

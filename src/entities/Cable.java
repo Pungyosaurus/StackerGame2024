@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Cable extends GameObject {
-
+	private final int WIDTH, HEIGHT;
 	// zero is moving to the left, 1 is moving to the right
 	private boolean direction;
 	private double da = 30;
@@ -16,6 +16,8 @@ public class Cable extends GameObject {
 	public Cable(int x, int y, int w, int h, BufferedImage image) {
 		super(x, y, w, h, image);
 		spriteAngle = Math.PI / 4;
+		this.WIDTH = w;
+		HEIGHT = h;
 	}
 
 	@Override
@@ -78,17 +80,24 @@ public class Cable extends GameObject {
 	}
 
 	public double getSpriteAngle() {
-		// System.out.println(((this.spriteAngle-Math.PI/4))*6);
-		return Math.abs((this.spriteAngle - Math.PI / 4)) * 5;
+		return (this.spriteAngle/2 - Math.PI / 4) * 5;
 	}
 
 	public double getEndX() {
-		return getX() - getWidth();
+		System.out.println(Math.toDegrees(getSpriteAngle()), +" "+ );
+		return  getX() + Math.cos(Math.abs(getSpriteAngle() - Math.PI / 2)) * 100;
+//		return getX() - WIDTH +  Math.sin(getSpriteAngle()) * 6;
+//		return getX() - getWidth() - Math.cos(getSpriteAngle()) - da * 2;
+		
+		
+//		return getX() - getWidth();
 
 	}
 
 	public double getEndY() {
-		return getY() + getHeight();
+		return getY() + HEIGHT;
+//		return getWidth() * Math.sin(spriteAngle - Math.PI / 4);
+//		return getY() + getHeight();
 	}
 
 	public int getScale() {

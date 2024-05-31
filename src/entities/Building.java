@@ -46,4 +46,13 @@ public class Building extends GameObject {
 		public boolean getDrop(){
 		return drop;
 	}
+		
+		public void cut(int side, int depth){
+			if(side == 1){
+				//left facing side cut by depth
+				//right facing side stays the same length
+				//top facing side gets cut by depth at the same 
+			}
+			
+		}
 }

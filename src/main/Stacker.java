@@ -118,19 +118,17 @@ public class Stacker extends GamePanel {
 			}
 			if(building!= null){
 				if(!building.getDrop()){
-//					building.act();
-					building.setX(cable.getEndX());
-					building.setY(cable.getEndY());
+//					building.setX(cable.getEndX());
+//					building.setY(cable.getEndY());
 //					building.setSize(building.getWidth()+cable.getScale(),building.getHeight()+cable.getScale());
-//					System.out.println(cable.getDx()+" "+cable.getDy());
 					
 					if (mouseH.isClicked() == true || keyH.isSpacebar()) {
-						mouseH.setClicked(false);
 						keyH.setSpacebar(false);
-						
+						mouseH.setClicked(false);
+
 						System.out.println("in");
 						building.drop(cable.getDx(),cable.getDy(), cable.getDirection());
-						
+
 						
 
 					}

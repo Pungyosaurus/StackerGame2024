@@ -80,12 +80,14 @@ public class Cable extends GameObject {
 	}
 
 	public double getSpriteAngle() {
-		return (this.spriteAngle/2 - Math.PI / 4) * 5;
+		return Math.abs(this.spriteAngle/2 - Math.PI / 4) * 5;
 	}
 
 	public double getEndX() {
-		System.out.println(Math.toDegrees(getSpriteAngle()), +" "+ );
-		return  getX() + Math.cos(Math.abs(getSpriteAngle() - Math.PI / 2)) * 100;
+		System.out.println(Math.toDegrees(getSpriteAngle()) + " " + Math.cos(Math.toDegrees(getSpriteAngle())));
+		
+		
+		return  getX() - (Math.cos(getSpriteAngle())+1) +250 -getWidth();
 //		return getX() - WIDTH +  Math.sin(getSpriteAngle()) * 6;
 //		return getX() - getWidth() - Math.cos(getSpriteAngle()) - da * 2;
 		
@@ -95,7 +97,7 @@ public class Cable extends GameObject {
 	}
 
 	public double getEndY() {
-		return getY() + HEIGHT;
+		return getY() + getHeight()/1.3 + (Math.sin(getSpriteAngle()))*100;
 //		return getWidth() * Math.sin(spriteAngle - Math.PI / 4);
 //		return getY() + getHeight();
 	}

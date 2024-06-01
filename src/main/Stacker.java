@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import entities.Building;
+import entities.BuildingCut;
 import entities.Cable;
 import entities.Crane;
 import entities.Ground;
@@ -90,7 +91,9 @@ public class Stacker extends GamePanel {
 		makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight/4 *3), groundObjectList1);
 		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
 		
-		
+		BuildingCut temp = new BuildingCut(1000,500,500,500,iGround);
+		temp.cut(1, 100);
+		add(temp);
 		
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);
@@ -119,18 +122,21 @@ public class Stacker extends GamePanel {
 			if(building!= null){
 				if(!building.getDrop()){
 //					building.act();
-					building.setX(cable.getEndX());
-					building.setY(cable.getEndY());
-					building.setSize(building.getWidth()+cable.getScale()/2,building.getHeight()+cable.getScale()/2);
+				
+//					building.setSize(building.getWidth()+cable.getScale()/2,building.getHeight()+cable.getScale()/2);
+//				
 //					System.out.println(cable.getDx()+" "+cable.getDy());
+//					building.setX(cable.getEndX());
+//					building.setY(cable.getEndY());
+//					building.setSize(building.getWidth()+cable.getScale(),building.getHeight()+cable.getScale());
 					
 					if (mouseH.isClicked() == true || keyH.isSpacebar()) {
-						mouseH.setClicked(false);
 						keyH.setSpacebar(false);
-						
+						mouseH.setClicked(false);
+
 						System.out.println("in");
 						building.drop(cable.getDx(),cable.getDy(), cable.getDirection());
-						
+
 						
 
 					}

@@ -91,7 +91,7 @@ public class Stacker extends GamePanel {
 		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
 		
 		BuildingCut temp = new BuildingCut(1000,500,500,500,iGround);
-		temp.cut(3, 50);
+		temp.cut(4, 50);
 		add(temp);
 		
 		repaint();

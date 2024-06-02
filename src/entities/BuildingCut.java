@@ -265,7 +265,67 @@ public class BuildingCut extends GameObject {
 	            img3 = croppedTopFace;
 			}
 			
+			if(side == 4) {
+				double newWidth = img2.getWidth() - depth;
 	            
+	            int width = img2.getWidth();
+	            int height = img2.getHeight();
+
+	            // Create a new image to hold the cropped top face
+	            BufferedImage croppedRightFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	            Graphics2D g2d = croppedRightFace.createGraphics();
+	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+	            Path2D.Double path = new Path2D.Double();
+	            path.moveTo(width - depth, 0); // Top-right corner
+	            
+	            path.lineTo(width - depth, height); // bottom-right corner
+	            
+	            path.lineTo(0, height);
+	            
+	            path.lineTo(0,0);
+	            
+//	            path.lineTo(depth,0);
+
+	            // Fill the path with the image
+	            g2d.setClip(path);
+	            g2d.drawImage(img2, 0, 0, null);
+	            g2d.dispose();
+
+	            img2 = croppedRightFace;
+	         
+	            width = img3.getWidth();
+	            height = img3.getHeight();
+//	            depth /= Math.sqrt(2);
+	            // Create a new image to hold the cropped top face
+	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	            g2d = croppedTopFace.createGraphics();
+	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+	            // Create a path to define the area to keep
+	            path = new Path2D.Double();
+//	            path.moveTo(depth, depth  * 2 + 20); // Top-left corner
+	            path.moveTo(width - depth, height / 2 + depth / Math.sqrt(3));
+//	            path.moveTo(depth, height / 2 + depth );
+
+//	            System.out.println(depth * 2 + 20);
+//	            System.out.println(height / 2 + depth / Math.sqrt(3));
+	            path.lineTo(width / 2, height); // Top-right corner
+	            
+	            path.lineTo(0, height / 2);
+	            
+	            path.lineTo(0, depth);
+	            
+	            path.lineTo(width / 2 - depth , depth / Math.sqrt(2));
+
+
+	            // Fill the path with the image
+	            g2d.setClip(path);
+	            g2d.drawImage(img3, 0, 0, null);
+	            g2d.dispose();
+
+	            img3 = croppedTopFace;
+			}    
 	        
 			
 			

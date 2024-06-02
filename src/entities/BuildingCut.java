@@ -244,10 +244,10 @@ public class BuildingCut extends GameObject {
 
 	            // Create a path to define the area to keep
 	            path = new Path2D.Double();
-	            path.moveTo(depth, depth  * 2 + 20); // Top-left corner
-//	            path.moveTo(depth, height / 2 + depth / Math.sqrt(2));
-	            System.out.println(depth * 2 + 20);
-	            System.out.println(height / 2 + depth / Math.sqrt(2));
+//	            path.moveTo(depth, depth  * 2 + 20); // Top-left corner
+	            path.moveTo(depth, height / 2 + depth / Math.sqrt(3));
+//	            System.out.println(depth * 2 + 20);
+//	            System.out.println(height / 2 + depth / Math.sqrt(3));
 	            path.lineTo(depth, height); // Top-right corner
 	            
 	            path.lineTo(width, height);

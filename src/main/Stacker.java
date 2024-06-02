@@ -58,7 +58,6 @@ public class Stacker extends GamePanel {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
-//			rope = ImageIO.read(getClass().getResourceAsStream("/bgANGLED.png"));
 			rope = ImageIO.read(getClass().getResourceAsStream("/noTrim.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -92,7 +91,7 @@ public class Stacker extends GamePanel {
 		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
 		
 		BuildingCut temp = new BuildingCut(1000,500,500,500,iGround);
-		temp.cut(1, 100);
+		temp.cut(3, 50);
 		add(temp);
 		
 		repaint();

@@ -16,8 +16,11 @@ import javax.imageio.ImageIO;
 public class BuildingCut extends GameObject {
 
 	BufferedImage img1, img2, img3 ;
- 
+	private int totalLeftDepth, totalRightDepth, totalTopLeftDepth, totalTopRightDepth;
+	BufferedImage lf , rf, tf ;
 
+		
+	
 	public BuildingCut(int x, int y, int width, int height, BufferedImage image ){
 		
 		 super(x , y, width, height, image);
@@ -30,8 +33,11 @@ public class BuildingCut extends GameObject {
 
 	             img3 =ImageIO.read(getClass().getResourceAsStream("/topFace.png"));
 
+	             lf = img1;
+	             rf = img2;
+	             tf = img3;
 	            // Combine the images
-	            combinedImage = combineImages(img1, img2, img3,0,0);
+	            combinedImage = combineImages(img1, img2, img3);
 
 	            // Save the combined image to a file
 //	            ImageIO.write(combinedImage, "PNG", new File("path/to/combinedImage.png"));
@@ -44,7 +50,7 @@ public class BuildingCut extends GameObject {
 		 setSprite(combinedImage);
 		}
 	
-	 public static BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace, int leftFaceDepth, int rightFaceDepth) {
+	 public  BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
 		  	int faceWidth = leftFace.getWidth();
 	        int faceHeight = leftFace.getHeight();
 
@@ -66,11 +72,11 @@ public class BuildingCut extends GameObject {
 	       
 
 	        // Draw the left face
-	        g2d.drawImage(leftFace, (int)(leftFaceDepth*Math.sqrt(2)), topFace.getHeight() / 2 - (int) (leftFaceDepth*.8), null);
+	        g2d.drawImage(leftFace, (int)(totalRightDepth*Math.sqrt(2)), topFace.getHeight() / 2 - (int) (totalRightDepth*.57), null);
 //	        g2d.drawImage(leftFace, 0, topFace.getHeight() / 2 - 0, null);
 
 	        // Draw the right face
-	        g2d.drawImage(rightFace, faceWidth- (int)(rightFaceDepth*Math.sqrt(2)), topFace.getHeight() / 2 -  (int) (rightFaceDepth*.8) , null);
+	        g2d.drawImage(rightFace, faceWidth- (int)(totalLeftDepth), topFace.getHeight() / 2 -  (int) (totalLeftDepth*.57) , null);
 
 	        // Dispose the graphics object
 	        g2d.dispose();
@@ -91,15 +97,19 @@ public class BuildingCut extends GameObject {
 			
 			// using an if statement to avoid duplicate variable names
 			
-			int leftDepth = 0;
-		    int rightDepth = 0;
+			
 		    
 			if(side == 1){
-	            int width = img1.getWidth();
-	            int height = img1.getHeight();
-	            int newWidth =(int) ( width - depth);
-	            int newHeight = (int)(height - depth);
-
+				int topWidth = (int) (img3.getWidth() -totalLeftDepth/Math.sqrt(2) -totalRightDepth/Math.sqrt(2) );
+	            int topHeight = (int) (img3.getHeight()  - totalLeftDepth/Math.sqrt(2) - totalRightDepth/Math.sqrt(2) );
+	            int width = (int) (img1.getWidth());
+	            int height = (int) (img1.getHeight());
+				totalLeftDepth += depth;
+				
+	           
+	            
+	       
+	            
 	            BufferedImage croppedLeftFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	            Graphics2D g2d = croppedLeftFace.createGraphics();
 	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -109,36 +119,38 @@ public class BuildingCut extends GameObject {
 	            
 	            path.lineTo(0, height);
 	            
-	            path.lineTo(width-depth,height);
+	            path.lineTo(width-totalLeftDepth,height);
 	            
-	            path.lineTo(width-depth,0);
+	            path.lineTo(width-totalLeftDepth,0);
 	            
 	            path.lineTo(width,0);
 
 
 	            // Fill the path with the image
 	            g2d.setClip(path);
-	            BufferedImage cropped = img1.getSubimage(0, 0, newWidth, newHeight);
-	            
-	         
-	            
+//	            BufferedImage cropped = img1.getSubimage(0, 0, newWidth, newHeight);
 	            g2d.drawImage(img1, 0, 0, null);
 	            g2d.dispose();
-//	            img1 = resizeBuffImage(croppedLeftFace, newWidth, height);
+	            lf = croppedLeftFace;
 	            
-	            System.out.println("corpped" + croppedLeftFace.getWidth());
-	            img1 = cropped;
-//	            img1 = resizeBuffImage(croppedLeftFace, newWidth, height);
-	            System.out.println(img1.getWidth());
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            depth = totalLeftDepth/Math.sqrt(2);
 
-	            
-	            
-	             
-	            width = img3.getWidth();
-	            height = img3.getHeight();
-	            depth = depth/Math.sqrt(2);
 	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	            BufferedImage croppedTopFace = new BufferedImage(topWidth, topHeight, BufferedImage.TYPE_INT_ARGB);
 	            g2d = croppedTopFace.createGraphics();
 	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -146,30 +158,27 @@ public class BuildingCut extends GameObject {
 	            path = new Path2D.Double();
 	            path.moveTo(0, 0); // Top-left corner
 	            
-	            path.lineTo(0, height); // Top-right corner
+	            path.lineTo(0, topHeight); // Top-right corner
 	            
-	            path.lineTo(width/2-depth,height-depth);
+	            path.lineTo(topWidth/2-depth,topHeight-depth);
 	            
-	            path.lineTo(width-depth,height/2-depth);
+	            path.lineTo(topWidth-depth,topHeight/2-depth);
 	            
-	            path.lineTo(width,0);
+	            path.lineTo(topWidth,0);
 
 
 	            // Fill the path with the image
 	            g2d.setClip(path);
-	            g2d.drawImage(img3, 0, 0, null);
+	            g2d.drawImage(tf, 0, 0, null);
 	            g2d.dispose();
 
-	            img3 = croppedTopFace;
-	            
-	            rightDepth = (int)depth;
+	            tf = croppedTopFace;
 			}
 
 			if (side == 2) {
 		        // Calculate the new dimensions after cropping
 //		       img3 = img.getSubImage(0,0,)
-				double newWidth = img2.getWidth() - depth;
-	            
+	            totalRightDepth += depth;
 	            int width = img2.getWidth();
 	            int height = img2.getHeight();
 
@@ -183,9 +192,9 @@ public class BuildingCut extends GameObject {
 	            
 	            path.lineTo(width, height); // bottom-right corner
 	            
-	            path.lineTo(depth,height);
+	            path.lineTo(totalRightDepth,height);
 	            
-	            path.lineTo(depth,0);
+	            path.lineTo(totalRightDepth,0);
 	            
 	            path.lineTo(width,0);
 
@@ -194,11 +203,11 @@ public class BuildingCut extends GameObject {
 	            g2d.drawImage(img2, 0, 0, null);
 	            g2d.dispose();
 
-	            img2 = croppedRightFace;
+	            rf = croppedRightFace;
 
 	            width = img3.getWidth();
 	            height = img3.getHeight();
-	            depth /= Math.sqrt(2);
+	            depth = totalRightDepth/Math.sqrt(2);
 	            // Create a new image to hold the cropped top face
 	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	            g2d = croppedTopFace.createGraphics();
@@ -222,9 +231,8 @@ public class BuildingCut extends GameObject {
 	            g2d.drawImage(img3, 0, 0, null);
 	            g2d.dispose();
 
-	            img3 = croppedTopFace;
+	            tf = croppedTopFace;
 	            
-	            leftDepth = (int)depth;
 
 				
 				
@@ -356,7 +364,7 @@ public class BuildingCut extends GameObject {
 			
 			
 			
-			setSprite(combineImages(img1,img2,img3, leftDepth, rightDepth));
+			setSprite(combineImages(lf,rf,tf));
 			
 		}
 		

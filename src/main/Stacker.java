@@ -98,7 +98,7 @@ public class Stacker extends GamePanel {
 		
 		repaint();
 		try {
-			TimeUnit.SECONDS.sleep(5);
+			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -91,8 +91,17 @@ public class Stacker extends GamePanel {
 		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
 		
 		BuildingCut temp = new BuildingCut(1000,500,500,500,iGround);
-		temp.cut(4, 50);
 		add(temp);
+		temp.cut(1, 50);
+		
+		repaint();
+		try {
+			TimeUnit.SECONDS.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		temp.cut(1, 70);
 		
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);
@@ -190,12 +199,12 @@ public class Stacker extends GamePanel {
 			}
 			
 			for(int i = 0; i<=amount;i++) {
-				try {
-					TimeUnit.MILLISECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					TimeUnit.MILLISECONDS.sleep(1);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 //				Ground ground = new Ground( startX + groundWidth*i - 40*i -40*amount , startY + (int) (j*groundHeight*.25) , groundWidth, groundHeight, iGround, 180/depth*j);
 				Ground ground = new Ground( startX + (groundWidth-30)*i - ((groundWidth-30)/2)*amount , startY + (int) (j*groundHeight*.20) , groundWidth, groundHeight, iGround, 180/depth*j);
 

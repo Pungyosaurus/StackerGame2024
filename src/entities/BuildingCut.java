@@ -3,6 +3,7 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -48,7 +49,7 @@ public class BuildingCut extends GameObject {
 	        int faceHeight = leftFace.getHeight();
 
 	        // Calculate the dimensions of the combined image
-	        int combinedWidth = 2 * faceWidth+leftFaceDepth+rightFaceDepth;
+	        int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 	        int combinedHeight = faceHeight + topFace.getHeight() / 2;
 
 	        // Create a new BufferedImage with the combined dimensions
@@ -94,10 +95,10 @@ public class BuildingCut extends GameObject {
 		    int rightDepth = 0;
 		    
 			if(side == 1){
-	            int newWidth =(int) ( img1.getWidth() - depth);
-	            
 	            int width = img1.getWidth();
 	            int height = img1.getHeight();
+	            int newWidth =(int) ( width - depth);
+	            int newHeight = (int)(height - depth);
 
 	            BufferedImage croppedLeftFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	            Graphics2D g2d = croppedLeftFace.createGraphics();
@@ -117,10 +118,17 @@ public class BuildingCut extends GameObject {
 
 	            // Fill the path with the image
 	            g2d.setClip(path);
+	            BufferedImage cropped = img1.getSubimage(0, 0, newWidth, newHeight);
+	            
+	         
+	            
 	            g2d.drawImage(img1, 0, 0, null);
 	            g2d.dispose();
-	            System.out.println(img1.getWidth());
-	            img1 = croppedLeftFace;
+//	            img1 = resizeBuffImage(croppedLeftFace, newWidth, height);
+	            
+	            System.out.println("corpped" + croppedLeftFace.getWidth());
+	            img1 = cropped;
+//	            img1 = resizeBuffImage(croppedLeftFace, newWidth, height);
 	            System.out.println(img1.getWidth());
 
 	            

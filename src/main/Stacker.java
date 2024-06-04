@@ -98,12 +98,12 @@ public class Stacker extends GamePanel {
 		
 		repaint();
 		try {
-			TimeUnit.SECONDS.sleep(5);
+			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		temp.cut(1, 50);
+		temp.cut(1, 60);
 		
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);

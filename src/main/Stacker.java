@@ -93,7 +93,7 @@ public class Stacker extends GamePanel {
 		BuildingCut temp = new BuildingCut(1000,500,500,500,iGround);
 		add(temp);
 
-		temp.cut(1, 50);
+		temp.cut(50,50);
 
 		
 		repaint();
@@ -103,8 +103,8 @@ public class Stacker extends GamePanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		temp.cut(1, 50);
-		
+		temp.cut(50,50);
+
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);
 //		add(ground);

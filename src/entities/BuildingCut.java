@@ -38,7 +38,7 @@ public class BuildingCut extends GameObject {
 
 	BufferedImage lf, rf, tf;
 
-	private int FWIDTH, FHEIGHT;
+	private int SIDE_WIDTH, SIDE_HEIGHT, TOP_WIDTH, TOP_HEIGHT;
 
 
 
@@ -64,9 +64,11 @@ public class BuildingCut extends GameObject {
 
 			img3 = ImageIO.read(getClass().getResourceAsStream("/topFace.png"));
 
-			FWIDTH = img1.getWidth();
+			SIDE_WIDTH = img1.getWidth();
 
-			FHEIGHT = img1.getHeight();
+			SIDE_HEIGHT = img1.getHeight();
+			TOP_WIDTH = img3.getWidth();
+			TOP_HEIGHT = img3.getHeight();
 
 			lf = img1;
 
@@ -172,7 +174,7 @@ public class BuildingCut extends GameObject {
 
 
 
-	public void cut(int side, int leftCutDepth, int rightCutDepth) {
+	public void cut( int leftCutDepth, int rightCutDepth) {
 
 
 
@@ -182,7 +184,7 @@ public class BuildingCut extends GameObject {
 
 //		totalTopDepth += (leftCutDepth + rightCutDepth) / Math.sqrt(2);
 
-		BufferedImage croppedLeftFace = new BufferedImage(FWIDTH, FHEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage croppedLeftFace = new BufferedImage(SIDE_WIDTH, SIDE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = croppedLeftFace.createGraphics();
 
@@ -192,11 +194,11 @@ public class BuildingCut extends GameObject {
 
 		leftPath.moveTo(0, 0);
 
-		leftPath.lineTo(0, FHEIGHT);
+		leftPath.lineTo(0, SIDE_HEIGHT);
 
-		leftPath.lineTo(FWIDTH - totalLeftDepth, FHEIGHT);
+		leftPath.lineTo(SIDE_WIDTH - totalLeftDepth, SIDE_HEIGHT);
 
-		leftPath.lineTo(FWIDTH - totalLeftDepth, 0);
+		leftPath.lineTo(SIDE_WIDTH - totalLeftDepth, 0);
 
 		g2d.setClip(leftPath);
 
@@ -206,7 +208,7 @@ public class BuildingCut extends GameObject {
 
 
 
-		BufferedImage croppedRightFace = new BufferedImage(FWIDTH, FHEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage croppedRightFace = new BufferedImage(SIDE_WIDTH, SIDE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
 		g2d = croppedRightFace.createGraphics();
 
@@ -214,15 +216,15 @@ public class BuildingCut extends GameObject {
 
 		Path2D.Double rightPath = new Path2D.Double();
 
-		rightPath.moveTo(FWIDTH, 0);
+		rightPath.moveTo(SIDE_WIDTH, 0);
 
 
 
-		rightPath.lineTo(FWIDTH, FHEIGHT); 
+		rightPath.lineTo(SIDE_WIDTH, SIDE_HEIGHT); 
 
 
 
-		rightPath.lineTo(totalRightDepth, FHEIGHT);
+		rightPath.lineTo(totalRightDepth, SIDE_HEIGHT);
 
 
 
@@ -238,9 +240,7 @@ public class BuildingCut extends GameObject {
 
 
 
-		BufferedImage croppedTopFace = new BufferedImage(img3.getWidth(), img3.getHeight(),
-
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage croppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT,BufferedImage.TYPE_INT_ARGB);
 
 		g2d = croppedTopFace.createGraphics();
 
@@ -248,35 +248,42 @@ public class BuildingCut extends GameObject {
 
 		Path2D.Double topPath = new Path2D.Double();
 
-		topPath.moveTo(img3.getWidth() / 2, 0); 
+		topPath.moveTo(TOP_WIDTH / 2, 0); 
 
 
 
-		topPath.lineTo(totalRightDepth / Math.sqrt(2), img3.getHeight() / 2 - totalRightDepth / Math.sqrt(2)); 
+		topPath.lineTo(totalRightDepth / Math.sqrt(2), TOP_HEIGHT / 2 - totalRightDepth / Math.sqrt(2)); 
+
+
+		double line1B = (TOP_HEIGHT / 2 - totalRightDepth / Math.sqrt(2)) -(-16.0/9*(totalRightDepth / Math.sqrt(2)));
+		double line2B =  (TOP_HEIGHT / 2 - totalLeftDepth / Math.sqrt(2)) - (9.0/16*(TOP_WIDTH - totalLeftDepth / Math.sqrt(2)));
+		
+		double Xint = (line2B-line1B)/ (-337.0/144.0);
+		double Yint = 9.0/16.0*Xint+line1B;
+				
+		topPath.lineTo(Xint,Yint);
 
 
 
-		topPath.lineTo(img3.getWidth() / 2 - (totalRightDepth + totalLeftDepth) / Math.sqrt(2), topHeight - depth);
+		topPath.lineTo(TOP_WIDTH - totalLeftDepth / Math.sqrt(2), TOP_HEIGHT / 2 - totalLeftDepth / Math.sqrt(2));
 
 
 
-		topPath.lineTo(topWidth - depth, topHeight / 2 - depth);
+		topPath.lineTo(TOP_WIDTH, TOP_HEIGHT);
 
-
-
-		topPath.lineTo(topWidth, 0);
-
+		topPath.lineTo(TOP_WIDTH, 0);
 
 
 		// Fill the path with the image
 
 		g2d.setClip(topPath);
 
-		g2d.drawImage(tf, 0, 0, null);
+		g2d.drawImage(img3, 0, 0, null);
 
 		g2d.dispose();
 
 		
+		setSprite((croppedTopFace));
 
 		
 
@@ -764,7 +771,6 @@ public class BuildingCut extends GameObject {
 
 
 
-		setSprite(combineImages(lf, rf, tf));
 
 
 

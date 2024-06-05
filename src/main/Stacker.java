@@ -90,10 +90,10 @@ public class Stacker extends GamePanel {
 		makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight/4 *3), groundObjectList1);
 		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
 		
-		BuildingCut temp = new BuildingCut(1000,500,500,500,iGround);
+		BuildingCut temp = new BuildingCut(1000,500,groundWidth*7,groundHeight*7,iGround);
 		add(temp);
 		
-		temp.cut(60,60);
+		temp.cut(0, 0, 90, 0);
 		
 		
 		repaint();
@@ -103,8 +103,10 @@ public class Stacker extends GamePanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		
-		temp.cut(30, 30);
+		temp.cut(0, 0, 40, 0);
+
+//		temp.cut(0, 0);
+//		temp.setSize(70, temp.getWidth());
 		repaint();
 //		ground = new Ground (120,150,90,125,iGround);
 //		add(ground);

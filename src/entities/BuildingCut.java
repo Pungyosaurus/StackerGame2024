@@ -213,7 +213,7 @@ public class BuildingCut extends GameObject {
 		Path2D.Double topPath = new Path2D.Double();
 		double topXInt =  TOP_WIDTH / 2 + totalTopLeftCutDepth * Math.sqrt(3)/2 - totalTopRightCutDepth * Math.sqrt(3)/2;
 		double topYInt = 0 + totalTopLeftCutDepth / 2 + totalTopRightCutDepth / 2;
-		topPath.moveTo(0, 0);
+		topPath.moveTo(topXInt, topYInt);
 
 
 

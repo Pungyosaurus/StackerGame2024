@@ -1,362 +1,280 @@
 package entities;
 
+
+
 import java.awt.Color;
+
 import java.awt.Graphics;
+
 import java.awt.Graphics2D;
+
+import java.awt.Rectangle;
+
 import java.awt.RenderingHints;
+
 import java.awt.geom.AffineTransform;
+
 import java.awt.geom.Path2D;
+
 import java.awt.image.BufferedImage;
+
 import java.io.File;
+
 import java.io.IOException;
+
+
 
 import javax.imageio.ImageIO;
 
+
+
 public class BuildingCut extends GameObject {
 
-	BufferedImage img1, img2, img3 ;
- 
 
-	public BuildingCut(int x, int y, int width, int height, BufferedImage image ){
-		
-		 super(x , y, width, height, image);
-		 BufferedImage combinedImage = null;
-		 try {
-	            // Load the images
-	             img1 =ImageIO.read(getClass().getResourceAsStream("/leftFace.png"));
 
-	             img2 =ImageIO.read(getClass().getResourceAsStream("/rightFace.png"));
+	BufferedImage img1, img2, img3;
 
-	             img3 =ImageIO.read(getClass().getResourceAsStream("/topFace.png"));
+	private int totalLeftDepth, totalRightDepth, topDistance;
 
-	            // Combine the images
-	            combinedImage = combineImages(img1, img2, img3,0,0);
+	BufferedImage lf, rf, tf;
 
-	            // Save the combined image to a file
+	private int SIDE_WIDTH, SIDE_HEIGHT, TOP_WIDTH, TOP_HEIGHT;
+
+
+
+	public BuildingCut(int x, int y, int width, int height, BufferedImage image) {
+
+
+
+		super(x, y, width, height, image);
+
+		BufferedImage combinedImage = null;
+
+		try {
+
+			// Load the images
+
+			img1 = ImageIO.read(getClass().getResourceAsStream("/leftFace.png"));
+
+
+
+			img2 = ImageIO.read(getClass().getResourceAsStream("/rightFace.png"));
+
+
+
+			img3 = ImageIO.read(getClass().getResourceAsStream("/topFace.png"));
+
+			SIDE_WIDTH = img1.getWidth();
+
+			SIDE_HEIGHT = img1.getHeight();
+			TOP_WIDTH = img3.getWidth();
+			TOP_HEIGHT = img3.getHeight();
+
+			lf = img1;
+
+			rf = img2;
+
+			tf = img3;
+
+			// Combine the images
+
+			combinedImage = combineImages(img1, img2, img3);
+
+
+
+			// Save the combined image to a file
+
 //	            ImageIO.write(combinedImage, "PNG", new File("path/to/combinedImage.png"));
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	       }
-	    
-	
-//		 BufferedImage resizediGround = resizeBuffImage(image, width, height);
-		 setSprite(combinedImage);
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
 		}
-	
-	 public static BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace, int leftFaceDepth, int rightFaceDepth) {
-		  	int faceWidth = leftFace.getWidth();
-	        int faceHeight = leftFace.getHeight();
 
-	        // Calculate the dimensions of the combined image
-	        int combinedWidth = 2 * faceWidth+leftFaceDepth+rightFaceDepth;
-	        int combinedHeight = faceHeight + topFace.getHeight() / 2;
 
-	        // Create a new BufferedImage with the combined dimensions
-	        BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
 
-	        // Get the Graphics2D object to draw on the combined image
-	        Graphics2D g2d = combined.createGraphics();
-	        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//		 BufferedImage resizediGround = resizeBuffImage(image, width, height);
 
-	        // Draw the top face
-	        g2d.drawImage(topFace, 0, 0, null);
+		setSprite(combinedImage);
 
-	        
-	       
+	}
 
-	        // Draw the left face
-	        g2d.drawImage(leftFace, (int)(leftFaceDepth*Math.sqrt(2)), topFace.getHeight() / 2 - (int) (leftFaceDepth*.8), null);
+
+
+	public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
+
+
+
+		// Calculate the dimensions of the combined image
+
+		int combinedWidth = leftFace.getWidth() + rightFace.getWidth() - totalLeftDepth - totalRightDepth;
+
+		int combinedHeight = leftFace.getHeight() + (topFace.getHeight()-topDistance) / 2;
+
+
+
+		// Create a new BufferedImage with the combined dimensions
+		System.out.println("combined Widths" + combinedWidth +" "+ combinedHeight);
+		BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
+
+
+
+		// Get the Graphics2D object to draw on the combined image
+
+		Graphics2D g2d = combined.createGraphics();
+
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+
+		// Draw the top face
+		
+		g2d.drawImage(topFace,-55 , 0, null);
+		System.out.println(topFace.getWidth() + " " + topFace.getHeight());
+
+
+		// Draw the left face
+
+		g2d.drawImage(leftFace, 0,topDistance, null);
+
 //	        g2d.drawImage(leftFace, 0, topFace.getHeight() / 2 - 0, null);
 
-	        // Draw the right face
-	        g2d.drawImage(rightFace, faceWidth- (int)(rightFaceDepth*Math.sqrt(2)), topFace.getHeight() / 2 -  (int) (rightFaceDepth*.8) , null);
 
-	        // Dispose the graphics object
-	        g2d.dispose();
 
-	        return combined;
-	    }
-	
+		// Draw the right face
+
+		g2d.drawImage(rightFace, 160-totalLeftDepth,topDistance, null);
+
+
+
+		// Dispose the graphics object
+
+		g2d.dispose();
+
+
+
+		return combined;
+
+	}
+
+
+
 	public void act() {
 
-		
+
+
 	}
-	
-	
-		public void cut(int side, double depth){
-			//left facing side cut by depth
-			//right facing side stays the same length
-			//top facing side gets cut by depth at the same 
-			
-			// using an if statement to avoid duplicate variable names
-			
-			int leftDepth = 0;
-		    int rightDepth = 0;
-		    
-			if(side == 1){
-	            int newWidth =(int) ( img1.getWidth() - depth);
-	            
-	            int width = img1.getWidth();
-	            int height = img1.getHeight();
 
-	            BufferedImage croppedLeftFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            Graphics2D g2d = croppedLeftFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+	public void cut( int leftCutDepth, int rightCutDepth) {
+
+		totalLeftDepth += leftCutDepth;
+		totalRightDepth += rightCutDepth;
+
+		BufferedImage resultLeftImage = img1.getSubimage(0,0,img1.getWidth()-totalLeftDepth, img1.getHeight());
 		
-	            Path2D.Double path = new Path2D.Double();
-	            path.moveTo(0, 0); 
-	            
-	            path.lineTo(0, height);
-	            
-	            path.lineTo(width-depth,height);
-	            
-	            path.lineTo(width-depth,0);
-	            
-	            path.lineTo(width,0);
+        BufferedImage croppedLeftFace = new BufferedImage(img1.getWidth(), img2.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		 Graphics2D g2d = croppedLeftFace.createGraphics();
+         g2d.setBackground(new java.awt.Color(0, 0, 0, 0));
+         g2d.clearRect(0, 0, croppedLeftFace.getWidth(),croppedLeftFace.getHeight());
+         g2d.drawImage(resultLeftImage, 0, 0, null);
+         g2d.dispose();
+         
 
-
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img1, 0, 0, null);
-	            g2d.dispose();
-	            System.out.println(img1.getWidth());
-	            img1 = croppedLeftFace;
-	            System.out.println(img1.getWidth());
-
-	            
-	            
-	             
-	            width = img3.getWidth();
-	            height = img3.getHeight();
-	            depth = depth/Math.sqrt(2);
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            g2d = croppedTopFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-	            // Create a path to define the area to keep
-	            path = new Path2D.Double();
-	            path.moveTo(0, 0); // Top-left corner
-	            
-	            path.lineTo(0, height); // Top-right corner
-	            
-	            path.lineTo(width/2-depth,height-depth);
-	            
-	            path.lineTo(width-depth,height/2-depth);
-	            
-	            path.lineTo(width,0);
-
-
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img3, 0, 0, null);
-	            g2d.dispose();
-
-	            img3 = croppedTopFace;
-	            
-	            rightDepth = (int)depth;
-			}
-
-			if (side == 2) {
-		        // Calculate the new dimensions after cropping
-//		       img3 = img.getSubImage(0,0,)
-				double newWidth = img2.getWidth() - depth;
-	            
-	            int width = img2.getWidth();
-	            int height = img2.getHeight();
-
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedRightFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            Graphics2D g2d = croppedRightFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		BufferedImage resultRightImage = img2.getSubimage(totalRightDepth,0,img2.getWidth()-totalRightDepth, img2.getHeight());
+		BufferedImage croppedRightFace = new BufferedImage(img1.getWidth(), img2.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		g2d = croppedRightFace.createGraphics();
+	    g2d.setBackground(new java.awt.Color(0, 0, 0, 0));
+	    g2d.clearRect(0, 0, croppedRightFace.getWidth(),croppedRightFace.getHeight());
+	    g2d.drawImage(resultRightImage, 0, 0, null);
+	    g2d.dispose();
 		
-	            Path2D.Double path = new Path2D.Double();
-	            path.moveTo(width, 0); // Top-right corner
-	            
-	            path.lineTo(width, height); // bottom-right corner
-	            
-	            path.lineTo(depth,height);
-	            
-	            path.lineTo(depth,0);
-	            
-	            path.lineTo(width,0);
-
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img2, 0, 0, null);
-	            g2d.dispose();
-
-	            img2 = croppedRightFace;
-
-	            width = img3.getWidth();
-	            height = img3.getHeight();
-	            depth /= Math.sqrt(2);
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            g2d = croppedTopFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-	            // Create a path to define the area to keep
-	            path = new Path2D.Double();
-	            path.moveTo(width, 0); // Top-left corner
-	            
-	            path.lineTo(width, height); // Top-right corner
-	            
-	            path.lineTo(width / 2 + depth,height-depth);
-	            
-	            path.lineTo(depth, height / 2-depth);
-	            
-	            path.lineTo(0,0);
-
-
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img3, 0, 0, null);
-	            g2d.dispose();
-
-	            img3 = croppedTopFace;
-	            
-	            leftDepth = (int)depth;
-
-				
-				
-				
-		    }
-
-			if(side == 3) {
-				double newWidth = img1.getWidth() - depth;
-	            
-	            int width = img1.getWidth();
-	            int height = img1.getHeight();
-
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedLeftFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            Graphics2D g2d = croppedLeftFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
-	            Path2D.Double path = new Path2D.Double();
-	            path.moveTo(depth, 0); // Top-right corner
-	            
-	            path.lineTo(depth, height); // bottom-right corner
-	            
-	            path.lineTo(width,height);
-	            
-	            path.lineTo(width,0);
-	            
-	            path.lineTo(depth,0);
+		BufferedImage croppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		g2d = croppedTopFace.createGraphics();
 
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img1, 0, 0, null);
-	            g2d.dispose();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-	            img1 = croppedLeftFace;
-	         
-	            width = img3.getWidth();
-	            height = img3.getHeight();
-//	            depth /= Math.sqrt(2);
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            g2d = croppedTopFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-	            // Create a path to define the area to keep
-	            path = new Path2D.Double();
-//	            path.moveTo(depth, depth  * 2 + 20); // Top-left corner
-	            path.moveTo(depth, height / 2 + depth / Math.sqrt(3));
-//	            System.out.println(depth * 2 + 20);
-//	            System.out.println(height / 2 + depth / Math.sqrt(3));
-	            path.lineTo(depth, height); // Top-right corner
-	            
-	            path.lineTo(width, height);
-	            
-	            path.lineTo(width, depth);
-	            
-	            path.lineTo(width / 2 + depth , depth / Math.sqrt(2));
+		Path2D.Double topPath = new Path2D.Double();
+		topPath.moveTo(0, 0);
 
 
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img3, 0, 0, null);
-	            g2d.dispose();
 
-	            img3 = croppedTopFace;
-			}
-			
-			if(side == 4) {
-				double newWidth = img2.getWidth() - depth;
-	            
-	            int width = img2.getWidth();
-	            int height = img2.getHeight();
+		topPath.lineTo(totalRightDepth / Math.sqrt(2), TOP_HEIGHT / 2 - totalRightDepth / Math.sqrt(2)); 
 
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedRightFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            Graphics2D g2d = croppedRightFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		double Xint = TOP_WIDTH/2 + totalRightDepth*Math.sqrt(3)/2 - totalLeftDepth*Math.sqrt(3)/2;
+		double Yint = TOP_HEIGHT - totalRightDepth/2 - totalLeftDepth/2;
+
+		topPath.lineTo(Xint,Yint);
+
+		topDistance += (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(TOP_HEIGHT - Yint,2));
+
+
+		topPath.lineTo(TOP_WIDTH - totalLeftDepth / Math.sqrt(2), TOP_HEIGHT / 2 - totalLeftDepth / Math.sqrt(2));
+
+
+
+		topPath.lineTo(TOP_WIDTH, TOP_HEIGHT);
+
+		topPath.lineTo(TOP_WIDTH, 0);
 		
-	            Path2D.Double path = new Path2D.Double();
-	            path.moveTo(width - depth, 0); // Top-right corner
-	            
-	            path.lineTo(width - depth, height); // bottom-right corner
-	            
-	            path.lineTo(0, height);
-	            
-	            path.lineTo(0,0);
-	            
-//	            path.lineTo(depth,0);
-
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img2, 0, 0, null);
-	            g2d.dispose();
-
-	            img2 = croppedRightFace;
-	         
-	            width = img3.getWidth();
-	            height = img3.getHeight();
-//	            depth /= Math.sqrt(2);
-	            // Create a new image to hold the cropped top face
-	            BufferedImage croppedTopFace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	            g2d = croppedTopFace.createGraphics();
-	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-	            // Create a path to define the area to keep
-	            path = new Path2D.Double();
-//	            path.moveTo(depth, depth  * 2 + 20); // Top-left corner
-	            path.moveTo(width - depth, height / 2 + depth / Math.sqrt(3));
-//	            path.moveTo(depth, height / 2 + depth );
-
-//	            System.out.println(depth * 2 + 20);
-//	            System.out.println(height / 2 + depth / Math.sqrt(3));
-	            path.lineTo(width / 2, height); // Top-right corner
-	            
-	            path.lineTo(0, height / 2);
-	            
-	            path.lineTo(0, depth);
-	            
-	            path.lineTo(width / 2 - depth , depth / Math.sqrt(2));
 
 
-	            // Fill the path with the image
-	            g2d.setClip(path);
-	            g2d.drawImage(img3, 0, 0, null);
-	            g2d.dispose();
+		// Fill the path with the image
 
-	            img3 = croppedTopFace;
-			}    
-	        
-			
-			
-			
-			setSprite(combineImages(img1,img2,img3, leftDepth, rightDepth));
-			
+		g2d.setClip(topPath);
+
+		g2d.drawImage(img3, 0, 0, null);
+
+		g2d.dispose();
+		String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedTopFace.png";
+		String desktopPath1 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedLeftFace.png";
+		String desktopPath2 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedRightFace.png";
+
+		// Create a File object with the specified file path
+		File outputFile = new File(desktopPath);
+		File outputFile1 = new File(desktopPath1);
+		File outputFile2 = new File(desktopPath2);
+
+
+		try {
+		    // Write the BufferedImage to the specified file path
+		    ImageIO.write(croppedTopFace, "PNG", outputFile);
+		    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
+		    ImageIO.write(croppedRightFace, "PNG", outputFile2);
+
+		    System.out.println("Image saved successfully at: " + desktopPath);
+		} catch (IOException e) {
+		    System.out.println("Error saving image: " + e.getMessage());
 		}
 		
-		  private void drawPoint(Graphics2D g2d, int x, int y) {
-		        g2d.setColor(Color.RED);
-		        int size = 100;
-		        g2d.fillOval(x - size / 2, y - size / 2, size, size);
-
-		    }
+	
 		
+		setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedTopFace));
+
+		
+		
+		
+	
+	}
+
+
+
+	private void drawPoint(Graphics2D g2d, int x, int y) {
+
+		g2d.setColor(Color.RED);
+
+		int size = 100;
+
+		g2d.fillOval(x - size / 2, y - size / 2, size, size);
+
+
+
+	}
+
+
+
 }
+

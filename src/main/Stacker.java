@@ -135,11 +135,11 @@ public class Stacker extends GamePanel {
 				if(!building.getDrop()){
 //					building.act();
 				
-//					building.setSize(building.getWidth()+cable.getScale()/2,building.getHeight()+cable.getScale()/2);
+					building.setSize(building.getWidth()+cable.getScale()/2,building.getHeight()+cable.getScale()/2);
 //				
 //					System.out.println(cable.getDx()+" "+cable.getDy());
-//					building.setX(cable.getEndX());
-//					building.setY(cable.getEndY());
+					building.setX(cable.getEndX());
+					building.setY(cable.getEndY());
 //					building.setSize(building.getWidth()+cable.getScale(),building.getHeight()+cable.getScale());
 					
 					if (mouseH.isClicked() == true || keyH.isSpacebar()) {

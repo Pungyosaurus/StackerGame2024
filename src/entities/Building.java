@@ -1,5 +1,9 @@
 package entities;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 public class Building extends GameObject {
@@ -26,6 +30,10 @@ public class Building extends GameObject {
 		
 	}
 	
+	
+	public void setDrop(boolean state) {
+		this.drop = state;
+	}
 	public void drop(double dx, double dy, boolean direction){
 		
 		if(direction){
@@ -55,4 +63,50 @@ public class Building extends GameObject {
 			}
 			
 		}
+		
+		public boolean collides(Building other, boolean direction) {
+//			Dimension o = other.getSize();
+			System.out.println("called");
+			double x = getX();
+			double y = getY() + getHeight() - getWidth() / 2 / Math.sqrt(3) ;
+			Graphics2D g2d = (Graphics2D) this.getGraphics();
+			
+			drawPoint(g2d,(int) x,(int) y);
+			
+			double xo = other.getX();
+			double yo = other.getY() + other.getWidth() / 2 / Math.sqrt(3);
+			
+			
+//			Dimension t = this.getSize();
+			double m;
+			if(direction) {
+				m = 9/16;
+			}else
+				m = -16/9;
+			
+			
+			
+//			Line2D oLine = new Line2D(
+//					(float)other.getX(), 
+//					(float)(other.getY() + o.getHeight() / 2), 
+//					(float)(other.getX() + o.getWidth() / 2), 
+//					(float)(other.getY() + o.getHeight()));
+
+//			Line tLine = new Line();
+
+
+			return false;
+		}
+		private void drawPoint(Graphics2D g2d, int x, int y) {
+
+			g2d.setColor(Color.RED);
+
+			int size = 100;
+
+			g2d.fillOval(x - size / 2, y - size / 2, size, size);
+
+
+
+		}
+		
 }

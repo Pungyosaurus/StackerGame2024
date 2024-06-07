@@ -1,8 +1,10 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -24,19 +26,17 @@ public class Stacker extends GamePanel {
 
 	private int groundWidth = 90;
 	private int groundHeight = 80;
-	
 
 	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
 	private ArrayList<Ground> groundObjectList2 = new ArrayList<Ground>();
-	
+	private ArrayList<Building> stack = new ArrayList<Building>();
 
 	private Cable cable;
 	private Crane crane1;
 	private Building building;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
-	private BufferedImage background, iGround, iCrane,  rope;
-	
+	private BufferedImage background, iGround, iCrane, rope;
 
 	public static void main(String[] args) {
 
@@ -73,29 +73,33 @@ public class Stacker extends GamePanel {
 		getImages();
 		setBackgroundImage(background);
 
-		int startCraneX = (int) (screenWidth / 8-600);
-		int startCraneY = (int) (screenHeight / 8+200);
 
-		crane1 = new Crane(startCraneX, startCraneY, 800, 800, iCrane);
-		add(crane1);
-		cable = new Cable((int)screenWidth/4, -100, 550, 550, rope);
+		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
+		
+		Building groundZero = new Building((int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundWidth * 7, groundHeight * 7,iGround);
+		stack.add(groundZero);
+		numBuildings++;
+		Building first = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 7, groundHeight * 7, iGround);
+		add(first);
 		add(cable);
-		
-		
-		
+		stack.add(first);
+		numBuildings++;
+
 		// create and place ground objects
 
 		// keep odd
 
-		makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight/4 *3), groundObjectList1);
-		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight/4 *3), groundObjectList2);
-		
-		BuildingCut temp = new BuildingCut(1000,500,groundWidth*7,groundHeight*7,iGround);
+		makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
+		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+
+		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
 		add(temp);
 		
 		temp.cut(30,50,20,20);
 		
 		
+
+
 		repaint();
 		try {
 			TimeUnit.SECONDS.sleep(2);
@@ -103,6 +107,13 @@ public class Stacker extends GamePanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
+//		try {
+//			TimeUnit.SECONDS.sleep(2);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}		
+//		temp.cut(0, 0, 40, 0);
 
 //		temp.cut(0, 0);
 //		temp.setSize(70, temp.getWidth());
@@ -113,10 +124,10 @@ public class Stacker extends GamePanel {
 
 	}
 
-	
-
 	int counter = 0;
 	int counter2 = 11;
+	private int leftEndGround = 900, rightEndGround = 900;
+	private int numBuildings;
 
 	public void update() {
 		if (keyH.isEscape()) {
@@ -124,44 +135,37 @@ public class Stacker extends GamePanel {
 			isPaused = !isPaused;
 		}
 		if (!isPaused) {
-			
-			if(building == null){
-//				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth*7,groundHeight*7,iGround);
-				building = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*7,groundHeight*7,iGround);
-				add(building,3);
-			}
-			if(building!= null){
-				if(!building.getDrop()){
-//					building.act();
-				
-//					building.setSize(building.getWidth()+cable.getScale()/2,building.getHeight()+cable.getScale()/2);
-//				
-//					System.out.println(cable.getDx()+" "+cable.getDy());
-//					building.setX(cable.getEndX());
-//					building.setY(cable.getEndY());
-//					building.setSize(building.getWidth()+cable.getScale(),building.getHeight()+cable.getScale());
-					
-					if (mouseH.isClicked() == true || keyH.isSpacebar()) {
-						keyH.setSpacebar(false);
-						mouseH.setClicked(false);
-
-						System.out.println("in");
-						building.drop(cable.getDx(),cable.getDy(), cable.getDirection());
-
-						
-
-					}
-				}else{
-					building.act();
-					if(building.getY()>4000){
-						building = null;
-					}
-					
-				}
-			}
-			
 			cable.act();
-			// add code to drop the block here
+
+			Building current = stack.get(numBuildings - 1);
+
+			if (!current.getDrop()) {
+
+				current.setSize(current.getWidth() + cable.getScale() / 2, current.getHeight() + cable.getScale() / 2);
+				current.setX(cable.getEndX());
+				current.setY(cable.getEndY());
+
+				if (mouseH.isClicked() == true || keyH.isSpacebar()) {
+					keyH.setSpacebar(false);
+					mouseH.setClicked(false);
+					current.drop(cable.getDx(), cable.getDy(), cable.getDirection());
+
+				}
+			} else {
+				current.act();
+				// only works when there is more than one building... Solution: make an invisible building with bounds of the platform class
+				Building prev = stack.get(numBuildings - 2);
+				if (prev.collides(current) || current.getY() > leftEndGround || current.getY() > rightEndGround) {
+					current.setDrop(false);
+					Dimension r = current.getSize();
+					
+					stack.add(new Building((int) cable.getEndX(), (int) cable.getEndY(), (int)r.getWidth(), (int)r.getHeight(), iGround));
+					numBuildings++;
+					add(stack.get(numBuildings - 1), numBuildings);
+
+				}
+
+			}
 
 			groundObjectList1.get(counter).act();
 			groundObjectList1.get(counter2).act();
@@ -178,16 +182,7 @@ public class Stacker extends GamePanel {
 //			ground.setX(ground.getX() + 1);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
 		int amount = -1;
 		setLayout(null);
@@ -200,8 +195,8 @@ public class Stacker extends GamePanel {
 				amount += 1;
 
 			}
-			
-			for(int i = 0; i<=amount;i++) {
+
+			for (int i = 0; i <= amount; i++) {
 //				try {
 //					TimeUnit.MILLISECONDS.sleep(1);
 //				} catch (InterruptedException e) {
@@ -209,11 +204,11 @@ public class Stacker extends GamePanel {
 //					e.printStackTrace();
 //				}
 //				Ground ground = new Ground( startX + groundWidth*i - 40*i -40*amount , startY + (int) (j*groundHeight*.25) , groundWidth, groundHeight, iGround, 180/depth*j);
-				Ground ground = new Ground( startX + (groundWidth-30)*i - ((groundWidth-30)/2)*amount , startY + (int) (j*groundHeight*.20) , groundWidth, groundHeight, iGround, 180/depth*j);
+				Ground ground = new Ground(startX + (groundWidth - 30) * i - ((groundWidth - 30) / 2) * amount,
+						startY + (int) (j * groundHeight * .20), groundWidth, groundHeight, iGround, 180 / depth * j);
 
-				add(ground,1);
+				add(ground, 1);
 
-			
 //				try {
 //					TimeUnit.MILLISECONDS.sleep(1);
 //				} catch (InterruptedException e) {
@@ -223,10 +218,10 @@ public class Stacker extends GamePanel {
 //				setComponentZOrder(ground, 1);
 				list.add(ground);
 				repaint();
-			
-		}
 
-	}
+			}
+
+		}
 	}
 
 }

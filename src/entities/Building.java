@@ -1,5 +1,7 @@
 package entities;
 
+import java.awt.Dimension;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 public class Building extends GameObject {
@@ -26,6 +28,10 @@ public class Building extends GameObject {
 		
 	}
 	
+	
+	public void setDrop(boolean state) {
+		this.drop = state;
+	}
 	public void drop(double dx, double dy, boolean direction){
 		
 		if(direction){
@@ -54,5 +60,25 @@ public class Building extends GameObject {
 				//top facing side gets cut by depth at the same 
 			}
 			
+		}
+		
+		public boolean collides(Building other, boolean direction) {
+			Dimension o = other.getSize();
+			Dimension t = this.getSize();
+			
+			if(direction) {
+				
+			}
+			
+			Line2D oLine = new Line2D(
+					(float)other.getX(), 
+					(float)(other.getY() + o.getHeight() / 2), 
+					(float)(other.getX() + o.getWidth() / 2), 
+					(float)(other.getY() + o.getHeight()));
+
+//			Line tLine = new Line();
+
+
+			return false;
 		}
 }

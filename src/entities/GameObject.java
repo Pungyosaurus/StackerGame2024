@@ -23,6 +23,9 @@ public abstract class GameObject extends JComponent {
 	protected BufferedImage sprite;
 	protected double spriteAngle;
 	protected boolean backgroundElement;
+	
+	//delete 
+	int width,height;
 
 	public GameObject(int w, int h, BufferedImage image) {
 		setSize(w, h);
@@ -40,10 +43,16 @@ public abstract class GameObject extends JComponent {
 		this(w, h, image);
 		setX(x);
 		setY(y);
+		//delete
+		this.width = w;
+		this.height = h;
 	}
 
 	public void setSize(int width, int height) {
 		super.setSize(width, height);
+		//delete
+		this.width = width;
+		this.height = height;
 	}
 
 	public int getWindowWidth() {
@@ -207,6 +216,13 @@ public abstract class GameObject extends JComponent {
 				g.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 			}
 		}
+		
+		g.setColor(Color.RED);
+
+		int size = 100;
+
+		g.fillOval(width/2-50, height-50, size, size);
+
 	}
 
 	public boolean collides(GameObject o) {

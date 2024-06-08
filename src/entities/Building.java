@@ -64,39 +64,41 @@ public class Building extends GameObject {
 			
 		}
 		
-		public boolean collides(Building other, boolean direction) {
+		public boolean collides(Building prev, boolean direction) {
 //			Dimension o = other.getSize();
-			System.out.println("called");
-			double x = getX();
-			double y = getY() + getHeight() - getWidth() / 2 / Math.sqrt(3) ;
+			double x = getX()+getWidth()/2;
+			double y = getY()+getHeight();
 			Graphics2D g2d = (Graphics2D) this.getGraphics();
 			
 			drawPoint(g2d,(int) x,(int) y);
 			
-			double xo = other.getX();
-			double yo = other.getY() + other.getWidth() / 2 / Math.sqrt(3);
+			double xo = prev.getX()+prev.getWidth()/2;
+			double yo = prev.getY();
+//			System.out.println(xo+ " "+ yo);
+			
+			double bo = getHeight() - yo - 1/Math.sqrt(3)*xo;
+			double b = getHeight() - y -1/Math.sqrt(3)*x;
+			System.out.println(b + " "+bo);
+			if(bo-b <20 && bo-b >-20) {
+				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) > Math.sqrt(Math.pow(0-width/2,2)+Math.pow(height/2-0,2))) {
+					System.out.println("collides");
+					return true;
+				}
+			}
 			
 			
 //			Dimension t = this.getSize();
-			double m;
-			if(direction) {
-				m = 9/16;
-			}else
-				m = -16/9;
-			
-			
-			
-//			Line2D oLine = new Line2D(
-//					(float)other.getX(), 
-//					(float)(other.getY() + o.getHeight() / 2), 
-//					(float)(other.getX() + o.getWidth() / 2), 
-//					(float)(other.getY() + o.getHeight()));
-
-//			Line tLine = new Line();
-
+//			double m;
+//			if(direction) {
+//				m = 9/16;
+//			}else
+//				m = -16/9;
+		
 
 			return false;
+
 		}
+		
 		private void drawPoint(Graphics2D g2d, int x, int y) {
 
 			g2d.setColor(Color.RED);

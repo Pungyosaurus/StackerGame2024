@@ -33,10 +33,10 @@ public class Stacker extends GamePanel {
 
 	private Cable cable;
 	private Crane crane1;
-	private Building building;
+	private Building currentBuilding;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
-	private BufferedImage background, iGround, iCrane, rope;
+	private BufferedImage background, iGround, iCrane, rope,iBuilding;
 
 	public static void main(String[] args) {
 
@@ -59,6 +59,8 @@ public class Stacker extends GamePanel {
 			iCrane = ImageIO.read(getClass().getResourceAsStream("/noback.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
 			rope = ImageIO.read(getClass().getResourceAsStream("/blueCgain.png"));
+			iBuilding = ImageIO.read(getClass().getResourceAsStream("/building1.png"));
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -75,16 +77,12 @@ public class Stacker extends GamePanel {
 
 
 		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
-		
+		add(cable);
+
 		Building groundZero = new Building((int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundWidth * 7, groundHeight * 7,iGround);
 		stack.add(groundZero);
 		numBuildings++;
-		Building first = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 7, groundHeight * 7, iGround);
-		add(first);
-		add(cable);
-		stack.add(first);
-		numBuildings++;
-
+		
 		// create and place ground objects
 
 		// keep odd
@@ -95,32 +93,19 @@ public class Stacker extends GamePanel {
 		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
 		add(temp);
 		
-		temp.cut(30,50,20,20);
+		temp.cut(50,50,0,0);
 		
 		
 
 
 		repaint();
-		try {
-			TimeUnit.SECONDS.sleep(2);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
 //		try {
 //			TimeUnit.SECONDS.sleep(2);
 //		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}		
-//		temp.cut(0, 0, 40, 0);
+	
 
-//		temp.cut(0, 0);
-//		temp.setSize(70, temp.getWidth());
-		repaint();
-//		ground = new Ground (120,150,90,125,iGround);
-//		add(ground);
-//		
 
 	}
 
@@ -136,10 +121,9 @@ public class Stacker extends GamePanel {
 		}
 		if (!isPaused) {
 			
-			if(building == null){
-//				building = new Building((int)(screenWidth/4),(int)(screenHeight/2),groundWidth*7,groundHeight*7,iGround);
-				building = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*7,groundHeight*7,iGround);
-				add(building,3);
+			if(currentBuilding == null){
+				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*3,groundHeight*3,iBuilding);
+				add(currentBuilding,3);
 			}
 //			if(building!= null){
 //				if(!building.getDrop()){
@@ -172,37 +156,50 @@ public class Stacker extends GamePanel {
 			
 			
 			cable.act();
+			//if not dropping
+			if (!currentBuilding.getDrop()) {
 
-			Building current = stack.get(numBuildings - 1);
-
-			if (!current.getDrop()) {
-
-				current.setSize(current.getWidth() + cable.getScale() / 2, current.getHeight() + cable.getScale() / 2);
-				current.setX(cable.getEndX());
-				current.setY(cable.getEndY());
-				Building prev = stack.get(numBuildings - 2);
-				current.collides(prev, true);
+//				currentBuilding.setSize(currentBuilding.getWidth() + cable.getScale() / 2, currentBuilding.getHeight() + cable.getScale() / 2);
+				currentBuilding.setX(cable.getEndX());
+				currentBuilding.setY(cable.getEndY());
+				
 				if (mouseH.isClicked() == true || keyH.isSpacebar()) {
 					keyH.setSpacebar(false);
 					mouseH.setClicked(false);
-					current.drop(cable.getDx(), cable.getDy(), cable.getDirection());
+					currentBuilding.drop(cable.getDx(), cable.getDy(), cable.getDirection());
 					
 				}
 			} else {
-				current.act();
+				Building prev = stack.get(numBuildings - 1);
+				
+				
+				currentBuilding.act();
 				// only works when there is more than one building... Solution: make an invisible building with bounds of the platform class
-				if ( current.getY() > leftEndGround || current.getY() > rightEndGround) {
-					current.setDrop(false);
-					Dimension r = current.getSize();
-					
-					stack.add(new Building((int) cable.getEndX(), (int) cable.getEndY(), (int)r.getWidth(), (int)r.getHeight(), iGround));
+				if ( currentBuilding.collides(prev, true) ) {
+					currentBuilding.setDrop(false);
+					Dimension r = currentBuilding.getSize();
+					stack.add(currentBuilding);
 					numBuildings++;
-					add(stack.get(numBuildings - 1), numBuildings);
 
+					
+					
+					currentBuilding = new Building((int) cable.getEndX(), (int) cable.getEndY(), (int)r.getWidth(), (int)r.getHeight(), iBuilding);
+					add(currentBuilding, numBuildings);
+
+				}
+				else if(currentBuilding.getY()>2000){
+					System.out.println("you failed");
+					currentBuilding = null;
 				}
 
 			}
 
+			
+			
+			
+			
+			
+			
 			groundObjectList1.get(counter).act();
 			groundObjectList1.get(counter2).act();
 

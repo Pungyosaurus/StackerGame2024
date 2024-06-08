@@ -79,10 +79,6 @@ public class BuildingCut extends GameObject {
 
 
 
-			// Save the combined image to a file
-
-//	            ImageIO.write(combinedImage, "PNG", new File("path/to/combinedImage.png"));
-
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -179,7 +175,7 @@ public class BuildingCut extends GameObject {
 		
 		int startX = totalTopLeftCutDepth;
 		int startY = (int) (totalTopLeftCutDepth / Math.sqrt(3)) ;
-		int width = img1.getWidth()- totalLeftDepth - totalTopLeftCutDepth;
+		int width = img1.getWidth()- totalRightDepth - totalTopLeftCutDepth;
 		int height = img1.getHeight() - (int) (totalTopLeftCutDepth / Math.sqrt(3));
 				
 		BufferedImage croppedLeftFace = img1.getSubimage(startX,startY,width,height);
@@ -187,9 +183,9 @@ public class BuildingCut extends GameObject {
 		
 
 		
-		startX = totalRightDepth;
+		startX = totalLeftDepth;
 		startY = (int) (totalTopRightCutDepth / Math.sqrt(3)) ;
-		width = img2.getWidth()  - totalRightDepth - totalTopRightCutDepth;
+		width = img2.getWidth()  - totalLeftDepth - totalTopRightCutDepth;
 		height = img2.getHeight() - (int) (totalTopRightCutDepth / Math.sqrt(3));
 		BufferedImage croppedRightFace = img2.getSubimage(startX,startY,width,height);
 

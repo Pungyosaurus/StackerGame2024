@@ -184,7 +184,7 @@ public class Stacker extends GamePanel {
 					
 					
 					currentBuilding = new Building((int) cable.getEndX(), (int) cable.getEndY(), (int)r.getWidth(), (int)r.getHeight(), iBuilding);
-					add(currentBuilding, numBuildings);
+					add(currentBuilding, numBuildings+2);
 
 				}
 				else if(currentBuilding.getY()>2000){

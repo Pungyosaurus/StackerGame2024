@@ -32,7 +32,8 @@ public class Stacker extends GamePanel {
 	private ArrayList<Building> stack = new ArrayList<Building>();
 
 	private Cable cable;
-	private Crane crane1;
+	private Sound soundEffects = new Sound();
+	private Sound bgMusic = new Sound();
 	private Building currentBuilding;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
@@ -93,7 +94,7 @@ public class Stacker extends GamePanel {
 		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
 		add(temp);
 		
-		temp.cut(50,50,0,0);
+		temp.cut(0,0,0,40);
 		
 		
 
@@ -108,10 +109,9 @@ public class Stacker extends GamePanel {
 
 
 	}
-
+	private boolean s1, s2;
 	int counter = 0;
 	int counter2 = 11;
-	private int leftEndGround = 900, rightEndGround = 900;
 	private int numBuildings;
 
 	public void update() {
@@ -123,7 +123,7 @@ public class Stacker extends GamePanel {
 			
 			if(currentBuilding == null){
 				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*3,groundHeight*3,iBuilding);
-				add(currentBuilding,3);
+				add(currentBuilding,numBuildings + 1);
 			}
 //			if(building!= null){
 //				if(!building.getDrop()){
@@ -175,14 +175,16 @@ public class Stacker extends GamePanel {
 				
 				currentBuilding.act();
 				// only works when there is more than one building... Solution: make an invisible building with bounds of the platform class
-				if ( currentBuilding.collides(prev, true) ) {
+				if ( currentBuilding.collides(prev, cable.getDirection()) ) {
+					System.out.println(" jcollided");
 					currentBuilding.setDrop(false);
 					Dimension r = currentBuilding.getSize();
 					stack.add(currentBuilding);
 					numBuildings++;
+//					playSE(1);
 
 					
-					
+					// adding a buildng what
 					currentBuilding = new Building((int) cable.getEndX(), (int) cable.getEndY(), (int)r.getWidth(), (int)r.getHeight(), iBuilding);
 					add(currentBuilding, numBuildings+2);
 
@@ -256,5 +258,11 @@ public class Stacker extends GamePanel {
 
 		}
 	}
+	public void playSE(int i) {
+
+		soundEffects.setFile(i);
+		soundEffects.play();
+	}
+	
 
 }

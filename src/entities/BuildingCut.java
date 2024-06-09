@@ -137,7 +137,7 @@ public class BuildingCut extends GameObject {
 
 		// Draw the right face
 
-		g2d.drawImage(rightFace, topFace.getWidth() / 2,topFace.getHeight() / 2, null);
+		g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
 
 
 

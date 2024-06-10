@@ -96,7 +96,6 @@ public class Stacker extends GamePanel {
 		
 		temp.cut(40,40,40,40);
 		
-		
 
 
 		repaint();
@@ -124,6 +123,7 @@ public class Stacker extends GamePanel {
 			if(currentBuilding == null){
 				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*3,groundHeight*3,iBuilding);
 				add(currentBuilding,numBuildings + 1);
+
 			}
 //			if(building!= null){
 //				if(!building.getDrop()){

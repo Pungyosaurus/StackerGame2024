@@ -93,7 +93,12 @@ public class BuildingCut extends GameObject {
 
 	}
 
-
+	public double getMx(){
+		return middle[0];
+	}
+	public double getMy(){
+		return middle[1];
+	}
 
 	public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
 

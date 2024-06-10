@@ -65,23 +65,23 @@ public class Building extends GameObject {
 		}
 		
 		public boolean collides(Building prev, boolean direction) {
-			double x = getX()+getWidth()/2;
-			double y = getY();
-			Graphics2D g2d = (Graphics2D) this.getGraphics();
-			
-			drawPoint(g2d,(int) x,(int) y);
-			
-			double xo = prev.getX()+prev.getWidth()/2;
-			double yo = prev.getY();
+//			double x = getX()+getWidth()/2;
+//			double y = getY();
+//			Graphics2D g2d = (Graphics2D) this.getGraphics();
+//			
+//			drawPoint(g2d,(int) x,(int) y);
+//			
+//			double xo = prev.getX()+prev.getWidth()/2;
+//			double yo = prev.getY();
 //			double px = prev.getX() + prev.getWidth() / 2;
 //			double py = prev.getY() + prev.getWidth() / (2 * Math.sqrt(3));
 //			
 //			double x = getX() + getWidth() / 2;
 //			double y = getY() + getHeight();
 //			
-			System.out.println(y + "   :   " + yo);
-			if(y > yo)
-				return true;
+//			System.out.println(y + "   :   " + yo);
+//			if(y > yo)
+//				return true;
 			
 //			if(direction) {
 //				if(x >= xo) {
@@ -94,25 +94,25 @@ public class Building extends GameObject {
 //				return false;
 //			}
 			
-//			double x = getX()+getWidth()/2;
-//			double y = getY()+getHeight();
-//			Graphics2D g2d = (Graphics2D) this.getGraphics();
-//			
-//			drawPoint(g2d,(int) x,(int) y);
-//			
-//			double xo = prev.getX()+prev.getWidth()/2;
-//			double yo = prev.getY();
-////			System.out.println(xo+ " "+ yo);
-//			
-//			double bo = getHeight() - yo - 1/Math.sqrt(3)*xo;
-//			double b = getHeight() - y -1/Math.sqrt(3)*x;
-////			System.out.println(b + " "+bo);
-//			if(bo-b <20 && bo-b >-20) {
-//				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) > Math.sqrt(Math.pow(0-width/2,2)+Math.pow(height/2-0,2))) {
-//					System.out.println("collides");
-//					return true;
-//				}
-//			}
+			double x = getX()+getWidth()/2;
+			double y = getY()+getHeight();
+			Graphics2D g2d = (Graphics2D) this.getGraphics();
+			
+			drawPoint(g2d,(int) x,(int) y);
+			
+			double xo = prev.getX()+prev.getWidth()/2;
+			double yo = prev.getY();
+//			System.out.println(xo+ " "+ yo);
+			
+			double bo = getHeight() - yo - 1/Math.sqrt(3)*xo;
+			double b = getHeight() - y -1/Math.sqrt(3)*x;
+//			System.out.println(b + " "+bo);
+			if(bo-b <20 && bo-b >-20) {
+				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) > Math.sqrt(Math.pow(0-width/2,2)+Math.pow(height/2-0,2))) {
+					System.out.println("collides");
+					return true;
+				}
+			}
 			
 			
 //			Dimension t = this.getSize();

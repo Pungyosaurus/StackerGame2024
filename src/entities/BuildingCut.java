@@ -44,7 +44,7 @@ public class BuildingCut extends GameObject {
 	private int totalTopLeftCutDepth;
 
 	private int totalTopRightCutDepth;
-
+	private double[] middle = new double[2];
 
 	public BuildingCut(int x, int y, int width, int height, BufferedImage image) {
 
@@ -136,7 +136,8 @@ public class BuildingCut extends GameObject {
 
 
 		// Draw the right face
-
+		middle[0] = leftFace.getWidth();
+		middle[1] = leftFace.getWidth() / Math.sqrt(3);
 		g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
 
 

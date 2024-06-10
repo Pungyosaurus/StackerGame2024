@@ -94,7 +94,7 @@ public class Stacker extends GamePanel {
 		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
 		add(temp);
 		
-		temp.cut(0,0,0,40);
+		temp.cut(40,40,40,40);
 		
 		
 
@@ -109,7 +109,7 @@ public class Stacker extends GamePanel {
 
 
 	}
-	private boolean s1, s2;
+	private boolean s1, s2; // going to be used to paly different sound effects after consecutive successful placements
 	int counter = 0;
 	int counter2 = 11;
 	private int numBuildings;

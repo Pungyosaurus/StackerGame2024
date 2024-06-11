@@ -55,6 +55,7 @@ public class Building extends GameObject {
 				// Combine the images
 
 				combinedImage = combineImages(img1, img2, img3);
+				System.out.println(img1.getHeight()+img3.getHeight()  + "teslktj");
 
 
 
@@ -103,14 +104,6 @@ public class Building extends GameObject {
 		return drop;
 	}
 		
-		public void cut(int side, int depth){
-			if(side == 1){
-				//left facing side cut by depth
-				//right facing side stays the same length
-				//top facing side gets cut by depth at the same 
-			}
-			
-		}
 		
 		public boolean collides(Building prev, boolean direction) {
 			double mx = prev.getX() + prev.getBottomMiddleX();
@@ -119,7 +112,7 @@ public class Building extends GameObject {
 			double y = getY() + getHeight();
 			Graphics2D g2d = (Graphics2D) this.getGraphics();
 //			drawPoint(g2d,(int) x,(int) y, Color.blue);
-			System.out.println(y + "   :   " + my);
+//			System.out.println(y + "   :   " + my);
 			if(y > my)
 				return true;
 			
@@ -188,7 +181,8 @@ public class Building extends GameObject {
 	
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 
-			int combinedHeight = leftFace.getHeight() + topFace.getHeight();
+			int combinedHeight =(int) ( leftFace.getHeight() - leftFace.getWidth()/Math.sqrt(3) + topFace.getHeight());
+			System.out.println(combinedHeight);
 
 
 			BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
@@ -216,11 +210,57 @@ public class Building extends GameObject {
 
 			g2d.dispose();
 
-			BufferedImage whitespace = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			this.setSize(combinedWidth,combinedHeight);
+			System.out.println(this.getWidth()+" "+ this.getHeight());
+			
+			BufferedImage whitespace = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
 			g2d = whitespace.createGraphics();
 		    g2d.setBackground(new java.awt.Color(0, 0, 0, 0));
-		    g2d.clearRect(0, 0, width,height);
-		    g2d.drawImage(combined, 0, 0, null);
+		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
+		 
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    int x1 = (int) (TOP_WIDTH/2 + totalLeftDepth *Math.sqrt(3)/2 -totalRightDepth *Math.sqrt(3)/2);
+			int y1 = TOP_HEIGHT- totalLeftDepth/2 - totalRightDepth/2 -10;
+			setTopMiddleX(x1);
+			setTopMiddleY(y1);
+			
+			
+			for(int i =0; i<10;i++) {
+				combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
+
+			}
+			
+			
+			
+			 System.out.println(x1+" "+y1);
+
+			 y1 = whitespace.getHeight();
+			 
+			 System.out.println(x1+" "+y1);
+
+			 setBottomMiddleX(x1);
+			 setBottomMiddleY(y1);
+			
+			 for(int i =0; i<10;i++) {
+				 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
+
+			}
+		    
+			 
+			 
+			    g2d.drawImage(combined, 0, 0, null);
+
+		    
+		    
+		    
+		    
+
 		
 
 			return whitespace;
@@ -374,26 +414,6 @@ public class Building extends GameObject {
 		
 
 			
-			setBottomMiddleX(TOP_WIDTH/2 + totalLeftDepth *Math.sqrt(3)/2 -totalRightDepth *Math.sqrt(3)/2);
-			setBottomMiddleY(TOP_HEIGHT- totalLeftDepth/2 - totalRightDepth/2 -10);
-			int x1 = (int) (TOP_WIDTH/2 + totalLeftDepth *Math.sqrt(3)/2 -totalRightDepth *Math.sqrt(3)/2);
-			int y1 = TOP_HEIGHT- totalLeftDepth/2 - totalRightDepth/2 -10;
-			
-			for(int i =0; i<10;i++) {
-				croppedcroppedcroppedcroppedTopFace.setRGB(x1-i,y1-i, Color.pink.getRGB());
-
-			}
-			
-			
-			setBottomMiddleX(TOP_WIDTH/2 + totalTopLeftCutDepth *Math.sqrt(3)/2 -totalTopRightCutDepth *Math.sqrt(3)/2);
-			setBottomMiddleY(TOP_HEIGHT- totalTopLeftCutDepth/2 - totalTopRightCutDepth/2);
-			 x1 = (int) (TOP_WIDTH/2 + totalTopLeftCutDepth *Math.sqrt(3)/2 -totalTopRightCutDepth *Math.sqrt(3)/2);
-			 y1 = totalTopLeftCutDepth/2 + totalTopRightCutDepth/2 +10;
-			
-			for(int i =0; i<10;i++) {
-				croppedcroppedcroppedcroppedTopFace.setRGB(x1+i,y1+i, Color.pink.getRGB());
-
-			}
 			
 			g2d.dispose();
 			g2d2.dispose();
@@ -430,6 +450,11 @@ public class Building extends GameObject {
 			}
 			
 		
+			
+			
+			
+			
+			
 			
 			setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedImage));
 		}

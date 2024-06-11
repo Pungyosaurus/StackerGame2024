@@ -97,11 +97,11 @@ public class Stacker extends GamePanel {
 		
 		
 		//cut code
-		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
-		add(temp);
-		
-		temp.cut(40,40,40,40);
-		
+//		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
+//		add(temp);
+//		
+//		temp.cut(40,40,40,40);
+//		
 
 
 		repaint();
@@ -120,9 +120,8 @@ public class Stacker extends GamePanel {
 		if (!isPaused) {
 			
 			if(currentBuilding == null){
-				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*3,groundHeight*3,iBuilding);
+				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
 				add(currentBuilding,numBuildings + 1);
-				currentBuilding.cut(0,0,0,0);
 			}
 			
 			

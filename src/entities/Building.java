@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,11 +17,8 @@ public class Building extends GameObject {
 	private int gravity = 1;
 	private boolean drop = false;
 
-	BufferedImage img1, img2, img3;
-
+	private BufferedImage img1, img2, img3;
 	private int totalLeftDepth, totalRightDepth, topDistance;
-
-	BufferedImage lf, rf, tf;
 
 	private int TOP_WIDTH, TOP_HEIGHT;
 
@@ -33,16 +29,50 @@ public class Building extends GameObject {
 	
 	public Building(int x, int y, int width, int height, BufferedImage image ){
 		 super(x , y, width, height, image);
-		 BufferedImage resizediGround = resizeBuffImage(image, width, height);
-		 setSprite(resizediGround);
+		 
+		 this.width = width;
+		this.height = height;
+		BufferedImage combinedImage = null;
+
+		 try {
+
+				// Load the images
+
+				img1 = ImageIO.read(getClass().getResourceAsStream("/leftFace.png"));
+
+
+
+				img2 = ImageIO.read(getClass().getResourceAsStream("/rightFace.png"));
+
+
+
+				img3 = ImageIO.read(getClass().getResourceAsStream("/topFace.png"));
+
+				TOP_WIDTH = img3.getWidth();
+				TOP_HEIGHT = img3.getHeight();
+
+				
+				// Combine the images
+
+				combinedImage = combineImages(img1, img2, img3);
+
+
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+		 
+		 setSprite(combinedImage);
+		 //make this the value of the true cut zeros are temporrary
+//		 cut(0,0,0,0);
+		 
+		 
 		}
 	
 	public void act() {
-//		if(getX() >= 900 || getX()<100){
-//			xSpeed = -xSpeed;
-//			ySpeed = -ySpeed;
-//		}
-//		System.out.println(getX()+ " " + getY());
+
 		ySpeed += gravity;
 		setY(getY()+(int)ySpeed);
 		setX(getX()+(int)xSpeed);
@@ -67,7 +97,6 @@ public class Building extends GameObject {
 	public void drop(double dx, double dy){
 		xSpeed = -dx*3;
 		ySpeed =  dy;
-//		System.out.println(dx + " : " + dy);
 		drop = true;
 	}
 		public boolean getDrop(){
@@ -84,12 +113,11 @@ public class Building extends GameObject {
 		}
 		
 		public boolean collides(Building prev, boolean direction) {
-			double mx = prev.getX() + prev.getMx();
-			double my = prev.getY() + prev.getMy();
+			double mx = prev.getX() + prev.getBottomMiddleX();
+			double my = prev.getY() + prev.getBottomMiddleY();
 			double x = getX() + getWidth()/2;
 			double y = getY() + getHeight();
 			Graphics2D g2d = (Graphics2D) this.getGraphics();
-//			drawPoint(g2d, (int)mx, (int)my, Color.red);
 //			drawPoint(g2d,(int) x,(int) y, Color.blue);
 			System.out.println(y + "   :   " + my);
 			if(y > my)
@@ -157,27 +185,17 @@ public class Building extends GameObject {
 		public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
 
 
-
-			// Calculate the dimensions of the combined image
-
+	
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 
 			int combinedHeight = leftFace.getHeight() + topFace.getHeight();
 
 
-
-			// Create a new BufferedImage with the combined dimensions
-//			System.out.println("combined Widths" + combinedWidth +" "+ combinedHeight);
 			BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
-
-
-
-			// Get the Graphics2D object to draw on the combined image
 
 			Graphics2D g2d = combined.createGraphics();
 
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
 
 
 			// Draw the top face
@@ -190,18 +208,11 @@ public class Building extends GameObject {
 
 			g2d.drawImage(leftFace, 0,topFace.getHeight() / 2, null);
 
-//		        g2d.drawImage(leftFace, 0, topFace.getHeight() / 2 - 0, null);
-
-
-
 			// Draw the right face
-			setMx(leftFace.getWidth());
-			setMy(leftFace.getHeight() / Math.sqrt(3));
+
+
 			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
 
-
-
-			// Dispose the graphics object
 
 			g2d.dispose();
 
@@ -215,11 +226,6 @@ public class Building extends GameObject {
 			return whitespace;
 
 		}
-
-
-
-	
-
 
 
 		public void cut( int leftCutDepth, int rightCutDepth, int topRightCutDepth, int topLeftCutDepth) {
@@ -266,27 +272,15 @@ public class Building extends GameObject {
 			topPath.lineTo(TOP_WIDTH, TOP_HEIGHT);
 			topPath.lineTo(TOP_WIDTH, 0);
 
-	//
-//			topPath.lineTo(totalLeftDepth*Math.sqrt(3)/2, TOP_HEIGHT / 2 - totalRightDepth / 2); 
-	//
+
 			double Xint = TOP_WIDTH/2 + totalRightDepth*Math.sqrt(3)/2 - totalLeftDepth*Math.sqrt(3)/2;
 			double Yint = TOP_HEIGHT - totalRightDepth/2 - totalLeftDepth/2;
-	//
-//			topPath.lineTo(Xint,Yint);
-	//
-			topDistance = (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(0 - Yint,2));
-	//
-	//
-//			topPath.lineTo(TOP_WIDTH - totalLeftDepth / Math.sqrt(2), TOP_HEIGHT / 2 - totalLeftDepth / Math.sqrt(2));
-	//
-	//
-//			topPath.lineTo(TOP_WIDTH, 0);
-//			
+	
+	
+			topDistance = (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(0 - Yint,2));	//
 			g2d.setClip(topPath);
 
 			g2d.drawImage(img3, 0, 0, null);
-//			
-
 			
 
 			BufferedImage croppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -312,15 +306,6 @@ public class Building extends GameObject {
 
 			g2d2.drawImage(croppedTopFace, 0, 0, null);
 
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			
 			BufferedImage croppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -352,13 +337,6 @@ public class Building extends GameObject {
 			g2d3.setClip(topPath);
 
 			g2d3.drawImage(croppedcroppedTopFace, 0, 0, null);
-			
-			
-
-			
-			
-			
-			
 			
 			
 			
@@ -396,8 +374,26 @@ public class Building extends GameObject {
 		
 
 			
+			setBottomMiddleX(TOP_WIDTH/2 + totalLeftDepth *Math.sqrt(3)/2 -totalRightDepth *Math.sqrt(3)/2);
+			setBottomMiddleY(TOP_HEIGHT- totalLeftDepth/2 - totalRightDepth/2 -10);
+			int x1 = (int) (TOP_WIDTH/2 + totalLeftDepth *Math.sqrt(3)/2 -totalRightDepth *Math.sqrt(3)/2);
+			int y1 = TOP_HEIGHT- totalLeftDepth/2 - totalRightDepth/2 -10;
+			
+			for(int i =0; i<10;i++) {
+				croppedcroppedcroppedcroppedTopFace.setRGB(x1-i,y1-i, Color.pink.getRGB());
+
+			}
 			
 			
+			setBottomMiddleX(TOP_WIDTH/2 + totalTopLeftCutDepth *Math.sqrt(3)/2 -totalTopRightCutDepth *Math.sqrt(3)/2);
+			setBottomMiddleY(TOP_HEIGHT- totalTopLeftCutDepth/2 - totalTopRightCutDepth/2);
+			 x1 = (int) (TOP_WIDTH/2 + totalTopLeftCutDepth *Math.sqrt(3)/2 -totalTopRightCutDepth *Math.sqrt(3)/2);
+			 y1 = totalTopLeftCutDepth/2 + totalTopRightCutDepth/2 +10;
+			
+			for(int i =0; i<10;i++) {
+				croppedcroppedcroppedcroppedTopFace.setRGB(x1+i,y1+i, Color.pink.getRGB());
+
+			}
 			
 			g2d.dispose();
 			g2d2.dispose();
@@ -406,7 +402,6 @@ public class Building extends GameObject {
 
 
 
-			
 			 int[] boundingBox = getBoundingBox(croppedcroppedcroppedcroppedTopFace);
 	         int x = boundingBox[0];
 	         int y = boundingBox[1];
@@ -419,14 +414,12 @@ public class Building extends GameObject {
 			String desktopPath1 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedLeftFace.png";
 			String desktopPath2 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedRightFace.png";
 
-			// Create a File object with the specified file path
 			File outputFile = new File(desktopPath);
 			File outputFile1 = new File(desktopPath1);
 			File outputFile2 = new File(desktopPath2);
 
 
 			try {
-			    // Write the BufferedImage to the specified file path
 			    ImageIO.write(croppedTopFace, "PNG", outputFile);
 			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
 			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
@@ -436,22 +429,9 @@ public class Building extends GameObject {
 			    System.out.println("Error saving image: " + e.getMessage());
 			}
 			
-			
-			
-			
-
-//			int temp = 		totalTopRightCutDepth / 2 + totalTopLeftCutDepth / 2;
-//			croppedcroppedcroppedcroppedTopFace = croppedcroppedcroppedcroppedTopFace.getSubimage(TOP_WIDTH / 2 - croppedLeftFace.getWidth(),temp , croppedLeftFace.getWidth() + croppedRightFace.getWidth(), topDistance-temp);
-
-			
 		
 			
 			setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedImage));
-
-			
-			
-			
-		
 		}
 
 		private static int[] getBoundingBox(BufferedImage image) {
@@ -483,28 +463,64 @@ public class Building extends GameObject {
 		/**
 		 * @return the mx
 		 */
-		public double getMx() {
+		public double getBottomMiddleX() {
 			return mx;
 		}
 
 		/**
 		 * @param mx the mx to set
 		 */
-		public void setMx(double mx) {
+		public void setBottomMiddleX(double mx) {
 			this.mx = mx;
 		}
 
 		/**
 		 * @return the my
 		 */
-		public double getMy() {
+		public double getBottomMiddleY() {
 			return my;
 		}
 
 		/**
 		 * @param my the my to set
 		 */
-		public void setMy(double my) {
+		public void setBottomMiddleY(double my) {
+			this.my = my;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/**
+		 * @return the mx
+		 */
+		public double getTopMiddleX() {
+			return mx;
+		}
+
+		/**
+		 * @param mx the mx to set
+		 */
+		public void setTopMiddleX(double mx) {
+			this.mx = mx;
+		}
+
+		/**
+		 * @return the my
+		 */
+		public double getTopMiddleY() {
+			return my;
+		}
+
+		/**
+		 * @param my the my to set
+		 */
+		public void setTopMiddleY(double my) {
 			this.my = my;
 		}
 		

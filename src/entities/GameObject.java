@@ -25,7 +25,7 @@ public abstract class GameObject extends JComponent {
 	protected boolean backgroundElement;
 	
 	//delete 
-	int width,height;
+	private int width,height;
 
 	public GameObject(int w, int h, BufferedImage image) {
 		setSize(w, h);
@@ -221,7 +221,7 @@ public abstract class GameObject extends JComponent {
 
 		int size = 100;
 
-		g.fillOval(width/2-50, height-50, size, size);
+//		g.fillOval(width/2-50, height-50, size, size);
 
 	}
 

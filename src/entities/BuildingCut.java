@@ -103,22 +103,11 @@ public class BuildingCut extends GameObject {
 	public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
 
 
-
-		// Calculate the dimensions of the combined image
-
 		int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 
 		int combinedHeight = leftFace.getHeight() + topFace.getHeight();
 
-
-
-		// Create a new BufferedImage with the combined dimensions
-//		System.out.println("combined Widths" + combinedWidth +" "+ combinedHeight);
 		BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
-
-
-
-		// Get the Graphics2D object to draw on the combined image
 
 		Graphics2D g2d = combined.createGraphics();
 
@@ -136,7 +125,6 @@ public class BuildingCut extends GameObject {
 
 		g2d.drawImage(leftFace, 0,topFace.getHeight() / 2, null);
 
-//	        g2d.drawImage(leftFace, 0, topFace.getHeight() / 2 - 0, null);
 
 
 
@@ -147,7 +135,6 @@ public class BuildingCut extends GameObject {
 
 
 
-		// Dispose the graphics object
 
 		g2d.dispose();
 
@@ -216,26 +203,18 @@ public class BuildingCut extends GameObject {
 		topPath.lineTo(TOP_WIDTH, TOP_HEIGHT);
 		topPath.lineTo(TOP_WIDTH, 0);
 
-//
-//		topPath.lineTo(totalLeftDepth*Math.sqrt(3)/2, TOP_HEIGHT / 2 - totalRightDepth / 2); 
-//
+
 		double Xint = TOP_WIDTH/2 + totalRightDepth*Math.sqrt(3)/2 - totalLeftDepth*Math.sqrt(3)/2;
 		double Yint = TOP_HEIGHT - totalRightDepth/2 - totalLeftDepth/2;
-//
-//		topPath.lineTo(Xint,Yint);
-//
+
+
 		topDistance = (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(0 - Yint,2));
-//
-//
-//		topPath.lineTo(TOP_WIDTH - totalLeftDepth / Math.sqrt(2), TOP_HEIGHT / 2 - totalLeftDepth / Math.sqrt(2));
-//
-//
-//		topPath.lineTo(TOP_WIDTH, 0);
-//		
+
+
 		g2d.setClip(topPath);
 
 		g2d.drawImage(img3, 0, 0, null);
-//		
+	
 
 		
 
@@ -262,13 +241,6 @@ public class BuildingCut extends GameObject {
 
 		g2d2.drawImage(croppedTopFace, 0, 0, null);
 
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		
@@ -307,12 +279,6 @@ public class BuildingCut extends GameObject {
 
 		
 		
-		
-		
-		
-		
-		
-		
 		BufferedImage croppedcroppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		
 		Graphics2D g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
@@ -347,8 +313,6 @@ public class BuildingCut extends GameObject {
 
 		
 		
-		
-		
 		g2d.dispose();
 		g2d2.dispose();
 		g2d3.dispose();
@@ -368,15 +332,14 @@ public class BuildingCut extends GameObject {
 		String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedTopFace.png";
 		String desktopPath1 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedLeftFace.png";
 		String desktopPath2 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedRightFace.png";
-
-		// Create a File object with the specified file path
+		
+		// used for debugging and checking image bounds
 		File outputFile = new File(desktopPath);
 		File outputFile1 = new File(desktopPath1);
 		File outputFile2 = new File(desktopPath2);
 
 
 		try {
-		    // Write the BufferedImage to the specified file path
 		    ImageIO.write(croppedTopFace, "PNG", outputFile);
 		    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
 		    ImageIO.write(croppedRightFace, "PNG", outputFile2);
@@ -388,20 +351,10 @@ public class BuildingCut extends GameObject {
 		
 		
 		
-		
-
-//		int temp = 		totalTopRightCutDepth / 2 + totalTopLeftCutDepth / 2;
-//		croppedcroppedcroppedcroppedTopFace = croppedcroppedcroppedcroppedTopFace.getSubimage(TOP_WIDTH / 2 - croppedLeftFace.getWidth(),temp , croppedLeftFace.getWidth() + croppedRightFace.getWidth(), topDistance-temp);
-
-		
-	
-		
 		setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedImage));
 
 		
 		
-		
-	
 	}
 
 	private static int[] getBoundingBox(BufferedImage image) {

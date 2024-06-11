@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -174,7 +173,7 @@ public class Building extends GameObject {
 
 			// Draw the right face
 			setMx(leftFace.getWidth());
-			setMy(leftFace.getWidth() / Math.sqrt(3));
+			setMy(leftFace.getHeight() - leftFace.getWidth() / Math.sqrt(3));
 			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
 
 

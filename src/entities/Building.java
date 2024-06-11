@@ -181,7 +181,7 @@ public class Building extends GameObject {
 	
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 
-			int combinedHeight =(int) ( leftFace.getHeight() - leftFace.getWidth()/Math.sqrt(3) + topFace.getHeight());
+			int combinedHeight =(int) ( img1.getHeight() - img1.getWidth()/Math.sqrt(3) + topFace.getHeight());
 			System.out.println(combinedHeight);
 
 
@@ -213,10 +213,10 @@ public class Building extends GameObject {
 			this.setSize(combinedWidth,combinedHeight);
 			System.out.println(this.getWidth()+" "+ this.getHeight());
 			
-			BufferedImage whitespace = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
-			g2d = whitespace.createGraphics();
-		    g2d.setBackground(new java.awt.Color(0, 0, 0, 0));
-		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
+//			BufferedImage whitespace = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
+//			g2d = whitespace.createGraphics();
+//		    g2d.setBackground(new java.awt.Color(0, 0, 0, 0));
+//		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
 		 
 		    
 		    
@@ -240,7 +240,7 @@ public class Building extends GameObject {
 			
 			 System.out.println(x1+" "+y1);
 
-			 y1 = whitespace.getHeight();
+			 y1 = combined.getHeight();
 			 
 			 System.out.println(x1+" "+y1);
 
@@ -263,7 +263,7 @@ public class Building extends GameObject {
 
 		
 
-			return whitespace;
+			return combined;
 
 		}
 

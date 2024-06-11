@@ -23,16 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final static double screenWidth = screenSize.getWidth();
 	public static double screenHeight = screenSize.getHeight();
 	
-	// old screen settings
-	private final int originalTileSize = 16;
-	private final int scale = 3;
-
-	private final int tileSize = originalTileSize / scale;
-	private final int maxScreenCol = 24;
-	private final int maxScreenRow = 14;
     private BufferedImage backgroundImage;
-//	private final int screenWidth = tileSize * maxScreenCol; // 1152 pixels
-//	private final int screenHeight = tileSize * maxScreenRow; // 672 pixels
 
 	public GamePanel() {
 		this.setPreferredSize(screenSize);

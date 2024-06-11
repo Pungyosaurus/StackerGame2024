@@ -50,7 +50,6 @@ public class Cable extends GameObject {
 
 		setSize(getWidth() + (int) (da / 2), getHeight() + (int) (da / 10));
 		spriteAngle += Math.toRadians(da / 15);
-		// System.out.println(Math.abs(Math.toDegrees(spriteAngle) - 45) * 5);
 	}
 
 	@Override
@@ -60,15 +59,13 @@ public class Cable extends GameObject {
 		try {
 			if (spriteAngle != 0) {
 
-				// Calculate the bounding box of the rotated object
+				// bounding box of rotated object
 				AffineTransform rotation = AffineTransform.getRotateInstance(spriteAngle);
 				Rectangle rotatedBounds = rotation
 						.createTransformedShape(new Rectangle(0, 0, sprite.getWidth(), sprite.getHeight())).getBounds();
 
 				// KEY CHANGE
 				g2d.setClip(rotatedBounds);
-
-				// Draw the rotated image
 				g2d.rotate(spriteAngle);
 				g2d.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 			}
@@ -84,21 +81,13 @@ public class Cable extends GameObject {
 	}
 
 	public double getEndX() {
-//		System.out.println(Math.toDegrees(getSpriteAngle()) + " " + Math.cos(Math.toDegrees(getSpriteAngle())));
 		return  getX() - (Math.cos(getSpriteAngle())+1) +250 -getWidth();
-//		System.out.println(Math.toDegrees(getSpriteAngle()), +" "+ );
-//		return getX() - WIDTH +  Math.sin(getSpriteAngle()) * 6;
-//		return getX() - getWidth() - Math.cos(getSpriteAngle()) - da * 2;
-		
-		
-//		return getX() - getWidth();
+
 
 	}
 
 	public double getEndY() {
 		return getY() + getHeight()/1.3 + (Math.sin(getSpriteAngle()))*100;
-//		return getWidth() * Math.sin(spriteAngle - Math.PI / 4);
-//		return getY() + getHeight();
 	}
 
 	public int getScale() {

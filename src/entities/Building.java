@@ -196,7 +196,7 @@ public class Building extends GameObject {
 
 			// Draw the right face
 			setMx(leftFace.getWidth());
-			setMy(leftFace.getWidth() / Math.sqrt(3));
+			setMy(leftFace.getHeight() / Math.sqrt(3));
 			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
 
 
@@ -477,21 +477,9 @@ public class Building extends GameObject {
 	    private static boolean isNonEmptyPixel(BufferedImage image, int x, int y) {
 	        int pixel = image.getRGB(x, y);
 	        Color color = new Color(pixel, true);
-	        // Assuming empty spaces are white or fully transparent
-	        return !(color.getAlpha() == 0 || (color.getRed() > 240 && color.getGreen() > 240 && color.getBlue() > 240));
+	        //empty spaces are white or fully transparent
+	        return !(color.getAlpha() == 0);
 	    }
-		private void drawPoint(Graphics2D g2d, int x, int y, Color c) {
-
-			g2d.setColor(c);
-
-			int size = 100;
-
-			g2d.fillOval(x - size / 2, y - size / 2, size, size);
-
-
-
-		}
-
 		/**
 		 * @return the mx
 		 */

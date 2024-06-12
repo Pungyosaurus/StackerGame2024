@@ -170,11 +170,13 @@ public class Building extends GameObject {
 			return false;
 
 		}
-
 		public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
 
 
-	
+			
+			
+			double hyp = Math.sqrt(Math.pow(TOP_HEIGHT / 2, 2) + Math.pow(TOP_WIDTH / 2, 2));
+			System.out.println(hyp);
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 			rightFaceWidth = rightFace.getWidth();
 
@@ -195,9 +197,9 @@ public class Building extends GameObject {
 
 
 			// Draw the left face
-
-			g2d.drawImage(leftFace, 0,topFace.getHeight() / 2, null);
-
+//			g2d.drawImage(leftFace, 0, topFace.getHeight() /2, null);
+			g2d.drawImage(leftFace, 0,(int) (topFace.getHeight() / 2 - adjustment), null);
+			adjustment = 0;
 			// Draw the right face
 
 
@@ -213,25 +215,25 @@ public class Building extends GameObject {
 //		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
 		 
 		    
-			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
-			int y1 = topFace.getHeight() - 20;
-			setTopMiddleX(x1);
-			setTopMiddleY(y1);
-				
-				
-				for(int i =0; i<10;i++) {
-					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
-
-				}
-				
-			y1 = combined.getHeight();
-			setBottomMiddleX(x1);
-			setBottomMiddleY(y1);
-				
-				 for(int i =0; i<10;i++) {
-					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
-
-				}
+//			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
+//			int y1 = topFace.getHeight() - 20;
+//			setTopMiddleX(x1);
+//			setTopMiddleY(y1);
+//				
+//				
+//				for(int i =0; i<10;i++) {
+//					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
+//
+//				}
+//				
+//			y1 = combined.getHeight();
+//			setBottomMiddleX(x1);
+//			setBottomMiddleY(y1);
+//				
+//				 for(int i =0; i<10;i++) {
+//					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
+//
+//				}
 		    
 		    
 		    
@@ -254,14 +256,14 @@ public class Building extends GameObject {
 
 		}
 
-
+		private double adjustment;
 		public void cut( int leftCutDepth, int rightCutDepth, int topRightCutDepth, int topLeftCutDepth) {
 
 			totalLeftDepth += leftCutDepth;
 			totalRightDepth += rightCutDepth;
 			totalTopLeftCutDepth += topLeftCutDepth;
 			totalTopRightCutDepth += topRightCutDepth;
-			
+			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
 			int startX = totalTopLeftCutDepth;
 			int startY = (int) (totalTopLeftCutDepth / Math.sqrt(3)) ;
 			int width = img1.getWidth()- totalRightDepth - totalTopLeftCutDepth;

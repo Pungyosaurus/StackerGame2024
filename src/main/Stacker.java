@@ -153,21 +153,17 @@ public class Stacker extends GamePanel {
 				currentBuilding.act();
 				// only works when there is more than one building... Solution: make an invisible building with bounds of the platform class
 				if ( currentBuilding.collides(prev, cable.getDirection()) ) {
-					System.out.println(" jcollided");
 					currentBuilding.setDrop(false);
-					Dimension r = currentBuilding.getSize();
 					stack.add(currentBuilding);
 					numBuildings++;
 					
 					prev = stack.get(numBuildings - 1);
-					// adding a buildng what
 					currentBuilding = null;
 					
 					for(int i = 0; i<stack.size();i++){
 						Building building = stack.get(i);
-						building.setY(building.getY()+150);
+						building.setY(building.getY()+ building.rightFaceHeight);
 					}
-
 				}
 				else if(currentBuilding.getY()>2000){
 					System.out.println("you failed");

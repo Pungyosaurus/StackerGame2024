@@ -31,8 +31,8 @@ public class Building extends GameObject {
 	private double tx;
 	private double ty;
 	
-	private double rightFaceWidth;
-	
+	public double rightFaceWidth;
+	public double rightFaceHeight;
 	public Building(int x, int y, int width, int height, BufferedImage image ){
 		 super(x , y, width, height, image);
 		 
@@ -45,7 +45,6 @@ public class Building extends GameObject {
 				// Load the images
 
 				img1 = ImageIO.read(getClass().getResourceAsStream("/leftFace.png"));
-
 
 
 				img2 = ImageIO.read(getClass().getResourceAsStream("/rightFace.png"));
@@ -177,8 +176,8 @@ public class Building extends GameObject {
 			System.out.println(hyp);
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 			rightFaceWidth = rightFace.getWidth();
-
 			int combinedHeight =(int) ( img1.getHeight() - img1.getWidth()/Math.sqrt(3) + topFace.getHeight());
+			rightFaceHeight = (int) ( combinedHeight - topFace.getHeight());
 
 			
 			this.setSize(combinedWidth,combinedHeight);
@@ -213,25 +212,25 @@ public class Building extends GameObject {
 //		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
 		 
 		    
-//			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
-//			int y1 = topFace.getHeight() - 20;
-//			setTopMiddleX(x1);
-//			setTopMiddleY(y1);
-//				
-//				
-//				for(int i =0; i<10;i++) {
-//					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
-//
-//				}
-//				
-//			y1 = combined.getHeight();
-//			setBottomMiddleX(x1);
-//			setBottomMiddleY(y1);
-//				
-//				 for(int i =0; i<10;i++) {
-//					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
-//
-//				}
+			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
+			int y1 = topFace.getHeight();
+			setTopMiddleX(x1);
+			setTopMiddleY(y1);
+				
+				
+				for(int i =0; i<10;i++) {
+					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
+
+				}
+				
+			y1 = combined.getHeight();
+			setBottomMiddleX(x1);
+			setBottomMiddleY(y1);
+				
+				 for(int i =0; i<10;i++) {
+					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
+
+				}
 		    
 		    
 		    

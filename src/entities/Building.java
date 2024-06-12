@@ -25,7 +25,13 @@ public class Building extends GameObject {
 	private int totalTopLeftCutDepth;
 
 	private int totalTopRightCutDepth;
-	private double mx, my;
+
+	private double by;
+	private double bx;
+	private double tx;
+	private double ty;
+	
+	private double rightFaceWidth;
 	
 	public Building(int x, int y, int width, int height, BufferedImage image ){
 		 super(x , y, width, height, image);
@@ -55,7 +61,6 @@ public class Building extends GameObject {
 				// Combine the images
 
 				combinedImage = combineImages(img1, img2, img3);
-				System.out.println(img1.getHeight()+img3.getHeight()  + "teslktj");
 
 
 
@@ -106,31 +111,29 @@ public class Building extends GameObject {
 		
 		
 		public boolean collides(Building prev, boolean direction) {
-			double mx = prev.getX() + prev.getBottomMiddleX();
-			double my = prev.getY() + prev.getBottomMiddleY();
-			double x = getX() + getWidth()/2;
-			double y = getY() + getHeight();
-			Graphics2D g2d = (Graphics2D) this.getGraphics();
-//			drawPoint(g2d,(int) x,(int) y, Color.blue);
-//			System.out.println(y + "   :   " + my);
-			if(y > my)
-				return true;
-			
-			
-			
-			
-//			double xo = prev.getX()+prev.getWidth()/2;
-//			double yo = prev.getY();
-//			double px = prev.getX() + prev.getWidth() / 2;
-//			double py = prev.getY() + prev.getWidth() / (2 * Math.sqrt(3));
-//			
-//			double x = getX() + getWidth() / 2;
+//			double mx = prev.getX() + prev.getBottomMiddleX();
+//			double my = prev.getY() + prev.getBottomMiddleY();
+//			double x = getX() + getWidth()/2;
 //			double y = getY() + getHeight();
-//			
-//			System.out.println(y + "   :   " + yo);
-//			if(y > yo)
+//			Graphics2D g2d = (Graphics2D) this.getGraphics();
+////			drawPoint(g2d,(int) x,(int) y, Color.blue);
+////			System.out.println(y + "   :   " + my);
+//			if(y > my)
 //				return true;
 			
+			
+			
+			
+			double xo = prev.getX()+ prev.getTopMiddleX();
+			double yo = prev.getY()+ prev.getTopMiddleY();
+			
+			double x = getX()+getBottomMiddleX();
+			double y = getY()+getBottomMiddleY();
+			
+			System.out.println(y + "   :   " + yo);
+			System.out.println(x + "   :   " + xo);
+//			if(y > yo)
+//				return true;			
 //			if(direction) {
 //				if(x >= xo) {
 //					return true;
@@ -140,27 +143,20 @@ public class Building extends GameObject {
 //				return true;
 //			}else {
 //				return false;
-//			}
+//			}			
 			
-//			double x = getX()+getWidth()/2;
-//			double y = getY()+getHeight();
-//			Graphics2D g2d = (Graphics2D) this.getGraphics();
-//			
-//			drawPoint(g2d,(int) x,(int) y);
-//			
-//			double xo = prev.getX()+prev.getWidth()/2;
-//			double yo = prev.getY();
-////			System.out.println(xo+ " "+ yo);
-//			
-//			double bo = getHeight() - yo - 1/Math.sqrt(3)*xo;
-//			double b = getHeight() - y -1/Math.sqrt(3)*x;
-////			System.out.println(b + " "+bo);
-//			if(bo-b <20 && bo-b >-20) {
-//				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) > Math.sqrt(Math.pow(0-width/2,2)+Math.pow(height/2-0,2))) {
-//					System.out.println("collides");
-//					return true;
-//				}
-//			}
+		
+//			System.out.println(xo+ " "+ yo);
+			
+			double bo =  yo + 1/Math.sqrt(3)*xo;
+			double b =  y +1/Math.sqrt(3)*x;
+			System.out.println(b + " "+bo);
+			if(bo-b <20 && bo-b >-20) {
+				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
+					System.out.println("collides");
+					return true;
+				}
+			}
 			
 			
 //			Dimension t = this.getSize();
@@ -180,10 +176,11 @@ public class Building extends GameObject {
 
 	
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
+			rightFaceWidth = rightFace.getWidth();
 
 			int combinedHeight =(int) ( img1.getHeight() - img1.getWidth()/Math.sqrt(3) + topFace.getHeight());
-			System.out.println(combinedHeight);
 
+			
 			this.setSize(combinedWidth,combinedHeight);
 			BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
 
@@ -195,7 +192,6 @@ public class Building extends GameObject {
 			// Draw the top face
 			
 			g2d.drawImage(topFace,0 , 0, null);
-//			System.out.println(topFace.getWidth() + " " + topFace.getHeight());
 
 
 			// Draw the left face
@@ -209,7 +205,7 @@ public class Building extends GameObject {
 
 
 
-			System.out.println(this.getWidth()+" "+ this.getHeight());
+
 			
 //			BufferedImage whitespace = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
 //			g2d = whitespace.createGraphics();
@@ -219,8 +215,8 @@ public class Building extends GameObject {
 		    
 			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
 			int y1 = topFace.getHeight() - 20;
-//			setTopMiddleX(x1);
-//			setTopMiddleY(y1);
+			setTopMiddleX(x1);
+			setTopMiddleY(y1);
 				
 				
 				for(int i =0; i<10;i++) {
@@ -228,9 +224,9 @@ public class Building extends GameObject {
 
 				}
 				
-				 y1 = combined.getHeight();
-				 setBottomMiddleX(x1);
-				 setBottomMiddleY(y1);
+			y1 = combined.getHeight();
+			setBottomMiddleX(x1);
+			setBottomMiddleY(y1);
 				
 				 for(int i =0; i<10;i++) {
 					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
@@ -478,31 +474,31 @@ public class Building extends GameObject {
 	        return !(color.getAlpha() == 0);
 	    }
 		/**
-		 * @return the mx
+		 * @return the bx
 		 */
 		public double getBottomMiddleX() {
-			return mx;
+			return bx;
 		}
 
 		/**
 		 * @param mx the mx to set
 		 */
-		public void setBottomMiddleX(double mx) {
-			this.mx = mx;
+		public void setBottomMiddleX(double bx) {
+			this.bx = bx;
 		}
 
 		/**
 		 * @return the my
 		 */
 		public double getBottomMiddleY() {
-			return my;
+			return by;
 		}
 
 		/**
 		 * @param my the my to set
 		 */
-		public void setBottomMiddleY(double my) {
-			this.my = my;
+		public void setBottomMiddleY(double by) {
+			this.by = by;
 		}
 		
 		
@@ -517,28 +513,28 @@ public class Building extends GameObject {
 		 * @return the mx
 		 */
 		public double getTopMiddleX() {
-			return mx;
+			return tx;
 		}
 
 		/**
 		 * @param mx the mx to set
 		 */
-		public void setTopMiddleX(double mx) {
-			this.mx = mx;
+		public void setTopMiddleX(double tx) {
+			this.tx = tx;
 		}
 
 		/**
 		 * @return the my
 		 */
 		public double getTopMiddleY() {
-			return my;
+			return ty;
 		}
 
 		/**
 		 * @param my the my to set
 		 */
-		public void setTopMiddleY(double my) {
-			this.my = my;
+		public void setTopMiddleY(double ty) {
+			this.ty = ty;
 		}
 		
 }

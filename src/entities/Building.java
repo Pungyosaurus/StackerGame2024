@@ -130,8 +130,7 @@ public class Building extends GameObject {
 			double x = getX()+getBottomMiddleX();
 			double y = getY()+getBottomMiddleY();
 			
-			System.out.println(y + "   :   " + yo);
-			System.out.println(x + "   :   " + xo);
+			
 //			if(y > yo)
 //				return true;			
 //			if(direction) {
@@ -150,7 +149,6 @@ public class Building extends GameObject {
 			
 			double bo =  yo + 1/Math.sqrt(3)*xo;
 			double b =  y +1/Math.sqrt(3)*x;
-			System.out.println(b + " "+bo);
 			if(bo-b <20 && bo-b >-20) {
 				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
 					System.out.println("collides");

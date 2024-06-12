@@ -44,6 +44,8 @@ public class Stacker extends GamePanel {
 	private int counter2 = 11;
 	private int numBuildings;
 	
+	private Building prev;
+	
 	public static void main(String[] args) {
 
 		JFrame window = new JFrame();
@@ -96,7 +98,8 @@ public class Stacker extends GamePanel {
 
 	
 		
-		
+		prev = stack.get(numBuildings - 1);
+
 		//cut code
 //		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
 //		add(temp);
@@ -119,14 +122,17 @@ public class Stacker extends GamePanel {
 			isPaused = !isPaused;
 		}
 		if (!isPaused) {
-			
+			 
+			cable.act();
+
 			if(currentBuilding == null){
 				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
-				add(currentBuilding,numBuildings + 1);
+				add(currentBuilding,this.getComponentZOrder(prev)-1);
+				System.out.println(this.getComponentZOrder(prev)+" "+this.getComponentZOrder(currentBuilding));
+
 			}
 			
 			
-			cable.act();
 			//if not dropping
 			if (!currentBuilding.getDrop()) {
 
@@ -140,7 +146,6 @@ public class Stacker extends GamePanel {
 					
 				}
 			} else {
-				Building prev = stack.get(numBuildings - 1);
 				
 				
 				currentBuilding.act();
@@ -151,12 +156,15 @@ public class Stacker extends GamePanel {
 					Dimension r = currentBuilding.getSize();
 					stack.add(currentBuilding);
 					numBuildings++;
-//					playSE(1);
-
 					
+					prev = stack.get(numBuildings - 1);
 					// adding a buildng what
-					currentBuilding = new Building((int) cable.getEndX(), (int) cable.getEndY(), (int)r.getWidth(), (int)r.getHeight(), iBuilding);
-					add(currentBuilding, numBuildings+2);
+					currentBuilding = null;
+					
+					for(int i = 0; i<stack.size();i++){
+						Building building = stack.get(i);
+						building.setY(building.getY()+150);
+					}
 
 				}
 				else if(currentBuilding.getY()>2000){

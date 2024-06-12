@@ -184,7 +184,7 @@ public class Building extends GameObject {
 			int combinedHeight =(int) ( img1.getHeight() - img1.getWidth()/Math.sqrt(3) + topFace.getHeight());
 			System.out.println(combinedHeight);
 
-
+			this.setSize(combinedWidth,combinedHeight);
 			BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
 
 			Graphics2D g2d = combined.createGraphics();
@@ -208,9 +208,7 @@ public class Building extends GameObject {
 			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
 
 
-			g2d.dispose();
 
-			this.setSize(combinedWidth,combinedHeight);
 			System.out.println(this.getWidth()+" "+ this.getHeight());
 			
 //			BufferedImage whitespace = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
@@ -219,44 +217,37 @@ public class Building extends GameObject {
 //		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
 		 
 		    
-		    
-		    
-		    
-		    
-		    
-		    
-		    int x1 = (int) (TOP_WIDTH/2 + totalLeftDepth *Math.sqrt(3)/2 -totalRightDepth *Math.sqrt(3)/2);
-			int y1 = TOP_HEIGHT- totalLeftDepth/2 - totalRightDepth/2 -10;
-			setTopMiddleX(x1);
-			setTopMiddleY(y1);
-			
-			
-			for(int i =0; i<10;i++) {
-				combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
+			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
+			int y1 = topFace.getHeight() - 20;
+//			setTopMiddleX(x1);
+//			setTopMiddleY(y1);
+				
+				
+				for(int i =0; i<10;i++) {
+					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
 
-			}
-			
-			
-			
-			 System.out.println(x1+" "+y1);
+				}
+				
+				 y1 = combined.getHeight();
+				 setBottomMiddleX(x1);
+				 setBottomMiddleY(y1);
+				
+				 for(int i =0; i<10;i++) {
+					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
 
-			 y1 = combined.getHeight();
-			 
-			 System.out.println(x1+" "+y1);
-
-			 setBottomMiddleX(x1);
-			 setBottomMiddleY(y1);
-			
-			 for(int i =0; i<10;i++) {
-				 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
-
-			}
+				}
 		    
+		    
+		    
+		    
+		    
+		  
 			 
 			 
-			    g2d.drawImage(combined, 0, 0, null);
+			g2d.drawImage(combined, 0, 0, null);
 
-		    
+			g2d.dispose();
+
 		    
 		    
 		    
@@ -452,6 +443,7 @@ public class Building extends GameObject {
 		
 			
 			
+			    
 			
 			
 			

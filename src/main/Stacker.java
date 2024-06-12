@@ -100,17 +100,8 @@ public class Stacker extends GamePanel {
 		
 		prev = stack.get(numBuildings - 1);
 
-		//cut code
-//		BuildingCut temp = new BuildingCut(1000, 500, groundWidth * 7, groundHeight * 7, iGround);
-//		add(temp);
-//		
-//		temp.cut(40,40,40,40);
-//		
-
 
 		repaint();
-	
-	
 
 
 	}
@@ -131,7 +122,7 @@ public class Stacker extends GamePanel {
 				currentBuilding.cut(0, 0, 30, 0);
 				add(currentBuilding,this.getComponentZOrder(prev)-1);
 				System.out.println(this.getComponentZOrder(prev)+" "+this.getComponentZOrder(currentBuilding));
-
+				cable.changeMode();
 			}
 			
 			
@@ -151,7 +142,6 @@ public class Stacker extends GamePanel {
 				
 				
 				currentBuilding.act();
-				// only works when there is more than one building... Solution: make an invisible building with bounds of the platform class
 				if ( currentBuilding.collides(prev, cable.getDirection()) ) {
 					currentBuilding.setDrop(false);
 					stack.add(currentBuilding);

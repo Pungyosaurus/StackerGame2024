@@ -98,9 +98,7 @@ public class Stacker extends GamePanel {
 		stack.add(groundZero);
 		numBuildings++;
 		
-		// create and place ground objects
-		makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+		
 
 	
 		
@@ -115,18 +113,30 @@ public class Stacker extends GamePanel {
 	
 	public void drawMenu() {
 
-	    JLabel title = new JLabel("Construction Crane Chaos", SwingConstants.CENTER);
-	    title.setFont(new Font("Arial", Font.BOLD, 24));
-	    int labelWidth = 400; // Width of the JLabel
-	    int labelHeight = 50; // Height of the JLabel
-	    int x = (int) ((screenWidth - labelWidth) / 2); // Center the label horizontally
-	    int y = (int) ((screenHeight - labelHeight) / 3.0); // Position the label vertically, adjust the divisor to control vertical position
+	    JLabel title = new JLabel("Construction Crane Chaos");
+	    title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 45)));
+	    title.setForeground(Color.white);
+	    int labelWidth = (int) (screenWidth / 3.5); 
+	    int labelHeight = (int) (screenHeight / 10);
+	    int lx = (int) ((screenWidth - labelWidth) / 2); 
+	    int ly = (int) ((screenHeight - labelHeight) / 3.0);
 
-	    // Set the bounds for the JLabel
-	    title.setBounds(x, y, labelWidth, labelHeight);
+	    title.setBounds(lx, ly, labelWidth, labelHeight);
 	    add(title);
-	    revalidate();
+	    
 	    repaint();
+		// create and place ground objects
+
+	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
+		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+	    while(true){
+	    	if(keyH.isSpacebar() || mouseH.isClicked()){
+	    		keyH.setSpacebar(false);
+				mouseH.setClicked(false);
+	    		break;
+	    	}
+	    }
+	    remove(title);
         
 	}
 	

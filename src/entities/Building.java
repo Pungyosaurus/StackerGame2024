@@ -347,15 +347,15 @@ public class Building extends GameObject {
 
 			Path2D.Double topPath2 = new Path2D.Double();
 			
-			
-			topPath2.moveTo(backLeft/2*Math.sqrt(3), TOP_HEIGHT/2+backLeft/2);
+			topPath2.moveTo(0, 0);
+			topPath2.lineTo(backLeft/2*Math.sqrt(3), TOP_HEIGHT/2+backLeft/2); // gud
 			
 			Xint = TOP_WIDTH/2 + backLeft/2*Math.sqrt(3) - backRight/2*Math.sqrt(3);
 			Yint = backLeft/2 + backRight/2;
 			
 			topPath2.lineTo(Xint,Yint);
 			// everything was move to not lineto
-			topPath2.lineTo(TOP_WIDTH - backRight/2*Math.sqrt(3) , TOP_HEIGHT - backRight/2);// minus was a plus
+			topPath2.lineTo(TOP_WIDTH - backRight/2*Math.sqrt(3) , TOP_HEIGHT/2 + backRight/2);// minus was a plus
 			
 			
 			topPath2.lineTo(TOP_WIDTH,TOP_HEIGHT);

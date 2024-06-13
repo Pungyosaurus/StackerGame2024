@@ -86,11 +86,16 @@ public class Stacker extends GamePanel {
 
 		getImages();
 		setBackgroundImage(background);
-		drawMenu();
+
+
+		
 		repaint();
 
 		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
 		add(cable);
+		
+		  makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
+			makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
 
 		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4*3), groundWidth * 5, groundHeight * 5,iGround);
 //		groundZero.cut(0, 0, 0, 0);
@@ -131,6 +136,7 @@ public class Stacker extends GamePanel {
 		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
 	    while(true){
 	    	if(keyH.isSpacebar() || mouseH.isClicked()){
+	    		System.out.println("stuck");
 	    		keyH.setSpacebar(false);
 				mouseH.setClicked(false);
 	    		break;

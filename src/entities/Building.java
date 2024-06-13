@@ -142,9 +142,9 @@ public class Building extends GameObject {
 						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
 						
 						if(x>xo) {
-							offsetValues[2] = offset;
+							offsetValues[3] = offset;
 						}else {
-							offsetValues[0] = offset;
+							offsetValues[2] = offset;
 						}
 						
 						System.out.println("collides");
@@ -163,9 +163,9 @@ public class Building extends GameObject {
 						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
 						
 						if(x>xo) {
-							offsetValues[1] = offset;
+							offsetValues[0] = offset;
 						}else {
-							offsetValues[3] = offset;
+							offsetValues[1] = offset;
 						}
 						
 						System.out.println("collides");
@@ -182,8 +182,6 @@ public class Building extends GameObject {
 
 			
 			
-			double hyp = Math.sqrt(Math.pow(TOP_HEIGHT / 2, 2) + Math.pow(TOP_WIDTH / 2, 2));
-			System.out.println(hyp);
 			
 			
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
@@ -194,7 +192,6 @@ public class Building extends GameObject {
 			rightFaceHeight = (int) ( combinedHeight - topFace.getHeight());
 
 			
-			this.setSize(combinedWidth,combinedHeight);
 			BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
 
 			Graphics2D g2d = combined.createGraphics();
@@ -203,22 +200,23 @@ public class Building extends GameObject {
 
 
 			// Draw the top face
-			
+			g2d.drawImage(leftFace, 0,(int) leftAdjustmentY - minYAdjustment, null);
+
 			g2d.drawImage(topFace,0 , 0, null);
 
 
 			// Draw the left face
 //			g2d.drawImage(leftFace, 0, topFace.getHeight() /2, null);
 //			g2d.drawImage(leftFace, 0,(int) (topFace.getHeight() / 2 - adjustment), null);
-			g2d.drawImage(leftFace, 0,(int) leftAdjustmentY, null);
 
 			// Draw the right face
 
 
 //			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
-			g2d.drawImage(rightFace, combinedWidth-rightFace.getWidth(),(int) RightAdjustmentY, null);
+			g2d.drawImage(rightFace, combinedWidth-rightFace.getWidth(),(int) RightAdjustmentY - minYAdjustment, null);
 
 
+			this.setSize(combinedWidth,combinedHeight);
 
 
 
@@ -277,13 +275,11 @@ public class Building extends GameObject {
 			frontLeft += frontLeftP;
 			frontRight += frontRightP;
 			backRight += backRightP;
-			System.out.println(backLeft + " : " + frontLeft + " : "+ frontRight + " : "+ backRight);
 //			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
 			int startX = (int) (backLeft / 2 * Math.sqrt(3));
 			int startY = (int) (backLeft / 2) ;
 			int width = (int) (img1.getWidth()- backLeft/ 2 * Math.sqrt(3) - frontLeft/ 2 * Math.sqrt(3));
 			int height = img1.getHeight() - backLeft /2 - frontLeft/2;
-			System.out.println(startX + " : " + startY);
 			BufferedImage croppedLeftFace = img1.getSubimage(startX,startY,width,height);
 
 			
@@ -356,7 +352,6 @@ public class Building extends GameObject {
 			topPath2.lineTo(Xint,Yint);
 			// everything was move to not lineto
 			topPath2.lineTo(TOP_WIDTH - backRight/2*Math.sqrt(3) , TOP_HEIGHT/2 + backRight/2);// minus was a plus
-			System.out.println("to pus");
 			
 			topPath2.lineTo(TOP_WIDTH,TOP_HEIGHT);
 			
@@ -453,17 +448,20 @@ public class Building extends GameObject {
 //			g2d4.dispose();
 
 
-//
-//			 int[] boundingBox = getBoundingBox(croppedcroppedTopFace);
-//	         int x = boundingBox[0];
-//	         int y = boundingBox[1];
-//	         int width2 = Math.abs(boundingBox[2] - boundingBox[0] ) -1;
-//	         int height2 =Math.abs( boundingBox[3] - boundingBox[1])-1;
-//	         
+
+			 int[] boundingBox = getBoundingBox(croppedcroppedTopFace);
+			 highlightBoundingBox(croppedcroppedTopFace, boundingBox);
+	         int x = boundingBox[0];
+	         int y = boundingBox[1];
+	         int width2 =boundingBox[2] - boundingBox[0]  -1;
+	         int height2 = boundingBox[3] - boundingBox[1]-1;
+	         
 //	         System.out.println(croppedcroppedTopFace.getWidth()+" "+croppedcroppedTopFace.getHeight() );
 //	         System.out.println(x+" "+ y);
 //	         System.out.println(width2+" " +height2);
-//	         croppedTopFace = croppedcroppedTopFace.getSubimage(x, y, width2, height2);
+	         
+	         BufferedImage croppedImage= new BufferedImage(width2, height2, BufferedImage.TYPE_INT_ARGB);
+	        		 croppedImage = croppedcroppedTopFace.getSubimage(x, y, width2, height2);
 			
 			String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedTopFace.png";
 			String desktopPath1 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedLeftFace.png";
@@ -475,7 +473,7 @@ public class Building extends GameObject {
 
 
 			try {
-			    ImageIO.write(croppedcroppedTopFace, "PNG", outputFile);
+			    ImageIO.write( croppedImage, "PNG", outputFile);
 			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
 			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
 
@@ -489,37 +487,74 @@ public class Building extends GameObject {
 			
 			
 			
-			setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedTopFace));
+			setSprite(combineImages(croppedLeftFace,croppedRightFace, croppedImage));
 		}
 
 		private int leftAdjustmentY;
 		private int RightAdjustmentY;
+		private int minYAdjustment;
+		
 		private int[] getBoundingBox(BufferedImage image) {
-	        int minX = image.getWidth();
-	        int minY = image.getHeight();
-	        int maxX = 0;
-	        int maxY = 0;
+		    int minX = image.getWidth();
+		    int minY = image.getHeight();
+		    int maxX = 0;
+		    int maxY = 0;
 
-	        for (int y = 0; y < image.getHeight(); y++) {
-	            for (int x = 0; x < image.getWidth(); x++) {
-	                if (isNonEmptyPixel(image, x, y)) {
-	                    if (x < minX) { minX = x; leftAdjustmentY = y;}
-	                    if (y < minY) minY = y;
-	                    if (x > maxX) {maxX = x; RightAdjustmentY =y;}
-	                    if (y > maxY) maxY = y;
-	                }
-	            }
-	        }
+		    for (int y = 0; y < image.getHeight(); y++) {
+		        for (int x = 0; x < image.getWidth(); x++) {
+		            if (isNonEmptyPixel(image, x, y)) {
+		            	 if (x < minX) { minX = x; leftAdjustmentY = y;}
+		                    if (y < minY) minY = y;
+		                    if (x > maxX) {maxX = x; RightAdjustmentY =y;}
+		                    if (y > maxY) maxY = y;
+		            }
+		        }
+		    }
 
-	        return new int[]{minX, minY, maxX, maxY};
-	    }
+		    // Ensure we don't return an invalid bounding box
+		    if (minX > maxX || minY > maxY) {
+		        return new int[]{0, 0, 0, 0}; // No non-empty pixels found
+		    }
 
-	    private boolean isNonEmptyPixel(BufferedImage image, int x, int y) {
-	        int pixel = image.getRGB(x, y);
-	        Color color = new Color(pixel, true);
-	        //empty spaces are white or fully transparent
-	        return !(color.getAlpha() == 0);
-	    }
+	        image.setRGB(minX+1, leftAdjustmentY, Color.RED.getRGB());
+	        image.setRGB(maxX-10, RightAdjustmentY, Color.RED.getRGB());
+	        minYAdjustment = minY;
+
+		    return new int[]{minX, minY, maxX, maxY};
+		}
+
+		private boolean isNonEmptyPixel(BufferedImage image, int x, int y) {
+		    int pixel = image.getRGB(x, y);
+		    Color color = new Color(pixel, true);
+		    // Check if the pixel is not fully transparent
+		    return color.getAlpha() != 0;
+		}
+		
+		private void highlightBoundingBox(BufferedImage image, int[] boundingBox) {
+		    int minX = boundingBox[0];
+		    int minY = boundingBox[1];
+		    int maxX = boundingBox[2];
+		    int maxY = boundingBox[3];
+
+		    for (int x = minX; x <= maxX; x++) {
+		        image.setRGB(x, minY, Color.RED.getRGB());
+		        image.setRGB(x, maxY, Color.RED.getRGB());
+		    }
+		    for (int y = minY; y <= maxY; y++) {
+		        image.setRGB(minX, y, Color.RED.getRGB());
+		        image.setRGB(maxX, y, Color.RED.getRGB());
+		    }
+
+		    try {
+		        File outputFile = new File("highlightedBoundingBox.png");
+		        ImageIO.write(image, "PNG", outputFile);
+		        System.out.println("Highlighted image saved successfully.");
+		    } catch (IOException e) {
+		        System.out.println("Error saving highlighted image: " + e.getMessage());
+		    }
+		}
+		
+		
 		/**
 		 * @return the bx
 		 */

@@ -356,7 +356,7 @@ public class Building extends GameObject {
 			topPath2.lineTo(Xint,Yint);
 			// everything was move to not lineto
 			topPath2.lineTo(TOP_WIDTH - backRight/2*Math.sqrt(3) , TOP_HEIGHT/2 + backRight/2);// minus was a plus
-			
+			System.out.println("to pus");
 			
 			topPath2.lineTo(TOP_WIDTH,TOP_HEIGHT);
 			

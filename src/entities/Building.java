@@ -272,16 +272,18 @@ public class Building extends GameObject {
 
 		public void cut( int leftCutDepth, int rightCutDepth, int topRightCutDepth, int topLeftCutDepth) {
 
+			// 
 			totalLeftDepth += leftCutDepth;
 			totalRightDepth += rightCutDepth;
 			totalTopLeftCutDepth += topLeftCutDepth;
 			totalTopRightCutDepth += topRightCutDepth;
+			System.out.println(totalLeftDepth + " : " + totalRightDepth + " : "+ totalTopLeftCutDepth + " : "+ totalTopRightCutDepth);
 //			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
-			int startX = totalTopLeftCutDepth;
-			int startY = (int) (totalTopLeftCutDepth / Math.sqrt(3)) ;
+			int startX = (int) (totalTopLeftCutDepth / 2 * Math.sqrt(3));
+			int startY = (int) (totalTopLeftCutDepth / 2) ;
 			int width = img1.getWidth()- totalRightDepth - totalTopLeftCutDepth;
 			int height = img1.getHeight() - (int) (totalTopLeftCutDepth / Math.sqrt(3));
-					
+			System.out.println(startX + " : " + startY);
 			BufferedImage croppedLeftFace = img1.getSubimage(startX,startY,width,height);
 
 			

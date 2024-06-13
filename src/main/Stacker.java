@@ -1,7 +1,9 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -12,7 +14,11 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import entities.Building;
 import entities.BuildingCut;
@@ -82,7 +88,8 @@ public class Stacker extends GamePanel {
 
 		getImages();
 		setBackgroundImage(background);
-
+		drawMenu();
+		repaint();
 
 		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
 		add(cable);
@@ -104,6 +111,23 @@ public class Stacker extends GamePanel {
 		repaint();
 
 
+	}
+	
+	public void drawMenu() {
+
+	    JLabel title = new JLabel("Construction Crane Chaos", SwingConstants.CENTER);
+	    title.setFont(new Font("Arial", Font.BOLD, 24));
+	    int labelWidth = 400; // Width of the JLabel
+	    int labelHeight = 50; // Height of the JLabel
+	    int x = (int) ((screenWidth - labelWidth) / 2); // Center the label horizontally
+	    int y = (int) ((screenHeight - labelHeight) / 3.0); // Position the label vertically, adjust the divisor to control vertical position
+
+	    // Set the bounds for the JLabel
+	    title.setBounds(x, y, labelWidth, labelHeight);
+	    add(title);
+	    revalidate();
+	    repaint();
+        
 	}
 	
 

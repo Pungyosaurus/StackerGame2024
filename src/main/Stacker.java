@@ -1,11 +1,6 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,9 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import entities.Building;
-import entities.BuildingCut;
 import entities.Cable;
-import entities.Crane;
 import entities.Ground;
 import listeners.KeyHandler;
 import listeners.MouseHandler;
@@ -88,6 +81,7 @@ public class Stacker extends GamePanel {
 		add(cable);
 
 		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4*3), groundWidth * 5, groundHeight * 5,iGround);
+		groundZero.cut(0, 0, 0, 0);
 		add(groundZero);
 		stack.add(groundZero);
 		numBuildings++;
@@ -100,7 +94,8 @@ public class Stacker extends GamePanel {
 		
 		prev = stack.get(numBuildings - 1);
 
-
+		cable.changeMode();
+		
 		repaint();
 
 
@@ -117,12 +112,8 @@ public class Stacker extends GamePanel {
 			cable.act();
 
 			if(currentBuilding == null){
-				currentBuilding = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
-				add(currentBuilding,numBuildings + 1);
-				currentBuilding.cut(0, 0, 30, 0);
-				add(currentBuilding,this.getComponentZOrder(prev)-1);
-				System.out.println(this.getComponentZOrder(prev)+" "+this.getComponentZOrder(currentBuilding));
-				cable.changeMode();
+				currentBuilding = addBuilding();				
+//				cable.changeMode();
 			}
 			
 			
@@ -142,8 +133,10 @@ public class Stacker extends GamePanel {
 				
 				
 				currentBuilding.act();
-				if ( currentBuilding.collides(prev, cable.getDirection()) ) {
+				int[] collisionValues = currentBuilding.collides(prev, 1);
+				if ( collisionValues != null ) {
 					currentBuilding.setDrop(false);
+					currentBuilding.cut(collisionValues[0], collisionValues[1] , collisionValues[2], collisionValues[3]);
 					stack.add(currentBuilding);
 					numBuildings++;
 					
@@ -152,7 +145,7 @@ public class Stacker extends GamePanel {
 					
 					for(int i = 0; i<stack.size();i++){
 						Building building = stack.get(i);
-						building.setY(building.getY()+ building.rightFaceHeight);
+//						building.setY(building.getY()+ building.rightFaceHeight);
 					}
 				}
 				else if(currentBuilding.getY()>2000){
@@ -176,6 +169,16 @@ public class Stacker extends GamePanel {
 			counter2++;
 
 		}
+	}
+	
+	public Building addBuilding() {
+		
+		
+		Building temp = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
+		temp.cut(prev.getTotalLeftDepth(), prev.getTotalRightDepth(), prev.getTotalTopLeftCutDepth(), prev.getTotalTopRightCutDepth());
+		add(temp,this.getComponentZOrder(prev)-1);
+		return temp;
+		
 	}
 
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {

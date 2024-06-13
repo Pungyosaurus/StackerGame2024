@@ -18,13 +18,10 @@ public class Building extends GameObject {
 	private boolean drop = false;
 
 	private BufferedImage img1, img2, img3;
-	private int totalLeftDepth, totalRightDepth, topDistance;
+	private int totalLeftDepth, totalRightDepth, totalTopLeftCutDepth, totalTopRightCutDepth;
 
 	private int TOP_WIDTH, TOP_HEIGHT;
 
-	private int totalTopLeftCutDepth;
-
-	private int totalTopRightCutDepth;
 
 	private double by;
 	private double bx;
@@ -33,6 +30,7 @@ public class Building extends GameObject {
 	
 	public double rightFaceWidth;
 	public double rightFaceHeight;
+	private int leftFaceWidth;
 	public Building(int x, int y, int width, int height, BufferedImage image ){
 		 super(x , y, width, height, image);
 		 
@@ -109,19 +107,8 @@ public class Building extends GameObject {
 	}
 		
 		
-		public boolean collides(Building prev, boolean direction) {
-//			double mx = prev.getX() + prev.getBottomMiddleX();
-//			double my = prev.getY() + prev.getBottomMiddleY();
-//			double x = getX() + getWidth()/2;
-//			double y = getY() + getHeight();
-//			Graphics2D g2d = (Graphics2D) this.getGraphics();
-////			drawPoint(g2d,(int) x,(int) y, Color.blue);
-////			System.out.println(y + "   :   " + my);
-//			if(y > my)
-//				return true;
-			
-			
-			
+		public int[] collides(Building prev, int direction) {
+			//values to cut by
 			
 			double xo = prev.getX()+ prev.getTopMiddleX();
 			double yo = prev.getY()+ prev.getTopMiddleY();
@@ -143,28 +130,51 @@ public class Building extends GameObject {
 //				return false;
 //			}			
 			
-		
-//			System.out.println(xo+ " "+ yo);
-			
-			double bo =  yo + 1/Math.sqrt(3)*xo;
-			double b =  y +1/Math.sqrt(3)*x;
-			if(bo-b <20 && bo-b >-20) {
-				if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
-					System.out.println("collides");
-					return true;
+			//bottom left to top right
+			if(direction ==1) {
+				double bo =  yo + 1/Math.sqrt(3)*xo;
+				double b =  y +1/Math.sqrt(3)*x;
+				if(bo-b <20 && bo-b >-20) {
+					setY(getY()+ bo-b);
+					int[] offsetValues = new int[4];
+	
+					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
+						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
+						
+						if(x>xo) {
+							offsetValues[2] = offset;
+						}else {
+							offsetValues[0] = offset;
+						}
+						
+						System.out.println("collides");
+						return offsetValues;
+					}
 				}
 			}
-			
-			
-//			Dimension t = this.getSize();
-//			double m;
-//			if(direction) {
-//				m = 9/16;
-//			}else
-//				m = -16/9;
-		
-
-			return false;
+			//top left to bottom right
+			if(direction ==2) {
+				double bo =  yo - 1/Math.sqrt(3)*xo;
+				double b =  y - 1/Math.sqrt(3)*x;
+				if(bo-b <20 && bo-b >-20) {
+					int[] offsetValues = new int[4];
+	
+					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < leftFaceWidth/Math.sqrt(3)*2) {
+						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
+						
+						if(x>xo) {
+							offsetValues[1] = offset;
+						}else {
+							offsetValues[3] = offset;
+						}
+						
+						System.out.println("collides");
+						return offsetValues;
+					}
+				}
+			}
+			// no array values
+			return null;
 
 		}
 		public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
@@ -174,8 +184,12 @@ public class Building extends GameObject {
 			
 			double hyp = Math.sqrt(Math.pow(TOP_HEIGHT / 2, 2) + Math.pow(TOP_WIDTH / 2, 2));
 			System.out.println(hyp);
+			
+			
 			int combinedWidth = leftFace.getWidth() + rightFace.getWidth();
 			rightFaceWidth = rightFace.getWidth();
+			leftFaceWidth = leftFace.getWidth();
+			
 			int combinedHeight =(int) ( img1.getHeight() - img1.getWidth()/Math.sqrt(3) + topFace.getHeight());
 			rightFaceHeight = (int) ( combinedHeight - topFace.getHeight());
 
@@ -195,12 +209,15 @@ public class Building extends GameObject {
 
 			// Draw the left face
 //			g2d.drawImage(leftFace, 0, topFace.getHeight() /2, null);
-			g2d.drawImage(leftFace, 0,(int) (topFace.getHeight() / 2 - adjustment), null);
-			adjustment = 0;
+//			g2d.drawImage(leftFace, 0,(int) (topFace.getHeight() / 2 - adjustment), null);
+			g2d.drawImage(leftFace, 0,(int) leftAdjustmentY, null);
+
 			// Draw the right face
 
 
-			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
+//			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
+			g2d.drawImage(rightFace, combinedWidth-rightFace.getWidth(),(int) RightAdjustmentY, null);
+
 
 
 
@@ -253,14 +270,13 @@ public class Building extends GameObject {
 
 		}
 
-		private double adjustment;
 		public void cut( int leftCutDepth, int rightCutDepth, int topRightCutDepth, int topLeftCutDepth) {
 
 			totalLeftDepth += leftCutDepth;
 			totalRightDepth += rightCutDepth;
 			totalTopLeftCutDepth += topLeftCutDepth;
 			totalTopRightCutDepth += topRightCutDepth;
-			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
+//			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
 			int startX = totalTopLeftCutDepth;
 			int startY = (int) (totalTopLeftCutDepth / Math.sqrt(3)) ;
 			int width = img1.getWidth()- totalRightDepth - totalTopLeftCutDepth;
@@ -303,7 +319,7 @@ public class Building extends GameObject {
 			double Yint = TOP_HEIGHT - totalRightDepth/2 - totalLeftDepth/2;
 	
 	
-			topDistance = (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(0 - Yint,2));	//
+//			topDistance = (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(0 - Yint,2));	
 			g2d.setClip(topPath);
 
 			g2d.drawImage(img3, 0, 0, null);
@@ -414,7 +430,7 @@ public class Building extends GameObject {
 	         int width2 = boundingBox[2] - boundingBox[0] + 1;
 	         int height2 = boundingBox[3] - boundingBox[1] + 1;
 	         
-	         BufferedImage croppedImage = croppedcroppedcroppedcroppedTopFace.getSubimage(x, y, width2, height2);
+	         croppedTopFace = croppedcroppedcroppedcroppedTopFace.getSubimage(x, y, width2, height2);
 			
 			String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedTopFace.png";
 			String desktopPath1 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedLeftFace.png";
@@ -443,10 +459,12 @@ public class Building extends GameObject {
 			
 			
 			
-			setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedImage));
+			setSprite(combineImages(croppedLeftFace,croppedRightFace,croppedTopFace));
 		}
 
-		private static int[] getBoundingBox(BufferedImage image) {
+		private int leftAdjustmentY;
+		private int RightAdjustmentY;
+		private int[] getBoundingBox(BufferedImage image) {
 	        int minX = image.getWidth();
 	        int minY = image.getHeight();
 	        int maxX = 0;
@@ -455,9 +473,9 @@ public class Building extends GameObject {
 	        for (int y = 0; y < image.getHeight(); y++) {
 	            for (int x = 0; x < image.getWidth(); x++) {
 	                if (isNonEmptyPixel(image, x, y)) {
-	                    if (x < minX) minX = x;
+	                    if (x < minX) { minX = x; leftAdjustmentY = y;}
 	                    if (y < minY) minY = y;
-	                    if (x > maxX) maxX = x;
+	                    if (x > maxX) {maxX = x; RightAdjustmentY =y;}
 	                    if (y > maxY) maxY = y;
 	                }
 	            }
@@ -466,7 +484,7 @@ public class Building extends GameObject {
 	        return new int[]{minX, minY, maxX, maxY};
 	    }
 
-	    private static boolean isNonEmptyPixel(BufferedImage image, int x, int y) {
+	    private boolean isNonEmptyPixel(BufferedImage image, int x, int y) {
 	        int pixel = image.getRGB(x, y);
 	        Color color = new Color(pixel, true);
 	        //empty spaces are white or fully transparent
@@ -534,6 +552,21 @@ public class Building extends GameObject {
 		 */
 		public void setTopMiddleY(double ty) {
 			this.ty = ty;
+		}
+		
+		
+		
+		public int getTotalLeftDepth() {
+			return totalLeftDepth;
+		}
+		public int getTotalRightDepth() {
+			return totalRightDepth;
+		}
+		public int getTotalTopLeftCutDepth() {
+			return totalTopLeftCutDepth;
+		}
+		public int getTotalTopRightCutDepth() {
+			return totalTopRightCutDepth;
 		}
 		
 }

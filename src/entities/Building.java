@@ -18,7 +18,7 @@ public class Building extends GameObject {
 	private boolean drop = false;
 
 	private BufferedImage img1, img2, img3;
-	private int totalLeftDepth, totalRightDepth, totalTopLeftCutDepth, totalTopRightCutDepth;
+	private int backLeft, frontLeft , frontRight, backRight;
 
 	private int TOP_WIDTH, TOP_HEIGHT;
 
@@ -270,29 +270,29 @@ public class Building extends GameObject {
 
 		}
 
-		public void cut( int leftCutDepth, int rightCutDepth, int topRightCutDepth, int topLeftCutDepth) {
+		public void cut( int backLeftP, int frontLeftP, int frontRightP, int backRightP) {
 
 			// 
-			totalLeftDepth += leftCutDepth;
-			totalRightDepth += rightCutDepth;
-			totalTopLeftCutDepth += topLeftCutDepth;
-			totalTopRightCutDepth += topRightCutDepth;
-			System.out.println(totalLeftDepth + " : " + totalRightDepth + " : "+ totalTopLeftCutDepth + " : "+ totalTopRightCutDepth);
+			backLeft += backLeftP;
+			frontLeft += frontLeftP;
+			frontRight += frontRightP;
+			backRight += backRightP;
+			System.out.println(backLeft + " : " + frontLeft + " : "+ frontRight + " : "+ backRight);
 //			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
-			int startX = (int) (totalTopLeftCutDepth / 2 * Math.sqrt(3));
-			int startY = (int) (totalTopLeftCutDepth / 2) ;
-			int width = img1.getWidth()- totalRightDepth - totalTopLeftCutDepth;
-			int height = img1.getHeight() - (int) (totalTopLeftCutDepth / Math.sqrt(3));
+			int startX = (int) (backLeft / 2 * Math.sqrt(3));
+			int startY = (int) (backLeft / 2) ;
+			int width = (int) (img1.getWidth()- backLeft/ 2 * Math.sqrt(3) - frontLeft/ 2 * Math.sqrt(3));
+			int height = img1.getHeight() - backLeft /2 - frontLeft/2;
 			System.out.println(startX + " : " + startY);
 			BufferedImage croppedLeftFace = img1.getSubimage(startX,startY,width,height);
 
 			
 
 			
-			startX = totalLeftDepth;
-			startY = (int) (totalTopRightCutDepth / Math.sqrt(3)) ;
-			width = img2.getWidth()  - totalLeftDepth - totalTopRightCutDepth;
-			height = img2.getHeight() - (int) (totalTopRightCutDepth / Math.sqrt(3));
+			startX = (int) (frontRight/2*Math.sqrt(3));
+			startY = (int) (backRight/2) ;
+			width = (int) (img2.getWidth()  - frontRight/2*Math.sqrt(3) - backRight/2*Math.sqrt(3));
+			height = img2.getHeight() - frontRight/2 - backRight/2;
 			BufferedImage croppedRightFace = img2.getSubimage(startX,startY,width,height);
 
 			
@@ -309,16 +309,28 @@ public class Building extends GameObject {
 			
 			topPath.moveTo(0, 0);
 			
-			topPath.lineTo(totalLeftDepth*Math.sqrt(3)/2, TOP_HEIGHT / 2 - totalLeftDepth / 2); 
+			topPath.lineTo(frontRight*Math.sqrt(3)/2, TOP_HEIGHT / 2 - frontRight / 2); 
 			
-			topPath.lineTo(TOP_WIDTH/2+totalLeftDepth*Math.sqrt(3)/2, TOP_HEIGHT - totalLeftDepth/2); 
+			double Xint = TOP_WIDTH/2 + frontRight*Math.sqrt(3)/2 - frontLeft*Math.sqrt(3)/2;
+			double Yint = TOP_HEIGHT - frontRight/2 - frontLeft/2;
+			topPath.lineTo(Xint,Yint);
 
-			topPath.lineTo(TOP_WIDTH, TOP_HEIGHT);
+			
+			topPath.lineTo(TOP_WIDTH - frontLeft*Math.sqrt(3)/2, TOP_HEIGHT / 2 - frontLeft / 2); 
+			
 			topPath.lineTo(TOP_WIDTH, 0);
+			topPath.lineTo(0, 0);
+
+			
+			
+			
+//			topPath.lineTo(TOP_WIDTH/2+totalLeftDepth*Math.sqrt(3)/2, TOP_HEIGHT - totalLeftDepth/2); 
+//
+//			topPath.lineTo(TOP_WIDTH, TOP_HEIGHT);
+//			topPath.lineTo(TOP_WIDTH, 0);
 
 
-			double Xint = TOP_WIDTH/2 + totalRightDepth*Math.sqrt(3)/2 - totalLeftDepth*Math.sqrt(3)/2;
-			double Yint = TOP_HEIGHT - totalRightDepth/2 - totalLeftDepth/2;
+			
 	
 	
 //			topDistance = (int) Math.sqrt(Math.pow((TOP_WIDTH/2 - Xint),2) + Math.pow(0 - Yint,2));	
@@ -336,15 +348,24 @@ public class Building extends GameObject {
 			Path2D.Double topPath2 = new Path2D.Double();
 			
 			
+			topPath2.moveTo(backLeft/2*Math.sqrt(3), TOP_HEIGHT/2+backLeft/2);
 			
-			topPath2.moveTo(TOP_WIDTH - totalRightDepth *Math.sqrt(3)/2, TOP_HEIGHT / 2 - totalRightDepth / 2);
+			Xint = TOP_WIDTH/2 + backLeft/2*Math.sqrt(3) - backRight/2*Math.sqrt(3);
+			Yint = backLeft/2 + backRight/2;
 			
-			topPath2.lineTo(TOP_WIDTH/2-totalRightDepth*Math.sqrt(3)/2, TOP_HEIGHT - totalRightDepth/2); 
+			topPath2.lineTo(Xint,Yint);
+			// everything was move to not lineto
+			topPath2.lineTo(TOP_WIDTH - backRight/2*Math.sqrt(3) , TOP_HEIGHT - backRight/2);// minus was a plus
 			
-			topPath2.lineTo(0,TOP_HEIGHT); 
+			
+			topPath2.lineTo(TOP_WIDTH,TOP_HEIGHT);
+			
+			topPath2.lineTo(0,TOP_HEIGHT);
 
-			topPath2.lineTo(0, 0);
-			topPath2.lineTo(TOP_WIDTH, 0);
+
+			
+			
+
 			
 			g2d2.setClip(topPath2);
 
@@ -352,87 +373,97 @@ public class Building extends GameObject {
 
 			
 			
-			BufferedImage croppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-			
-			Graphics2D g2d3 = croppedcroppedcroppedTopFace.createGraphics();
-
-			g2d3 = croppedcroppedcroppedTopFace.createGraphics();
-
-			g2d3.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
-				
-			Path2D.Double topPath3 = new Path2D.Double();
-			
-			
-			
-			topPath3.moveTo(totalTopLeftCutDepth,(int) (TOP_HEIGHT/2 + totalTopLeftCutDepth / Math.sqrt(3)));
-
-			double topXInt =  TOP_WIDTH / 2 + totalTopLeftCutDepth * Math.sqrt(3)/2 ;
-			double topYInt = 0 + totalTopLeftCutDepth / 2 ;
-			
-			topPath3.lineTo(topXInt, topYInt);
-
-			topPath3.lineTo(TOP_WIDTH, 0);
-
-			topPath3.lineTo(TOP_WIDTH, TOP_HEIGHT);
-
-			topPath3.lineTo(0,TOP_HEIGHT);
-
-			
-			g2d3.setClip(topPath);
-
-			g2d3.drawImage(croppedcroppedTopFace, 0, 0, null);
 			
 			
 			
 			
-			BufferedImage croppedcroppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-			
-			Graphics2D g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
-
-			g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
-
-			g2d4.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
-				
-			Path2D.Double topPath4 = new Path2D.Double();
 			
 			
-			
-			topPath4.moveTo(TOP_WIDTH - totalTopRightCutDepth,(int) (TOP_HEIGHT/2 + totalTopRightCutDepth / Math.sqrt(3)));
-
-			
-			double topXInt2 =  TOP_WIDTH / 2 - totalTopRightCutDepth * Math.sqrt(3)/2 ;
-			double topYInt2 = 0 + totalTopRightCutDepth / 2 ;
-			
-			topPath4.lineTo(topXInt2, topYInt2);
-
-			topPath4.lineTo(0, 0);
-
-			topPath4.lineTo(0,TOP_HEIGHT);
-
-			topPath4.lineTo(TOP_WIDTH,TOP_HEIGHT);
-
-			
-			g2d4.setClip(topPath4);
-
-			g2d4.drawImage(croppedcroppedcroppedTopFace, 0, 0, null);
-		
+//			
+//			BufferedImage croppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+//			
+//			Graphics2D g2d3 = croppedcroppedcroppedTopFace.createGraphics();
+//
+//			g2d3 = croppedcroppedcroppedTopFace.createGraphics();
+//
+//			g2d3.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
+//				
+//			Path2D.Double topPath3 = new Path2D.Double();
+//			
+//			
+//			
+//			topPath3.moveTo(totalTopLeftCutDepth,(int) (TOP_HEIGHT/2 + totalTopLeftCutDepth / Math.sqrt(3)));
+//
+//			double topXInt =  TOP_WIDTH / 2 + totalTopLeftCutDepth * Math.sqrt(3)/2 ;
+//			double topYInt = 0 + totalTopLeftCutDepth / 2 ;
+//			
+//			topPath3.lineTo(topXInt, topYInt);
+//
+//			topPath3.lineTo(TOP_WIDTH, 0);
+//
+//			topPath3.lineTo(TOP_WIDTH, TOP_HEIGHT);
+//
+//			topPath3.lineTo(0,TOP_HEIGHT);
+//
+//			
+//			g2d3.setClip(topPath);
+//
+//			g2d3.drawImage(croppedcroppedTopFace, 0, 0, null);
+//			
+//			
+//			
+//			
+//			BufferedImage croppedcroppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+//			
+//			Graphics2D g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
+//
+//			g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
+//
+//			g2d4.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
+//				
+//			Path2D.Double topPath4 = new Path2D.Double();
+//			
+//			
+//			
+//			topPath4.moveTo(TOP_WIDTH - totalTopRightCutDepth,(int) (TOP_HEIGHT/2 + totalTopRightCutDepth / Math.sqrt(3)));
+//
+//			
+//			double topXInt2 =  TOP_WIDTH / 2 - totalTopRightCutDepth * Math.sqrt(3)/2 ;
+//			double topYInt2 = 0 + totalTopRightCutDepth / 2 ;
+//			
+//			topPath4.lineTo(topXInt2, topYInt2);
+//
+//			topPath4.lineTo(0, 0);
+//
+//			topPath4.lineTo(0,TOP_HEIGHT);
+//
+//			topPath4.lineTo(TOP_WIDTH,TOP_HEIGHT);
+//
+//			
+//			g2d4.setClip(topPath4);
+//
+//			g2d4.drawImage(croppedcroppedcroppedTopFace, 0, 0, null);
+//		
 
 			
 			
 			g2d.dispose();
 			g2d2.dispose();
-			g2d3.dispose();
-			g2d4.dispose();
+//			g2d3.dispose();
+//			g2d4.dispose();
 
 
-
-			 int[] boundingBox = getBoundingBox(croppedcroppedcroppedcroppedTopFace);
-	         int x = boundingBox[0];
-	         int y = boundingBox[1];
-	         int width2 = boundingBox[2] - boundingBox[0] + 1;
-	         int height2 = boundingBox[3] - boundingBox[1] + 1;
-	         
-	         croppedTopFace = croppedcroppedcroppedcroppedTopFace.getSubimage(x, y, width2, height2);
+//
+//			 int[] boundingBox = getBoundingBox(croppedcroppedTopFace);
+//	         int x = boundingBox[0];
+//	         int y = boundingBox[1];
+//	         int width2 = Math.abs(boundingBox[2] - boundingBox[0] ) -1;
+//	         int height2 =Math.abs( boundingBox[3] - boundingBox[1])-1;
+//	         
+//	         System.out.println(croppedcroppedTopFace.getWidth()+" "+croppedcroppedTopFace.getHeight() );
+//	         System.out.println(x+" "+ y);
+//	         System.out.println(width2+" " +height2);
+//	         croppedTopFace = croppedcroppedTopFace.getSubimage(x, y, width2, height2);
 			
 			String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedTopFace.png";
 			String desktopPath1 = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + File.separator + "croppedLeftFace.png";
@@ -444,7 +475,7 @@ public class Building extends GameObject {
 
 
 			try {
-			    ImageIO.write(croppedTopFace, "PNG", outputFile);
+			    ImageIO.write(croppedcroppedTopFace, "PNG", outputFile);
 			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
 			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
 
@@ -454,9 +485,6 @@ public class Building extends GameObject {
 			}
 			
 		
-			
-			
-			    
 			
 			
 			
@@ -558,17 +586,17 @@ public class Building extends GameObject {
 		
 		
 		
-		public int getTotalLeftDepth() {
-			return totalLeftDepth;
+		public int getBackLeft() {
+			return backLeft;
 		}
-		public int getTotalRightDepth() {
-			return totalRightDepth;
+		public int getFrontLeft() {
+			return frontLeft;
 		}
-		public int getTotalTopLeftCutDepth() {
-			return totalTopLeftCutDepth;
+		public int getFrontRight() {
+			return frontRight;
 		}
-		public int getTotalTopRightCutDepth() {
-			return totalTopRightCutDepth;
+		public int getBackRight() {
+			return backRight;
 		}
 		
 }

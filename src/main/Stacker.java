@@ -93,7 +93,7 @@ public class Stacker extends GamePanel {
 		add(cable);
 
 		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4*3), groundWidth * 5, groundHeight * 5,iGround);
-		groundZero.cut(0, 0, 0, 0);
+//		groundZero.cut(0, 0, 0, 0);
 		add(groundZero);
 		stack.add(groundZero);
 		numBuildings++;
@@ -204,7 +204,7 @@ public class Stacker extends GamePanel {
 		
 		
 		Building temp = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
-		temp.cut(prev.getTotalLeftDepth(), prev.getTotalRightDepth(), prev.getTotalTopLeftCutDepth(), prev.getTotalTopRightCutDepth());
+		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
 		add(temp,this.getComponentZOrder(prev)-1);
 		return temp;
 		

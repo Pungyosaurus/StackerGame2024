@@ -84,7 +84,7 @@ public class Stacker extends GamePanel {
 		mouseH = new MouseHandler();
 		addMouseListener(mouseH);
 		addKeyListener(keyH);
-		Building.loadImages((int) (50*Math.sqrt(3)/2),50/2);
+		Building.loadImages(50,50);
 		getImages();
 		setBackgroundImage(background);
 		

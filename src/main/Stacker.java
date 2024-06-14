@@ -83,7 +83,7 @@ public class Stacker extends GamePanel {
 		mouseH = new MouseHandler();
 		addMouseListener(mouseH);
 		addKeyListener(keyH);
-
+		Building.loadImages((int) (50*Math.sqrt(3)/2),50/2);
 		getImages();
 		setBackgroundImage(background);
 
@@ -94,12 +94,16 @@ public class Stacker extends GamePanel {
 		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
 		add(cable);
 		
-		  makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-			makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+		  makePlatform(12, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
+			makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
 
 		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4*3), groundWidth * 5, groundHeight * 5,iGround);
-//		groundZero.cut(0, 0, 0, 0);
 		add(groundZero);
+		groundZero.cut(0, 0, 0, 0);
+	
+	
+//		groundZero.cut(0, 0, 0, 0);
+//		add(groundZero);
 		stack.add(groundZero);
 		numBuildings++;
 		

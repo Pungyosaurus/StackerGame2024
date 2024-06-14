@@ -8,19 +8,22 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ServiceLoader;
 
 import javax.imageio.ImageIO;
 
 public class Building extends GameObject {
-	private int width, height;
+
+	
 	private double xSpeed=0,ySpeed=0;
 	private int gravity = 1;
 	private boolean drop = false;
 
-	private BufferedImage img1, img2, img3;
+	private static BufferedImage img1, img2, img3;
+	private static int  TOP_WIDTH, TOP_HEIGHT;
+
 	private int backLeft, frontLeft , frontRight, backRight;
 
-	private int TOP_WIDTH, TOP_HEIGHT;
 
 
 	private double by;
@@ -31,48 +34,55 @@ public class Building extends GameObject {
 	public double rightFaceWidth;
 	public double rightFaceHeight;
 	private int leftFaceWidth;
+	
+	
 	public Building(int x, int y, int width, int height, BufferedImage image ){
 		 super(x , y, width, height, image);
 		 
-		 this.width = width;
-		this.height = height;
-		BufferedImage combinedImage = null;
-
-		 try {
-
-				// Load the images
-
-				img1 = ImageIO.read(getClass().getResourceAsStream("/leftFace.png"));
-
-
-				img2 = ImageIO.read(getClass().getResourceAsStream("/rightFace.png"));
-
-
-
-				img3 = ImageIO.read(getClass().getResourceAsStream("/topFace.png"));
-
-				TOP_WIDTH = img3.getWidth();
-				TOP_HEIGHT = img3.getHeight();
-
-				
-				// Combine the images
-
-				combinedImage = combineImages(img1, img2, img3);
-
-
-
-			} catch (IOException e) {
-
-				e.printStackTrace();
-
-			}
-		 
+		 BufferedImage combinedImage = null;
+		 combinedImage = combineImages(img1, img2, img3);
 		 setSprite(combinedImage);
-		 //make this the value of the true cut zeros are temporrary
-//		 cut(0,0,0,0);
+		 
 		 
 		 
 		}
+	
+	public static void loadImages(int width, int height) {
+		try {
+
+			// Load the images
+
+			img1 = ImageIO.read(Building.class.getResourceAsStream("/leftFace.png"));
+
+
+
+			img2 = ImageIO.read(Building.class.getResourceAsStream("/rightFace.png"));
+
+
+
+			img3 = ImageIO.read(Building.class.getResourceAsStream("/topFace.png"));
+			
+
+			
+			img1 = resizeBuffImage(img1, img1.getWidth() + width, img1.getHeight()+ height);
+			img2 = resizeBuffImage(img2, img2.getWidth()+ width, img2.getHeight()+ height);
+			img3 = resizeBuffImage(img3, img3.getWidth() +width, img3.getHeight()+ height);
+			
+			TOP_WIDTH = img3.getWidth();
+			TOP_HEIGHT = img3.getHeight();
+
+
+			// Combine the images
+
+
+
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+	}
 	
 	public void act() {
 
@@ -130,7 +140,6 @@ public class Building extends GameObject {
 //				return false;
 //			}			
 			
-			//bottom left to top right
 			if(direction ==1) {
 				double bo =  yo + 1/Math.sqrt(3)*xo;
 				double b =  y +1/Math.sqrt(3)*x;
@@ -205,14 +214,7 @@ public class Building extends GameObject {
 			g2d.drawImage(topFace,0 , 0, null);
 
 
-			// Draw the left face
-//			g2d.drawImage(leftFace, 0, topFace.getHeight() /2, null);
-//			g2d.drawImage(leftFace, 0,(int) (topFace.getHeight() / 2 - adjustment), null);
-
-			// Draw the right face
-
-
-//			g2d.drawImage(rightFace, leftFace.getWidth(),(int) (leftFace.getWidth() / Math.sqrt(3)), null);
+		
 			g2d.drawImage(rightFace, combinedWidth-rightFace.getWidth(),(int) RightAdjustmentY - minYAdjustment, null);
 
 
@@ -221,10 +223,7 @@ public class Building extends GameObject {
 
 
 			
-//			BufferedImage whitespace = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
-//			g2d = whitespace.createGraphics();
-//		    g2d.setBackground(new java.awt.Color(0, 0, 0, 0));
-//		    g2d.clearRect(0, 0, combinedWidth,combinedHeight);
+
 		 
 		    
 			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
@@ -275,7 +274,8 @@ public class Building extends GameObject {
 			frontLeft += frontLeftP;
 			frontRight += frontRightP;
 			backRight += backRightP;
-//			adjustment = (leftCutDepth+ topRightCutDepth)/ 2 / 2 / Math.sqrt(3);
+
+			
 			int startX = (int) (backLeft / 2 * Math.sqrt(3));
 			int startY = (int) (backLeft / 2) ;
 			int width = (int) (img1.getWidth()- backLeft/ 2 * Math.sqrt(3) - frontLeft/ 2 * Math.sqrt(3));

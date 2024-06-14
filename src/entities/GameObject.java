@@ -191,7 +191,7 @@ public abstract class GameObject extends JComponent {
 	}
 	
 	
-	public BufferedImage resizeBuffImage(BufferedImage originalImage, int width, int height) {
+	public static BufferedImage resizeBuffImage(BufferedImage originalImage, int width, int height) {
         Image temp = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         resizedImage.getGraphics().drawImage(temp, 0, 0, null);

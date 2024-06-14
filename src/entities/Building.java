@@ -66,14 +66,13 @@ public class Building extends GameObject {
 			
 			img1 = resizeBuffImage(img1, img1.getWidth() + width, img1.getHeight()+ height);
 			img2 = resizeBuffImage(img2, img2.getWidth()+ width, img2.getHeight()+ height);
-			img3 = resizeBuffImage(img3, img3.getWidth() +width, img3.getHeight()+ height);
+			img3 = resizeBuffImage(img3, img3.getWidth() + 2 * width, img3.getHeight()+ height);
 			
 			TOP_WIDTH = img3.getWidth();
 			TOP_HEIGHT = img3.getHeight();
 
 
 			// Combine the images
-
 
 
 
@@ -453,8 +452,8 @@ public class Building extends GameObject {
 			 highlightBoundingBox(croppedcroppedTopFace, boundingBox);
 	         int x = boundingBox[0];
 	         int y = boundingBox[1];
-	         int width2 =boundingBox[2] - boundingBox[0]  -1;
-	         int height2 = boundingBox[3] - boundingBox[1]-1;
+	         int width2 =boundingBox[2] - boundingBox[0];
+	         int height2 = boundingBox[3] - boundingBox[1];
 	         
 //	         System.out.println(croppedcroppedTopFace.getWidth()+" "+croppedcroppedTopFace.getHeight() );
 //	         System.out.println(x+" "+ y);

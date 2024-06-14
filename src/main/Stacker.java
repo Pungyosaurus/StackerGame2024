@@ -84,7 +84,8 @@ public class Stacker extends GamePanel {
 		mouseH = new MouseHandler();
 		addMouseListener(mouseH);
 		addKeyListener(keyH);
-		Building.loadImages((int) (50*Math.sqrt(3)/2),50/2);
+		Building.loadImages(50,50);
+//		Building.loadImages((int) (50*Math.sqrt(3)/2),50/2);
 		getImages();
 		setBackgroundImage(background);
 		
@@ -151,9 +152,9 @@ public class Stacker extends GamePanel {
 	    repaint();
 
 	    // Add ground objects and wait for input
-	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-	    makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
-	    revalidate(); // May be needed on some systems
+//	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
+//	    makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+//	    revalidate(); // May be needed on some systems
 	    while (!mouseH.isClicked()) {
 	    	try {
 				TimeUnit.MILLISECONDS.sleep(100);

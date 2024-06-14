@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 
 import entities.Building;
 import entities.Cable;
+import entities.GameObject;
 import entities.Ground;
 import listeners.KeyHandler;
 import listeners.MouseHandler;
@@ -84,7 +85,7 @@ public class Stacker extends GamePanel {
 		mouseH = new MouseHandler();
 		addMouseListener(mouseH);
 		addKeyListener(keyH);
-		Building.loadImages(50,50);
+		Building.loadImages(0,0);
 		getImages();
 		setBackgroundImage(background);
 		
@@ -151,9 +152,9 @@ public class Stacker extends GamePanel {
 	    repaint();
 
 	    // Add ground objects and wait for input
-	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-	    makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
-	    revalidate(); // May be needed on some systems
+//	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
+//	    makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+//	    revalidate(); // May be needed on some systems
 	    while (!mouseH.isClicked()) {
 	    	try {
 				TimeUnit.MILLISECONDS.sleep(100);
@@ -205,6 +206,9 @@ public class Stacker extends GamePanel {
 				if ( collisionValues != null ) {
 					currentBuilding.setDrop(false);
 					currentBuilding.cut(collisionValues[0], collisionValues[1] , collisionValues[2], collisionValues[3]);
+					currentBuilding.setY(currentBuilding.getY()+ collisionValues[3]/2 + collisionValues[4]);
+					currentBuilding.setX(currentBuilding.getX()+collisionValues[2]*Math.sqrt(3)/2);
+
 					stack.add(currentBuilding);
 					numBuildings++;
 					
@@ -241,10 +245,10 @@ public class Stacker extends GamePanel {
 	
 	public Building addBuilding() {
 		
-		
 		Building temp = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
 		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
 		add(temp,this.getComponentZOrder(prev)-1);
+		cable.changeMode();
 		return temp;
 		
 	}

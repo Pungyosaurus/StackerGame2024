@@ -66,14 +66,13 @@ public class Building extends GameObject {
 			
 			img1 = resizeBuffImage(img1, img1.getWidth() + width, img1.getHeight()+ height);
 			img2 = resizeBuffImage(img2, img2.getWidth()+ width, img2.getHeight()+ height);
-			img3 = resizeBuffImage(img3, img3.getWidth() +width, img3.getHeight()+ height);
+			img3 = resizeBuffImage(img3, img3.getWidth() + 2 * width, img3.getHeight()+ height);
 			
 			TOP_WIDTH = img3.getWidth();
 			TOP_HEIGHT = img3.getHeight();
 
 
 			// Combine the images
-
 
 
 
@@ -144,8 +143,9 @@ public class Building extends GameObject {
 				double bo =  yo + 1/Math.sqrt(3)*xo;
 				double b =  y +1/Math.sqrt(3)*x;
 				if(bo-b <20 && bo-b >-20) {
-					setY(getY()+ bo-b);
-					int[] offsetValues = new int[4];
+		
+					System.out.println(b+ " "+ bo);
+					int[] offsetValues = new int[5];
 	
 					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
 						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
@@ -155,6 +155,7 @@ public class Building extends GameObject {
 						}else {
 							offsetValues[2] = offset;
 						}
+						offsetValues[4] = (int) (bo-b);
 						
 						System.out.println("collides");
 						return offsetValues;
@@ -229,7 +230,7 @@ public class Building extends GameObject {
 			int x1 = (int) (topFace.getWidth() - rightFace.getWidth());
 			int y1 = topFace.getHeight();
 			setTopMiddleX(x1);
-			setTopMiddleY(y1);
+			setTopMiddleY(y1- minYAdjustment);
 				
 				
 				for(int i =0; i<10;i++) {
@@ -239,7 +240,7 @@ public class Building extends GameObject {
 				
 			y1 = combined.getHeight();
 			setBottomMiddleX(x1);
-			setBottomMiddleY(y1);
+			setBottomMiddleY(y1- minYAdjustment);
 				
 				 for(int i =0; i<10;i++) {
 					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
@@ -371,81 +372,14 @@ public class Building extends GameObject {
 			
 			
 			
-			
-			
-			
-//			
-//			BufferedImage croppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-//			
-//			Graphics2D g2d3 = croppedcroppedcroppedTopFace.createGraphics();
-//
-//			g2d3 = croppedcroppedcroppedTopFace.createGraphics();
-//
-//			g2d3.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
-//				
-//			Path2D.Double topPath3 = new Path2D.Double();
-//			
-//			
-//			
-//			topPath3.moveTo(totalTopLeftCutDepth,(int) (TOP_HEIGHT/2 + totalTopLeftCutDepth / Math.sqrt(3)));
-//
-//			double topXInt =  TOP_WIDTH / 2 + totalTopLeftCutDepth * Math.sqrt(3)/2 ;
-//			double topYInt = 0 + totalTopLeftCutDepth / 2 ;
-//			
-//			topPath3.lineTo(topXInt, topYInt);
-//
-//			topPath3.lineTo(TOP_WIDTH, 0);
-//
-//			topPath3.lineTo(TOP_WIDTH, TOP_HEIGHT);
-//
-//			topPath3.lineTo(0,TOP_HEIGHT);
-//
-//			
-//			g2d3.setClip(topPath);
-//
-//			g2d3.drawImage(croppedcroppedTopFace, 0, 0, null);
-//			
-//			
-//			
-//			
-//			BufferedImage croppedcroppedcroppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-//			
-//			Graphics2D g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
-//
-//			g2d4 = croppedcroppedcroppedcroppedTopFace.createGraphics();
-//
-//			g2d4.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
-//				
-//			Path2D.Double topPath4 = new Path2D.Double();
-//			
-//			
-//			
-//			topPath4.moveTo(TOP_WIDTH - totalTopRightCutDepth,(int) (TOP_HEIGHT/2 + totalTopRightCutDepth / Math.sqrt(3)));
-//
-//			
-//			double topXInt2 =  TOP_WIDTH / 2 - totalTopRightCutDepth * Math.sqrt(3)/2 ;
-//			double topYInt2 = 0 + totalTopRightCutDepth / 2 ;
-//			
-//			topPath4.lineTo(topXInt2, topYInt2);
-//
-//			topPath4.lineTo(0, 0);
-//
-//			topPath4.lineTo(0,TOP_HEIGHT);
-//
-//			topPath4.lineTo(TOP_WIDTH,TOP_HEIGHT);
-//
-//			
-//			g2d4.setClip(topPath4);
-//
-//			g2d4.drawImage(croppedcroppedcroppedTopFace, 0, 0, null);
+
 //		
 
 			
 			
 			g2d.dispose();
 			g2d2.dispose();
-//			g2d3.dispose();
-//			g2d4.dispose();
+
 
 
 
@@ -453,13 +387,10 @@ public class Building extends GameObject {
 			 highlightBoundingBox(croppedcroppedTopFace, boundingBox);
 	         int x = boundingBox[0];
 	         int y = boundingBox[1];
-	         int width2 =boundingBox[2] - boundingBox[0]  -1;
-	         int height2 = boundingBox[3] - boundingBox[1]-1;
+	         int width2 =boundingBox[2] - boundingBox[0];
+	         int height2 = boundingBox[3] - boundingBox[1];
 	         
-//	         System.out.println(croppedcroppedTopFace.getWidth()+" "+croppedcroppedTopFace.getHeight() );
-//	         System.out.println(x+" "+ y);
-//	         System.out.println(width2+" " +height2);
-	         
+
 	         BufferedImage croppedImage= new BufferedImage(width2, height2, BufferedImage.TYPE_INT_ARGB);
 	        		 croppedImage = croppedcroppedTopFace.getSubimage(x, y, width2, height2);
 			

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -86,13 +87,11 @@ public class Stacker extends GamePanel {
 		Building.loadImages((int) (50*Math.sqrt(3)/2),50/2);
 		getImages();
 		setBackgroundImage(background);
-
-
 		
-		repaint();
 
 		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
 		add(cable);
+		drawMenu();
 		
 		  makePlatform(12, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
 			makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
@@ -108,9 +107,6 @@ public class Stacker extends GamePanel {
 		numBuildings++;
 		
 		
-
-	
-		
 		prev = stack.get(numBuildings - 1);
 
 		cable.changeMode();
@@ -121,35 +117,58 @@ public class Stacker extends GamePanel {
 	}
 	
 	public void drawMenu() {
+	    JPanel overlay = new JPanel() {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            Graphics2D g2d = (Graphics2D) g.create();
+	            g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+	            g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black color
+	            g2d.fillRect(0, 0, getWidth(), getHeight()); 
+	            
+
+	        }
+	    };
+	    overlay.setLayout(null); 
+	    overlay.setBounds(0, 0, (int) screenWidth, (int) screenHeight);
+
+	    add(overlay);
 
 	    JLabel title = new JLabel("Construction Crane Chaos");
-	    title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 45)));
+	    title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 43)));
 	    title.setForeground(Color.white);
-	    int labelWidth = (int) (screenWidth / 3.5); 
-	    int labelHeight = (int) (screenHeight / 10);
-	    int lx = (int) ((screenWidth - labelWidth) / 2); 
-	    int ly = (int) ((screenHeight - labelHeight) / 3.0);
-
-	    title.setBounds(lx, ly, labelWidth, labelHeight);
-	    add(title);
 	    
-	    repaint();
-		// create and place ground objects
+	    int labelWidth = (int) (screenWidth / 3.3);
+	    int labelHeight = (int) (screenHeight / 10);
+	    int lx = (int) ((screenWidth - labelWidth) / 2);
+	    int ly = (int) ((screenHeight - labelHeight) / 3.0);
+	    title.setBounds(lx, ly, labelWidth, labelHeight);
 
+	    overlay.add(title);
+
+	    title.setFocusable(true);
+	    title.requestFocusInWindow();
+	    repaint();
+
+	    // Add ground objects and wait for input
 	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-		makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
-	    while(true){
-	    	if(keyH.isSpacebar() || mouseH.isClicked()){
-	    		System.out.println("stuck");
-	    		keyH.setSpacebar(false);
-				mouseH.setClicked(false);
-	    		break;
-	    	}
+	    makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+	    revalidate(); // May be needed on some systems
+	    while (!mouseH.isClicked()) {
+	    	try {
+				TimeUnit.MILLISECONDS.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+            
+	      
 	    }
+
+	    remove(overlay);
 	    remove(title);
-        
 	}
-	
+
 
 	public void update() {
 		if (keyH.isEscape()) {

@@ -52,6 +52,9 @@ public class Stacker extends GamePanel {
 	
 	private Building prev;
 	
+	private int buildingMovementY;
+	private final int BUILDING_MOVEMENT_Y_SPEED = 5;
+	
 	public static void main(String[] args) {
 
 		JFrame window = new JFrame();
@@ -94,8 +97,8 @@ public class Stacker extends GamePanel {
 		add(cable);
 		drawMenu();
 		
-		  makePlatform(12, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-			makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+		  makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
+//			makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
 
 		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4*3), groundWidth * 5, groundHeight * 5,iGround);
 		add(groundZero);
@@ -110,8 +113,7 @@ public class Stacker extends GamePanel {
 		
 		prev = stack.get(numBuildings - 1);
 
-		cable.changeMode();
-		
+//		cable.changeMode();
 		repaint();
 
 
@@ -179,16 +181,31 @@ public class Stacker extends GamePanel {
 		if (!isPaused) {
 			 
 			cable.act();
-
+			
+			//move buildings down smoothly
+		if(buildingMovementY != 0){
+			for(int i = 0; i<stack.size();i++){
+				Building building = stack.get(i);
+				building.setY(building.getY()+ BUILDING_MOVEMENT_Y_SPEED);
+			}
+			buildingMovementY-= BUILDING_MOVEMENT_Y_SPEED;
+			if(buildingMovementY<0){
+				buildingMovementY = 0;
+			}
+		}
+		
+			
 			if(currentBuilding == null){
 				currentBuilding = addBuilding();				
 //				cable.changeMode();
 			}
 			
 			
+			
+			
 			//if not dropping
 			if (!currentBuilding.getDrop()) {
-
+				
 				currentBuilding.setX(cable.getEndX());
 				currentBuilding.setY(cable.getEndY());
 				
@@ -202,12 +219,12 @@ public class Stacker extends GamePanel {
 				
 				
 				currentBuilding.act();
-				int[] collisionValues = currentBuilding.collides(prev, 1);
+				int[] collisionValues = currentBuilding.collides(prev, cable.getMode());
 				if ( collisionValues != null ) {
 					currentBuilding.setDrop(false);
 					currentBuilding.cut(collisionValues[0], collisionValues[1] , collisionValues[2], collisionValues[3]);
-					currentBuilding.setY(currentBuilding.getY()+ collisionValues[3]/2 + collisionValues[4]);
-					currentBuilding.setX(currentBuilding.getX()+collisionValues[2]*Math.sqrt(3)/2);
+					currentBuilding.setY(currentBuilding.getY()+ collisionValues[3]/2 + collisionValues[4] +collisionValues[1]/2);
+					currentBuilding.setX(currentBuilding.getX()+collisionValues[2]*Math.sqrt(3)/2 + collisionValues[0]*Math.sqrt(3)/2 );
 
 					stack.add(currentBuilding);
 					numBuildings++;
@@ -215,10 +232,8 @@ public class Stacker extends GamePanel {
 					prev = stack.get(numBuildings - 1);
 					currentBuilding = null;
 					
-					for(int i = 0; i<stack.size();i++){
-						Building building = stack.get(i);
-//						building.setY(building.getY()+ building.rightFaceHeight);
-					}
+					buildingMovementY = (int) prev.rightFaceHeight;
+					
 				}
 				else if(currentBuilding.getY()>2000){
 					System.out.println("you failed");

@@ -10,26 +10,31 @@ public class Cable extends GameObject {
     private final int WIDTH, HEIGHT;
     // zero is moving to the left, 1 is moving to the right
     private boolean direction;
-    private boolean mode;
     private double da = 30;
     private final double d2a = 1;
     private int sizeChanger = -1; // -1 for shrinking, 1 for growing
     private final double DA = da, startingAngle = Math.PI / 4;
+  
+    private int mode = 1;
    
     public Cable(int x, int y, int w, int h, BufferedImage image) {
         super(x, y, w, h, image);
         spriteAngle = startingAngle;
         this.WIDTH = w;
         HEIGHT = h;
+        
     }
 
-    public boolean changeMode() {
+    public void changeMode() {
     	setSize(WIDTH, HEIGHT);
     	spriteAngle = startingAngle;
     	da = DA;
-    	mode = !mode;
+    	if(mode == 1){
+    		mode = 0;
+    	}else{
+    		mode = 1;
+    	}
         sizeChanger *= -1; 
-        return mode;
     }
     
     @Override
@@ -81,18 +86,28 @@ public class Cable extends GameObject {
             g.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
         }
     }
+    
+    public int getMode(){
+    	return mode;
+    }
 
     public double getSpriteAngle() {
         return Math.abs(this.spriteAngle / 2 - Math.PI / 4) * 5;
     }
 
     public double getEndX() {
-        return getX() - (Math.cos(getSpriteAngle()) + 1) + 250 - getWidth();
+    	if(mode == 0 ){
+    		  return getX() + 250 - getWidth();
+    	}
+    	return  getWidth() - getX()  + 250 ;
+      
     }
 
     public double getEndY() {
-        return getY() + getHeight() / 1.3 + (Math.sin(getSpriteAngle())) * 100;
+    	return getY() + getHeight() / 1.3 + (Math.sin(getSpriteAngle())) * 100;
     }
+    
+
 
     public int getScale() {
         return (int) da / 2;

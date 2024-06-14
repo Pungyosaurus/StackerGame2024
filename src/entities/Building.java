@@ -139,7 +139,7 @@ public class Building extends GameObject {
 //				return false;
 //			}			
 			
-			if(direction ==1) {
+			if(direction ==0) {
 				double bo =  yo + 1/Math.sqrt(3)*xo;
 				double b =  y +1/Math.sqrt(3)*x;
 				if(bo-b <20 && bo-b >-20) {
@@ -163,20 +163,22 @@ public class Building extends GameObject {
 				}
 			}
 			//top left to bottom right
-			if(direction ==2) {
+			if(direction ==1) {
 				double bo =  yo - 1/Math.sqrt(3)*xo;
 				double b =  y - 1/Math.sqrt(3)*x;
 				if(bo-b <20 && bo-b >-20) {
-					int[] offsetValues = new int[4];
+					int[] offsetValues = new int[5];
 	
 					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < leftFaceWidth/Math.sqrt(3)*2) {
 						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
 						
 						if(x>xo) {
-							offsetValues[0] = offset;
-						}else {
 							offsetValues[1] = offset;
+						}else {
+							offsetValues[0] = offset;
 						}
+						offsetValues[4] = (int) (bo-b);
+
 						
 						System.out.println("collides");
 						return offsetValues;
@@ -384,7 +386,7 @@ public class Building extends GameObject {
 
 
 			 int[] boundingBox = getBoundingBox(croppedcroppedTopFace);
-			 highlightBoundingBox(croppedcroppedTopFace, boundingBox);
+//			 highlightBoundingBox(croppedcroppedTopFace, boundingBox);
 	         int x = boundingBox[0];
 	         int y = boundingBox[1];
 	         int width2 =boundingBox[2] - boundingBox[0];
@@ -403,15 +405,15 @@ public class Building extends GameObject {
 			File outputFile2 = new File(desktopPath2);
 
 
-			try {
-			    ImageIO.write( croppedImage, "PNG", outputFile);
-			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
-			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
-
-			    System.out.println("Image saved successfully at: " + desktopPath);
-			} catch (IOException e) {
-			    System.out.println("Error saving image: " + e.getMessage());
-			}
+//			try {
+//			    ImageIO.write( croppedImage, "PNG", outputFile);
+//			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
+//			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
+//
+//			    System.out.println("Image saved successfully at: " + desktopPath);
+//			} catch (IOException e) {
+//			    System.out.println("Error saving image: " + e.getMessage());
+//			}
 			
 		
 			

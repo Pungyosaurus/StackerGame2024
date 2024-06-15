@@ -137,20 +137,30 @@ public class Stacker extends GamePanel {
 
 	    add(overlay);
 
-	    JLabel title = new JLabel("Construction Crane Chaos");
-	    title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 43)));
+	    JLabel title = new JLabel("Chaos Constructor");
+	    title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 21)));
 	    title.setForeground(Color.white);
 	    
-	    int labelWidth = (int) (screenWidth / 3.3);
+	    int labelWidth = (int) (screenWidth / 2.3);
 	    int labelHeight = (int) (screenHeight / 10);
 	    int lx = (int) ((screenWidth - labelWidth) / 2);
 	    int ly = (int) ((screenHeight - labelHeight) / 3.0);
 	    title.setBounds(lx, ly, labelWidth, labelHeight);
 
 	    overlay.add(title);
+	    JLabel click = new JLabel("Click to play!");
+	    click.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 30)));
+	    click.setForeground(Color.white);
 
-	    title.setFocusable(true);
-	    title.requestFocusInWindow();
+	    
+	    labelWidth = (int) (screenWidth / 4.5);
+	    
+	    lx = (int) ((screenWidth - labelWidth) / 2);
+	    ly += screenHeight / 3;
+	    click.setBounds(lx, ly, labelWidth, labelHeight);
+	    overlay.add(click);
+//	    title.setFocusable(true);
+//	    title.requestFocusInWindow();
 	    repaint();
 
 	    // Add ground objects and wait for input
@@ -167,7 +177,7 @@ public class Stacker extends GamePanel {
             
 	      
 	    }
-
+	    mouseH.setClicked(false);
 	    remove(overlay);
 	    remove(title);
 	}
@@ -206,8 +216,13 @@ public class Stacker extends GamePanel {
 			//if not dropping
 			if (!currentBuilding.getDrop()) {
 				
-				currentBuilding.setX(cable.getEndX());
-				currentBuilding.setY(cable.getEndY());
+				
+//				currentBuilding.setX(cable.getEndX());
+//				currentBuilding.setY(cable.getEndY());
+				
+//				currentBuilding.setSize((int)(currentBuilding.getSize().getWidth() + cable.getScale()), (int)(currentBuilding.getSize().getHeight()));
+				currentBuilding.setX(cable.getEndX() - currentBuilding.getSize().getWidth() / 2);
+				currentBuilding.setY(cable.getEndY() - currentBuilding.getSize().getHeight() / 2 - cable.getScale());
 				
 				if (mouseH.isClicked() == true || keyH.isSpacebar()) {
 					keyH.setSpacebar(false);

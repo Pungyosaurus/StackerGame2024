@@ -427,7 +427,13 @@ public class Building extends GameObject {
 
 		    return new int[]{minX, minY, maxX, maxY};
 		}
-
+		/**
+		 * should be added to gameobject
+		 * @param image
+		 * @param x
+		 * @param y
+		 * @return
+		 */
 		private boolean isNonEmptyPixel(BufferedImage image, int x, int y) {
 		    int pixel = image.getRGB(x, y);
 		    Color color = new Color(pixel, true);

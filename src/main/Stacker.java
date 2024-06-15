@@ -46,13 +46,14 @@ public class Stacker extends GamePanel {
 	private BufferedImage background, iGround, rope, iBuilding;
 
 	private JPanel pausedMenu;
-
-	private boolean s1, s2; // going to be used to paly different sound effects after consecutive successful
+	private JLabel pausedScoreDisplay;
+	public static int score;
+	private boolean s1, s2; // going to be used to play different sound effects after consecutive successful
 							// placements
 	private int counter = 0;
 	private int counter2 = 11;
 	private int numBuildings;
-
+	
 	private Building prev;
 
 	private int buildingMovementY;
@@ -110,7 +111,22 @@ public class Stacker extends GamePanel {
 		numBuildings++;
 
 		prev = stack.get(numBuildings - 1);
-
+		
+		
+		pausedMenu = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g.create();
+				g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black color
+				g2d.fillRect(0, 0, getWidth(), getHeight());
+			}
+		};
+		pausedMenu.setLayout(null);
+		int mWidth = (int) (screenWidth / 2);
+		int mHeight = (int) (screenHeight / 2);
+		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
 		repaint();
 
 	}
@@ -170,22 +186,19 @@ public class Stacker extends GamePanel {
 		remove(title);
 	}
 
-	public void drawPausedMenu() {
-		pausedMenu = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-				g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black color
-				g2d.fillRect(0, 0, getWidth(), getHeight());
-			}
-		};
-		pausedMenu.setLayout(null);
+	public void openPausedMenu() {
+		pausedScoreDisplay = new JLabel("Your Score: " + score);
+		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 21)));
+		pausedScoreDisplay.setForeground(Color.white);
+		int labelWidth = (int) (pausedMenu.getWidth() / 2);
+		int labelHeight = (int) (pausedMenu.getHeight() / 3);
+		int lx = (int) ((pausedMenu.getWidth() - labelWidth) / 2);
+		int ly = (int) ((pausedMenu.getHeight() - labelHeight) / 3.0);
+		
+		pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
 
-		int mWidth = (int) (screenWidth / 2);
-		int mHeight = (int) (screenHeight / 2);
-		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
+		pausedMenu.add(pausedScoreDisplay);
+
 		add(pausedMenu);
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
@@ -201,15 +214,17 @@ public class Stacker extends GamePanel {
 		keyH.setEscape(false);
 		remove(pausedMenu);
 //	    isPaused = false;
+		repaint();
 
 	}
 
 	public void update() {
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);
-			drawPausedMenu();
+			openPausedMenu();
+			return; // not sure if this does anything
 		}
-		System.out.println("not paused");
+//		System.out.println("not paused");
 		cable.act();
 
 		// move buildings down smoothly

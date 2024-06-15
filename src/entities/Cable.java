@@ -78,6 +78,7 @@ public class Cable extends GameObject {
 //			endY += da / 3.0;
 //		}
 	}
+	// to push
 
 	private boolean isNonEmptyPixel( int x, int y) {
 		int pixel = sprite.getRGB(x, y);

@@ -219,7 +219,6 @@ public abstract class GameObject extends JComponent {
 		
 		g.setColor(Color.RED);
 
-		int size = 100;
 
 //		g.fillOval(width/2-50, height-50, size, size);
 

@@ -27,7 +27,6 @@ public class Ground extends GameObject{
 	public void act() {
 		// TODO Auto-generated method stub
 		setY(getY()+ Math.sin(sinStart));
-		System.out.println(sinStart);
 		sinStart+=1;
 	}
 	

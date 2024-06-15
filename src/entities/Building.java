@@ -50,19 +50,9 @@ public class Building extends GameObject {
 	public static void loadImages(int width, int height) {
 		try {
 
-			// Load the images
-
 			img1 = ImageIO.read(Building.class.getResourceAsStream("/leftFace.png"));
-
-
-
 			img2 = ImageIO.read(Building.class.getResourceAsStream("/rightFace.png"));
-
-
-
 			img3 = ImageIO.read(Building.class.getResourceAsStream("/topFace.png"));
-			
-
 			
 			img1 = resizeBuffImage(img1, img1.getWidth() + width, img1.getHeight()+ height);
 			img2 = resizeBuffImage(img2, img2.getWidth()+ width, img2.getHeight()+ height);
@@ -70,10 +60,6 @@ public class Building extends GameObject {
 			
 			TOP_WIDTH = img3.getWidth();
 			TOP_HEIGHT = img3.getHeight();
-
-
-			// Combine the images
-
 
 
 		} catch (IOException e) {
@@ -124,20 +110,6 @@ public class Building extends GameObject {
 			
 			double x = getX()+getBottomMiddleX();
 			double y = getY()+getBottomMiddleY();
-			
-			
-//			if(y > yo)
-//				return true;			
-//			if(direction) {
-//				if(x >= xo) {
-//					return true;
-//				}
-//
-//			}else if(x <= xo) {
-//				return true;
-//			}else {
-//				return false;
-//			}			
 			
 			if(direction ==0) {
 				double bo =  yo + 1/Math.sqrt(3)*xo;

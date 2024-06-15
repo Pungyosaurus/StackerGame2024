@@ -2,7 +2,13 @@ package entities;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
+/**
+ * 
+ * @author Jason and Dave
+ * June 2024
+ * Small blocks that form a platform for the game to be played on
+ *
+ */
 public class Ground extends GameObject{
 	private double sinStart;
 			
@@ -14,11 +20,14 @@ public class Ground extends GameObject{
         this.sinStart = sinStart;
 		// TODO Auto-generated constructor stub
 	}
-
+	/**
+	 * Moves the blocks in a cyclic motion
+	 */
 	@Override
 	public void act() {
 		// TODO Auto-generated method stub
 		setY(getY()+ Math.sin(sinStart));
+		System.out.println(sinStart);
 		sinStart+=1;
 	}
 	

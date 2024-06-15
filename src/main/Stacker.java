@@ -127,34 +127,27 @@ public class Stacker extends GamePanel {
 	            Graphics2D g2d = (Graphics2D) g.create();
 	            g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	            g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black color
-	            g2d.fillRect(0, 0, getWidth(), getHeight()); 
-	            
-
+	            g2d.fillRect(0, 0, getWidth(), getHeight()); 	            
 	        }
 	    };
 	    overlay.setLayout(null); 
 	    overlay.setBounds(0, 0, (int) screenWidth, (int) screenHeight);
-
 	    add(overlay);
 
 	    JLabel title = new JLabel("Chaos Constructor");
 	    title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 21)));
 	    title.setForeground(Color.white);
-	    
 	    int labelWidth = (int) (screenWidth / 2.3);
 	    int labelHeight = (int) (screenHeight / 10);
 	    int lx = (int) ((screenWidth - labelWidth) / 2);
 	    int ly = (int) ((screenHeight - labelHeight) / 3.0);
 	    title.setBounds(lx, ly, labelWidth, labelHeight);
-
 	    overlay.add(title);
+	    
 	    JLabel click = new JLabel("Click to play!");
 	    click.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 30)));
 	    click.setForeground(Color.white);
-
-	    
 	    labelWidth = (int) (screenWidth / 4.5);
-	    
 	    lx = (int) ((screenWidth - labelWidth) / 2);
 	    ly += screenHeight / 3;
 	    click.setBounds(lx, ly, labelWidth, labelHeight);
@@ -207,7 +200,7 @@ public class Stacker extends GamePanel {
 			
 			if(currentBuilding == null){
 				currentBuilding = addBuilding();				
-//				cable.changeMode();
+				cable.changeMode();
 			}
 			
 			
@@ -278,7 +271,6 @@ public class Stacker extends GamePanel {
 		Building temp = new Building((int)cable.getEndX(),(int)cable.getEndY(),groundWidth*5,groundHeight*5,iBuilding);
 		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
 		add(temp,this.getComponentZOrder(prev)-1);
-		cable.changeMode();
 		return temp;
 		
 	}

@@ -47,6 +47,14 @@ public abstract class GameObject extends JComponent {
 		this.width = w;
 		this.height = h;
 	}
+	public GameObject(int x, int y, int w, int h) {
+		this(w, h,null);
+		setX(x);
+		setY(y);
+		//delete
+		this.width = w;
+		this.height = h;
+	}
 
 	public void setSize(int width, int height) {
 		super.setSize(width, height);

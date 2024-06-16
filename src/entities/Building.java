@@ -20,6 +20,7 @@ public class Building extends GameObject {
 	private boolean drop = false;
 
 	private static BufferedImage img1, img2, img3;
+//	private BufferedImage croppedLeftFace, croppedRightFace, croppedImage;
 	private static int  TOP_WIDTH, TOP_HEIGHT;
 
 	private int backLeft, frontLeft , frontRight, backRight;
@@ -36,16 +37,44 @@ public class Building extends GameObject {
 	private int leftFaceWidth;
 	
 	
-	public Building(int x, int y, int width, int height, BufferedImage image ){
-		 super(x , y, width, height, image);
+	public Building(int x, int y, int width, int height){
+		 super(x , y, width, height);
 		 
 		 BufferedImage combinedImage = null;
 		 combinedImage = combineImages(img1, img2, img3);
 		 setSprite(combinedImage);
-		 
-		 
-		 
 		}
+	
+//	
+//	public Building(Building original) {
+//        super(original.getX(), original.getY(), original.getWidth(), original.getHeight());
+//
+// 
+//        this.drop = original.drop;
+//
+//        this.backLeft = original.backLeft;
+//        this.frontLeft = original.frontLeft;
+//        this.frontRight = original.frontRight;
+//        this.backRight = original.backRight;
+//
+//        this.by = original.by;
+//        this.bx = original.bx;
+//        this.tx = original.tx;
+//        this.ty = original.ty;
+//
+//        this.rightFaceWidth = original.rightFaceWidth;
+//        this.rightFaceHeight = original.rightFaceHeight;
+//        this.leftFaceWidth = original.leftFaceWidth;
+//
+//        this.leftAdjustmentY = original.leftAdjustmentY;
+//        this.RightAdjustmentY = original.RightAdjustmentY;
+//        this.minYAdjustment = original.minYAdjustment;
+//
+//        BufferedImage combinedImage = combineImages(original.croppedLeftFace, original.croppedRightFace , original.croppedImage);
+//        setSprite(combinedImage);
+//    }
+	
+	
 	
 	public static void loadImages(int width, int height) {
 		try {
@@ -102,22 +131,19 @@ public class Building extends GameObject {
 	}
 		
 		
-		public int[] collides(Building prev, int direction) {
+		public int[] collides(double xo, double yo, int direction) {
 			//values to cut by
-			
-			double xo = prev.getX()+ prev.getTopMiddleX();
-			double yo = prev.getY()+ prev.getTopMiddleY();
 			
 			double x = getX()+getBottomMiddleX();
 			double y = getY()+getBottomMiddleY();
 			
-			if(direction ==0) {
+			if(direction ==1) {
 				double bo =  yo + 1/Math.sqrt(3)*xo;
 				double b =  y +1/Math.sqrt(3)*x;
 				if(bo-b <20 && bo-b >-20) {
 		
 					System.out.println(b+ " "+ bo);
-					int[] offsetValues = new int[5];
+					int[] offsetValues = new int[6];
 	
 					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
 						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
@@ -128,6 +154,7 @@ public class Building extends GameObject {
 							offsetValues[2] = offset;
 						}
 						offsetValues[4] = (int) (bo-b);
+						offsetValues[5] = (int) (rightFaceHeight+minYAdjustment);
 						
 						System.out.println("collides");
 						return offsetValues;
@@ -135,11 +162,11 @@ public class Building extends GameObject {
 				}
 			}
 			//top left to bottom right
-			if(direction ==1) {
+			if(direction ==0) {
 				double bo =  yo - 1/Math.sqrt(3)*xo;
 				double b =  y - 1/Math.sqrt(3)*x;
 				if(bo-b <20 && bo-b >-20) {
-					int[] offsetValues = new int[5];
+					int[] offsetValues = new int[6];
 	
 					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < leftFaceWidth/Math.sqrt(3)*2) {
 						int offset =(int) Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2));
@@ -150,6 +177,7 @@ public class Building extends GameObject {
 							offsetValues[0] = offset;
 						}
 						offsetValues[4] = (int) (bo-b);
+						offsetValues[5] = (int) (rightFaceHeight+minYAdjustment);
 
 						
 						System.out.println("collides");
@@ -309,6 +337,8 @@ public class Building extends GameObject {
 
 			g2d.drawImage(img3, 0, 0, null);
 			
+			
+			
 
 			BufferedImage croppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 			
@@ -377,15 +407,15 @@ public class Building extends GameObject {
 			File outputFile2 = new File(desktopPath2);
 
 
-//			try {
-//			    ImageIO.write( croppedImage, "PNG", outputFile);
-//			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
-//			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
-//
-//			    System.out.println("Image saved successfully at: " + desktopPath);
-//			} catch (IOException e) {
-//			    System.out.println("Error saving image: " + e.getMessage());
-//			}
+			try {
+			    ImageIO.write( croppedImage, "PNG", outputFile);
+			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
+			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
+
+			    System.out.println("Image saved successfully at: " + desktopPath);
+			} catch (IOException e) {
+			    System.out.println("Error saving image: " + e.getMessage());
+			}
 			
 		
 			

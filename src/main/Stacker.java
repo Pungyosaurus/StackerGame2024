@@ -65,6 +65,10 @@ public class Stacker extends GamePanel {
 
 	private int buildingMovementY;
 	private final int BUILDING_MOVEMENT_Y_SPEED = 5;
+	
+	
+	private boolean firstBuilding = true;
+	private int startTopMiddleX, startTopMiddleY;
 
 	public static void main(String[] args) {
 
@@ -180,58 +184,183 @@ public class Stacker extends GamePanel {
 		drawMenu();
 
 
-		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
+		cable = new Cable((int) screenWidth / 2, -100, 550, 550, rope);
 		add(cable);
 
 		
 		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
 		
-		
-		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5, iGround);
+		startTopMiddleX = (int) (screenWidth / 2);
+		startTopMiddleY = (int) (screenHeight / 4 * 3);
 
+		
+		Building groundZero = new Building((int) (screenWidth / 2) - groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5);
 		add(groundZero);
 		groundZero.cut(0, 0, 0, 0);
-
 		stack.add(groundZero);
-		numBuildings++;
+		numBuildings++;	
 
 		prev = stack.get(numBuildings - 1);
 		
 		
-		pausedMenu = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black color
-				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
-			}
-		};
-		pausedMenu.setOpaque(false); // Making the panel non-opaque
-		pausedMenu.setLayout(null);
-		int mWidth = (int) (screenWidth / 2);
-		int mHeight = (int) (screenHeight / 2);
-		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
+		setUpJLabel();
 		
-		int labelWidth = (int) (pausedMenu.getWidth() / 2);
-		int labelHeight = (int) (pausedMenu.getHeight() / 4);
 		
-		resume = new JLabel("Esc to Resume");
-		resume.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
-		resume.setForeground(Color.white);
-		resume.setBounds((pausedMenu.getWidth() - labelWidth) / 4 , pausedMenu.getHeight() - labelHeight, labelWidth, labelHeight);
-
-		quit = new JLabel("Delete to Quit");
-		quit.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
-		quit.setForeground(Color.white);
-		quit.setBounds(pausedMenu.getWidth() / 2 +(pausedMenu.getWidth() - labelWidth) / 4 , pausedMenu.getHeight() - labelHeight, labelWidth, labelHeight);
-		
-		pausedMenu.add(resume);
-		pausedMenu.add(quit);
-		repaint();
-
 	}
 
+	
+	public void update() {
+		if (keyH.isEscape()) {
+			keyH.setEscape(false);
+			openPausedMenu();
+			return; // not sure if this does anything
+		}
+		
+		if (currentBuilding == null) {
+			currentBuilding = addBuilding();
+			cable.changeMode();
+		}
+
+		cable.act();
+		animateGround();
+		animateGround();
+
+
+		// move buildings down smoothly
+		if (buildingMovementY != 0) {
+			for (int i = 0; i < stack.size(); i++) {
+				Building building = stack.get(i);
+				building.setY(building.getY() + BUILDING_MOVEMENT_Y_SPEED);
+			}
+			buildingMovementY -= BUILDING_MOVEMENT_Y_SPEED;
+			if (buildingMovementY < 0) {
+				buildingMovementY = 0;
+			}
+		}
+
+		
+
+		// if not dropping
+		if (!currentBuilding.getDrop()) {
+			currentBuilding.setX(cable.getEndX() - currentBuilding.getSize().getWidth() / 2);
+			currentBuilding.setY(cable.getEndY() - currentBuilding.getSize().getHeight() / 2 - cable.getScale());
+
+			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
+				keyH.setSpacebar(false);
+				mouseH.setClicked(false);
+				currentBuilding.drop(cable.getDx(), cable.getDy(), cable.getDirection());
+
+			}
+		} else {
+			currentBuilding.act();
+			if(firstBuilding) {
+				if(checkCollision(startTopMiddleX,startTopMiddleY)) {
+					firstBuilding = false;
+				}
+			}else if(!checkCollision(prev.getX()+ prev.getTopMiddleX(), prev.getY()+ prev.getTopMiddleY()) && (currentBuilding.getY() > 2000)) {
+				System.out.println("you failed");
+				currentBuilding = null;
+			}
+			
+
+			
+
+	}
+}
+	
+	
+	
+	
+	
+	public boolean checkCollision(double xo, double yo) {
+		int[] collisionValues = currentBuilding.collides(xo, yo, cable.getMode());
+		if(collisionValues != null) {
+			collisionUpdate(collisionValues);
+			return true;
+		}
+		return false;
+	}
+	
+	public void collisionUpdate(int[] collisionValues) {
+		if(collisionValues != null) {
+			currentBuilding.setDrop(false);
+			currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3]);
+			currentBuilding.setY(
+					currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
+			currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2
+					+ collisionValues[0] * Math.sqrt(3) / 2);
+	
+			stack.add(currentBuilding);
+			numBuildings++;
+	
+			prev = stack.get(numBuildings - 1);
+			currentBuilding = null;
+	
+			buildingMovementY = (int) prev.rightFaceHeight;
+		}
+	}
+	
+	public void animateGround() {
+		groundObjectList1.get(counter).act();
+		groundObjectList1.get(counter2).act();
+
+		if (counter == groundObjectList1.size() - 1) {
+			counter = -1;
+		}
+		if (counter2 == groundObjectList1.size() - 1) {
+			counter2 = -1;
+		}
+		counter++;
+		counter2++;
+	}
+
+	public Building addBuilding() {
+
+		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5);
+		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
+		add(temp, this.getComponentZOrder(prev) - 1);
+		
+//		Building temp = new Building(prev);
+		return temp;
+
+	}
+	
+	
+	
+
+	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
+		int amount = -1;
+		setLayout(null);
+
+		for (int j = 0; j < depth; j++) {
+
+			if (j >= (depth + 1) / 2) {
+				amount -= 1;
+			} else {
+				amount += 1;
+
+			}
+
+			for (int i = 0; i <= amount; i++) {
+
+				Ground ground = new Ground(startX + (groundWidth - 30) * i - ((groundWidth - 30) / 2) * amount,
+						startY + (int) (j * groundHeight * .20), groundWidth, groundHeight, iGround, 180 / depth * j);
+				add(ground, 1);
+				list.add(ground);
+				repaint();
+			}
+		}
+	}
+	
+	
+
+	public void playSE(int i) {
+
+		soundEffects.setFile(i);
+		soundEffects.play();
+	}
+	
+	
 	public void drawMenu() {
 		JPanel overlay = new JPanel() {
 			@Override
@@ -319,126 +448,45 @@ public class Stacker extends GamePanel {
 		repaint();
 
 	}
-
-	public void update() {
-		if (keyH.isEscape()) {
-			keyH.setEscape(false);
-			openPausedMenu();
-			return; // not sure if this does anything
-		}
-
-		// move buildings down smoothly
-		if (buildingMovementY != 0) {
-			for (int i = 0; i < stack.size(); i++) {
-				Building building = stack.get(i);
-				building.setY(building.getY() + BUILDING_MOVEMENT_Y_SPEED);
-			}
-			buildingMovementY -= BUILDING_MOVEMENT_Y_SPEED;
-			if (buildingMovementY < 0) {
-				buildingMovementY = 0;
+	
+	public void setUpJLabel() {
+		pausedMenu = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g.create();
+				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black color
+				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
 			}
 		}
+		;	
+		
+		
+		
+		pausedMenu.setOpaque(false); // Making the panel non-opaque
+		pausedMenu.setLayout(null);
+		int mWidth = (int) (screenWidth / 2);
+		int mHeight = (int) (screenHeight / 2);
+		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
+		
+		int labelWidth = (int) (pausedMenu.getWidth() / 2);
+		int labelHeight = (int) (pausedMenu.getHeight() / 4);
+		
+		resume = new JLabel("Esc to Resume");
+		resume.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
+		resume.setForeground(Color.white);
+		resume.setBounds((pausedMenu.getWidth() - labelWidth) / 4 , pausedMenu.getHeight() - labelHeight, labelWidth, labelHeight);
 
-		if (currentBuilding == null) {
-			currentBuilding = addBuilding();
-			cable.changeMode();
-		}
-
-		// if not dropping
-		if (!currentBuilding.getDrop()) {
-//			currentBuilding.setSize((int)(currentBuilding.getSize().getWidth() + cable.getScale()), (int)(currentBuilding.getSize().getHeight()));
-			currentBuilding.setX(cable.getEndX() - currentBuilding.getSize().getWidth() / 2);
-			currentBuilding.setY(cable.getEndY() - currentBuilding.getSize().getHeight() / 2 - cable.getScale());
-
-			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
-				keyH.setSpacebar(false);
-				mouseH.setClicked(false);
-				currentBuilding.drop(cable.getDx(), cable.getDy(), cable.getDirection());
-
-			}
-		} else {
-
-			currentBuilding.act();
-			int[] collisionValues = currentBuilding.collides(prev, cable.getMode());
-			if (collisionValues != null) {
-				currentBuilding.setDrop(false);
-				currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3]);
-				currentBuilding.setY(
-						currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
-				currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2
-						+ collisionValues[0] * Math.sqrt(3) / 2);
-
-				stack.add(currentBuilding);
-				numBuildings++;
-
-				prev = stack.get(numBuildings - 1);
-				currentBuilding = null;
-
-				buildingMovementY = (int) prev.rightFaceHeight;
-
-			} else if (currentBuilding.getY() > 2000) {
-				System.out.println("you failed");
-				currentBuilding = null;
-			}
-
-		}
-
-		groundObjectList1.get(counter).act();
-		groundObjectList1.get(counter2).act();
-
-		if (counter == groundObjectList1.size() - 1) {
-			counter = -1;
-		}
-		if (counter2 == groundObjectList1.size() - 1) {
-			counter2 = -1;
-		}
-		counter++;
-		counter2++;
+		quit = new JLabel("Delete to Quit");
+		quit.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
+		quit.setForeground(Color.white);
+		quit.setBounds(pausedMenu.getWidth() / 2 +(pausedMenu.getWidth() - labelWidth) / 4 , pausedMenu.getHeight() - labelHeight, labelWidth, labelHeight);
+		
+		pausedMenu.add(resume);
+		pausedMenu.add(quit);
+		repaint();
 
 	}
 
-	public Building addBuilding() {
-
-		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5, iBuilding);
-		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
-		add(temp, this.getComponentZOrder(prev) - 1);
-		return temp;
-
-	}
-	
-	
-	
-
-	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
-		int amount = -1;
-		setLayout(null);
-
-		for (int j = 0; j < depth; j++) {
-
-			if (j >= (depth + 1) / 2) {
-				amount -= 1;
-			} else {
-				amount += 1;
-
-			}
-
-			for (int i = 0; i <= amount; i++) {
-
-				Ground ground = new Ground(startX + (groundWidth - 30) * i - ((groundWidth - 30) / 2) * amount,
-						startY + (int) (j * groundHeight * .20), groundWidth, groundHeight, iGround, 180 / depth * j);
-				add(ground, 1);
-				list.add(ground);
-				repaint();
-			}
-		}
-	}
-	
-	
-
-	public void playSE(int i) {
-
-		soundEffects.setFile(i);
-		soundEffects.play();
-	}
 
 }

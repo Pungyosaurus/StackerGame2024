@@ -209,12 +209,17 @@ public class Stacker extends GamePanel {
 		
 		
 		setUpJLabel();
-		
+//		bgMusic.setFile((int)(Math.random() * 2));
+		bgMusic.setFile(0);
+
+		bgMusic.play();
 		
 	}
 
 	
 	public void update() {
+		
+
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);
 			openPausedMenu();
@@ -365,7 +370,9 @@ public class Stacker extends GamePanel {
 		soundEffects.play();
 	}
 	
-	
+	/**
+	 * Draws the starting menu 
+	 */
 	public void drawMenu() {
 		JPanel overlay = new JPanel() {
 			@Override
@@ -418,7 +425,10 @@ public class Stacker extends GamePanel {
 		remove(overlay);
 		remove(title);
 	}
-
+	/**
+	 * Opens the paused menu and enters a new loop (this way we don't have to track the gamestate and have an if statement that evaluates every tick)
+	 * Displays the score and dialogue
+	 */
 	public void openPausedMenu() {
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
 		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 15)));
@@ -426,7 +436,7 @@ public class Stacker extends GamePanel {
 		int labelWidth = (int) (pausedMenu.getWidth() / 2);
 		int labelHeight = (int) (pausedMenu.getHeight() / 3);
 		int lx = (int) ((pausedMenu.getWidth() - labelWidth) / 2);
-		int ly = (int) (50);
+		int ly = 50;
 		
 		pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
 
@@ -436,7 +446,7 @@ public class Stacker extends GamePanel {
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
 		while (!keyH.isEscape()) {
-			System.out.println("co");
+			
 			if(keyH.isDelete())
 				System.exit(0);
 			try {
@@ -452,7 +462,9 @@ public class Stacker extends GamePanel {
 		repaint();
 
 	}
-	
+	/**
+	 * Creates the JLabels for the pausing menu and adds an translucent overlay
+	 */
 	public void setUpJLabel() {
 		pausedMenu = new JPanel() {
 			@Override
@@ -467,8 +479,9 @@ public class Stacker extends GamePanel {
 		
 		
 		
-		pausedMenu.setOpaque(false); // Making the panel non-opaque
+		pausedMenu.setOpaque(false); // Making the panel non-opaque to remove corners
 		pausedMenu.setLayout(null);
+		// Dynamically calculating the width and height and positioning it in the middle of the panel
 		int mWidth = (int) (screenWidth / 2);
 		int mHeight = (int) (screenHeight / 2);
 		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);

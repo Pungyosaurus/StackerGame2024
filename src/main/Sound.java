@@ -19,10 +19,10 @@ public class Sound {
 	 */
 	public Sound() {
 
-		soundURL[0] = getClass().getResource("/audio/Bad Piggies.wav");
-		soundURL[1] = getClass().getResource("");
-		soundURL[2] = getClass().getResource("");
-		soundURL[3] = getClass().getResource("");
+		soundURL[0] = getClass().getResource("/sound/Bad Piggies.wav");
+//		soundURL[1] = getClass().getResource("");
+//		soundURL[2] = getClass().getResource("");
+//		soundURL[3] = getClass().getResource("");
 	}
 
 	/**

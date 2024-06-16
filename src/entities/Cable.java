@@ -54,21 +54,28 @@ public class Cable extends GameObject {
 		sizeChanger *= -1;
 		return false;
 	}
-
+	private double totalDa;
 	/**
 	 * Calculates the end position of the cable using Pythagorean Theorem with some
 	 * degree of error
 	 */
 	public void calculateEndPosition() {
-		getBoundingBox();
-		
+//		getBoundingBox();
 
-//		double diagonalLength = Math.sqrt(Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2));
-//		double endAngle = spriteAngle + Math.PI / 4; // Starting angle position is 45 degrees
-//
-//		endX = getX() + diagonalLength * Math.cos(endAngle);
-//		endY = getY() + diagonalLength * Math.sin(endAngle);
-//
+		double diagonalLength = Math.sqrt(Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2));
+		double endAngle = spriteAngle + Math.PI / 4 ; // Starting angle position is 45 degrees
+//		endX = getX() + getWidth() * Math.cos(endAngle) - getHeight() * Math.sin(endAngle);
+//		endY = getY() + getHeight() * Math.cos(endAngle) + getWidth() * Math.sin(endAngle);
+
+		endX = getX() + diagonalLength * Math.cos(endAngle);
+		endY = getY() + diagonalLength * Math.sin(endAngle);
+
+//		if(totalDa > 0)
+//			endX -= da;
+//		else
+//			endX += da;
+//		
+
 //		// Trying to adjust for the change in the size of the cable
 //		if (direction) {
 //			endX -= da / 3.0;
@@ -78,31 +85,30 @@ public class Cable extends GameObject {
 //			endY += da / 3.0;
 //		}
 	}
-	// to push
 
-	private boolean isNonEmptyPixel( int x, int y) {
-		int pixel = sprite.getRGB(x, y);
-		Color color = new Color(pixel, true);
-		// Check if the pixel is not fully transparent
-		return color.getAlpha() != 0;
-	}
-
-	private void getBoundingBox() {
-		
-		for (int y = getHeight(); y > 0; y--) {
-			for (int x = getWidth(); x > 0; x--) {
-				if(isNonEmptyPixel(x, y)) {
-					System.out.println(x + "   :   " + y);
-					endX = x;
-					endY = y;	
-					return;
-//					return new int[]{x, y};
-				}
-			}
-
-		}
-//		ret	urn null;
-	}
+//	private boolean isNonEmptyPixel( int x, int y) {
+//		int pixel = sprite.getRGB(x, y);
+//		Color color = new Color(pixel, true);
+//		// Check if the pixel is not fully transparent
+//		return color.getAlpha() != 0;
+//	}
+//
+//	private void getBoundingBox() {
+//		
+//		for (int y = getHeight(); y > 0; y--) {
+//			for (int x = getWidth(); x > 0; x--) {
+//				if(isNonEmptyPixel(x, y)) {
+//					System.out.println(x + "   :   " + y);
+//					endX = x;
+//					endY = y;	
+//					return;
+////					return new int[]{x, y};
+//				}
+//			}
+//
+//		}
+////		ret	urn null;
+//	}
 
 	/**
 	 * Changes the angle using a second difference to model a real life pendulum
@@ -126,6 +132,7 @@ public class Cable extends GameObject {
 			da -= d2a;
 		else
 			da += d2a;
+		totalDa += da;
 		// Scaling the image to make it more realistic
 		setSize(getWidth() + sizeChanger * (int) (da / 2), getHeight());
 		// Rotating the image
@@ -153,6 +160,8 @@ public class Cable extends GameObject {
 		} catch (Exception e) {
 			g.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 		}
+		
+	
 	}
 
 	/**

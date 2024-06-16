@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="res"/>
-	<classpathentry kind="src" path="audio"/>
+	<classpathentry excluding="audio/" kind="src" path="res"/>
+	<classpathentry kind="src" path="res/audio"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

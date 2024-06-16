@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,11 +31,11 @@ import listeners.MouseHandler;
 
 public class Stacker extends GamePanel {
 
+	private static final JLabel[][] JLabel = null;
 	private int groundWidth = 90;
 	private int groundHeight = 80;
 
 	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
-	private ArrayList<Ground> groundObjectList2 = new ArrayList<Ground>();
 	private ArrayList<Building> stack = new ArrayList<Building>();
 
 	private Cable cable;
@@ -44,7 +45,13 @@ public class Stacker extends GamePanel {
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
 	private BufferedImage background, iGround, rope, iBuilding;
-
+	
+	ImageIcon heartIcon;
+	private final int TOTAL_HEARTS  =5;
+	private int heartCount = TOTAL_HEARTS;
+	private JLabel[] heartList = new JLabel[TOTAL_HEARTS];
+	
+	
 	private JPanel pausedMenu;
 	private JLabel pausedScoreDisplay;
 	public static int score;
@@ -73,6 +80,7 @@ public class Stacker extends GamePanel {
 		window.setVisible(true);
 		stacker.startGameThread();
 	}
+	
 
 	public void getImages() {
 		try {
@@ -80,30 +88,106 @@ public class Stacker extends GamePanel {
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
 			rope = ImageIO.read(getClass().getResourceAsStream("/blueCgain.png"));
 			iBuilding = ImageIO.read(getClass().getResourceAsStream("/building1.png"));
+			
+			int newWidth = 150; // New width of the scaled image
+			int newHeight = 100; // New height of the scaled image
+			Image heart = ImageIO.read(getClass().getResourceAsStream("/Health.png")).getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+			heartIcon = new ImageIcon(heart);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	public void initHearts() {
+		int startLocation = getWidth()/2;
+		int distance = 50;
+		
+		
+		
+		//draw x number of hearts and add to array
+		for(int i = 0; i <TOTAL_HEARTS; i++) {
+			 JLabel heart = drawHeart();
+		     heart.setLocation(startLocation+i*distance, 50);
+		     heartList[i] = heart;
+		} 
+	}
+	
+	/**
+	 * Reset hearts if player wants to play again
+	 * @param paddle
+	 */
+	public void resetHearts() {
+		for(int i =0;i<TOTAL_HEARTS;i++) {
+			heartList[i].setVisible(true);
+		}
+	}
+	
+	
+	/**
+	 * Method for creating heart labels
+	 * @return JLabel
+	 */
+	 public JLabel drawHeart() {
+	        JLabel label = new JLabel();
+		    label.setIcon(heartIcon);
+		    label.setVisible(true);
+		    label.setBounds(200,200,50,100);
+		    add(label);
+		    return label;
+		 }
+	 
+	 /**
+	  * Add and remove hearts depending on score
+	  * @param paddle
+	  * @param change
+	  * pre: change must be either 1 or -1;
+	  */
+	 public void updateHearts(int change) {
+		 
+		 	//remove heart
+			if(change == -1) {
+				
+				JLabel heart = heartList[heartCount-1]; 
+				heart.setVisible(false);
+				heartCount --;
+				
+			}
+			//add heart
+			if(change == 1) {
+				JLabel heart = heartList[heartCount-1];
+				heart.setVisible(true);
+				heartCount++;
+			}
+		
+
+		}
 
 	public void setup() {
 		keyH = new KeyHandler();
 		mouseH = new MouseHandler();
+		
 		addMouseListener(mouseH);
 		addKeyListener(keyH);
+		
 		Building.loadImages(0, 0);
 		getImages();
+		
 		setBackgroundImage(background);
+		
+		drawMenu();
+
 
 		cable = new Cable((int) screenWidth / 4, -100, 550, 550, rope);
 		add(cable);
-		drawMenu();
 
+		
 		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
-//			makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
-
-		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundWidth * 5,
-				groundHeight * 5, iGround);
+		
+		
+		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5, iGround);
 		add(groundZero);
 		groundZero.cut(0, 0, 0, 0);
 
@@ -224,7 +308,6 @@ public class Stacker extends GamePanel {
 			openPausedMenu();
 			return; // not sure if this does anything
 		}
-		cable.act();
 
 		// move buildings down smoothly
 		if (buildingMovementY != 0) {
@@ -246,10 +329,10 @@ public class Stacker extends GamePanel {
 		// if not dropping
 		if (!currentBuilding.getDrop()) {
 
-//				currentBuilding.setX(cable.getEndX());
-//				currentBuilding.setY(cable.getEndY());
 
-//				currentBuilding.setSize((int)(currentBuilding.getSize().getWidth() + cable.getScale()), (int)(currentBuilding.getSize().getHeight()));
+
+//			currentBuilding.setSize((int)(currentBuilding.getSize().getWidth() + cable.getScale()), (int)(currentBuilding.getSize().getHeight()));
+			
 			currentBuilding.setX(cable.getEndX() - currentBuilding.getSize().getWidth() / 2);
 			currentBuilding.setY(cable.getEndY() - currentBuilding.getSize().getHeight() / 2 - cable.getScale());
 
@@ -302,13 +385,15 @@ public class Stacker extends GamePanel {
 
 	public Building addBuilding() {
 
-		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5,
-				iBuilding);
+		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5, iBuilding);
 		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
 		add(temp, this.getComponentZOrder(prev) - 1);
 		return temp;
 
 	}
+	
+	
+	
 
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
 		int amount = -1;
@@ -327,14 +412,10 @@ public class Stacker extends GamePanel {
 
 				Ground ground = new Ground(startX + (groundWidth - 30) * i - ((groundWidth - 30) / 2) * amount,
 						startY + (int) (j * groundHeight * .20), groundWidth, groundHeight, iGround, 180 / depth * j);
-
 				add(ground, 1);
-
 				list.add(ground);
 				repaint();
-
 			}
-
 		}
 	}
 	

@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 
 import entities.Building;
 import entities.Cable;
+import entities.Dot;
 import entities.GameObject;
 import entities.Ground;
 import listeners.KeyHandler;
@@ -168,6 +169,8 @@ public class Stacker extends GamePanel {
 		
 
 		}
+	 
+
 
 	public void setup() {
 		keyH = new KeyHandler();
@@ -188,13 +191,15 @@ public class Stacker extends GamePanel {
 		add(cable);
 
 		
+		
+		startTopMiddleX = (int) (screenWidth / 2+groundWidth/2);
+		startTopMiddleY = (int) (screenHeight / 4 * 3 + groundHeight*6*.4);
+		Dot dot = new Dot(startTopMiddleX, startTopMiddleY, 50,50);
+		add(dot);
+		
 		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
-		
-		startTopMiddleX = (int) (screenWidth / 2);
-		startTopMiddleY = (int) (screenHeight / 4 * 3);
 
-		
-		Building groundZero = new Building((int) (screenWidth / 2) - groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5);
+		Building groundZero = new Building((int) -(screenWidth / 2) - groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5);
 		add(groundZero);
 		groundZero.cut(0, 0, 0, 0);
 		stack.add(groundZero);
@@ -399,7 +404,6 @@ public class Stacker extends GamePanel {
 		repaint();
 
 		// Add ground objects and wait for input
-		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
 //	    revalidate(); // May be needed on some systems
 		while (!mouseH.isClicked()) {
 			try {

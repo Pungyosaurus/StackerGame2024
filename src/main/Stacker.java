@@ -224,7 +224,6 @@ public class Stacker extends GamePanel {
 			openPausedMenu();
 			return; // not sure if this does anything
 		}
-//		System.out.println("not paused");
 		cable.act();
 
 		// move buildings down smoothly

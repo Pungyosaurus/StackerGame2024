@@ -212,6 +212,7 @@ public class Stacker extends GamePanel {
 //		bgMusic.setFile((int)(Math.random() * 2));
 		bgMusic.setFile(1);
 		bgMusic.play();
+		bgMusic.setVolume((float) 0.7);
 		
 	}
 
@@ -270,9 +271,7 @@ public class Stacker extends GamePanel {
 				System.out.println("you failed");
 				currentBuilding = null;
 			}
-			
-
-			
+				
 
 	}
 }
@@ -445,6 +444,17 @@ public class Stacker extends GamePanel {
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
 		while (!keyH.isEscape()) {
+			
+			if(keyH.isUp()) {
+				System.out.println("up");
+				keyH.setUp(false);
+				bgMusic.increaseVolume(0.1f);
+			}
+			if(keyH.isDown()) {
+				System.out.println("down");
+				keyH.setDown(false);
+				bgMusic.decreaseVolume(0.1f);
+			}
 			
 			if(keyH.isDelete())
 				System.exit(0);

@@ -46,7 +46,7 @@ public class Stacker extends GamePanel {
 	private BufferedImage background, iGround, rope, iBuilding;
 
 	private JPanel pausedMenu;
-	private JLabel pausedScoreDisplay;
+	private JLabel pausedScoreDisplay, resume, quit;
 	public static int score;
 	private boolean s1, s2; // going to be used to play different sound effects after consecutive successful
 							// placements
@@ -99,8 +99,6 @@ public class Stacker extends GamePanel {
 		add(cable);
 		drawMenu();
 
-		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
-//			makePlatform(13, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
 
 		Building groundZero = new Building((int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundWidth * 5,
 				groundHeight * 5, iGround);
@@ -118,15 +116,31 @@ public class Stacker extends GamePanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black color
-				g2d.fillRect(0, 0, getWidth(), getHeight());
+				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
 			}
 		};
+		pausedMenu.setOpaque(false); // Making the panel non-opaque
 		pausedMenu.setLayout(null);
 		int mWidth = (int) (screenWidth / 2);
 		int mHeight = (int) (screenHeight / 2);
 		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
+		
+		int labelWidth = (int) (pausedMenu.getWidth() / 2);
+		int labelHeight = (int) (pausedMenu.getHeight() / 4);
+		
+		resume = new JLabel("Esc to Resume");
+		resume.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
+		resume.setForeground(Color.white);
+		resume.setBounds((pausedMenu.getWidth() - labelWidth) / 4 , pausedMenu.getHeight() - labelHeight, labelWidth, labelHeight);
+
+		quit = new JLabel("Delete to Quit");
+		quit.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
+		quit.setForeground(Color.white);
+		quit.setBounds(pausedMenu.getWidth() / 2 +(pausedMenu.getWidth() - labelWidth) / 4 , pausedMenu.getHeight() - labelHeight, labelWidth, labelHeight);
+		
+		pausedMenu.add(resume);
+		pausedMenu.add(quit);
 		repaint();
 
 	}
@@ -169,8 +183,7 @@ public class Stacker extends GamePanel {
 		repaint();
 
 		// Add ground objects and wait for input
-//	    makePlatform(14, (int) (screenWidth / 4), (int) (screenHeight / 4 * 3), groundObjectList1);
-//	    makePlatform(14, (int) (screenWidth / 4 * 3), (int) (screenHeight / 4 * 3), groundObjectList2);
+		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
 //	    revalidate(); // May be needed on some systems
 		while (!mouseH.isClicked()) {
 			try {
@@ -188,12 +201,12 @@ public class Stacker extends GamePanel {
 
 	public void openPausedMenu() {
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
-		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 21)));
+		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 15)));
 		pausedScoreDisplay.setForeground(Color.white);
 		int labelWidth = (int) (pausedMenu.getWidth() / 2);
 		int labelHeight = (int) (pausedMenu.getHeight() / 3);
 		int lx = (int) ((pausedMenu.getWidth() - labelWidth) / 2);
-		int ly = (int) ((pausedMenu.getHeight() - labelHeight) / 3.0);
+		int ly = (int) (50);
 		
 		pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
 
@@ -203,6 +216,9 @@ public class Stacker extends GamePanel {
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
 		while (!keyH.isEscape()) {
+			
+			if(keyH.isDelete())
+				System.exit(0);
 			try {
 				TimeUnit.MILLISECONDS.sleep(100);
 			} catch (InterruptedException e) {
@@ -213,7 +229,6 @@ public class Stacker extends GamePanel {
 		}
 		keyH.setEscape(false);
 		remove(pausedMenu);
-//	    isPaused = false;
 		repaint();
 
 	}
@@ -246,10 +261,6 @@ public class Stacker extends GamePanel {
 		// if not dropping
 		if (!currentBuilding.getDrop()) {
 
-//				currentBuilding.setX(cable.getEndX());
-//				currentBuilding.setY(cable.getEndY());
-
-//				currentBuilding.setSize((int)(currentBuilding.getSize().getWidth() + cable.getScale()), (int)(currentBuilding.getSize().getHeight()));
 			currentBuilding.setX(cable.getEndX() - currentBuilding.getSize().getWidth() / 2);
 			currentBuilding.setY(cable.getEndY() - currentBuilding.getSize().getHeight() / 2 - cable.getScale());
 

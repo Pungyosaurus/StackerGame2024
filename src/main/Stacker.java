@@ -216,7 +216,7 @@ public class Stacker extends GamePanel {
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
 		while (!keyH.isEscape()) {
-			
+			System.out.println("co");
 			if(keyH.isDelete())
 				System.exit(0);
 			try {

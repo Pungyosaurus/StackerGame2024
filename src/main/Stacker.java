@@ -89,14 +89,14 @@ public class Stacker extends GamePanel {
 
 	public void getImages() {
 		try {
-			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
-			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
-			rope = ImageIO.read(getClass().getResourceAsStream("/blueCgain.png"));
-			iBuilding = ImageIO.read(getClass().getResourceAsStream("/building1.png"));
+			iGround = ImageIO.read(getClass().getResourceAsStream("/textures/IceBlock.png"));
+			background = ImageIO.read(getClass().getResourceAsStream("/textures/background.png"));
+			rope = ImageIO.read(getClass().getResourceAsStream("/textures/blueCgain.png"));
+			iBuilding = ImageIO.read(getClass().getResourceAsStream("/textures/building1.png"));
 			
 			int newWidth = 150; // New width of the scaled image
 			int newHeight = 100; // New height of the scaled image
-			Image heart = ImageIO.read(getClass().getResourceAsStream("/Health.png")).getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+			Image heart = ImageIO.read(getClass().getResourceAsStream("/textures/Health.png")).getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 			heartIcon = new ImageIcon(heart);
 
 		} catch (IOException e) {
@@ -210,8 +210,7 @@ public class Stacker extends GamePanel {
 		
 		setUpJLabel();
 //		bgMusic.setFile((int)(Math.random() * 2));
-		bgMusic.setFile(0);
-
+		bgMusic.setFile(1);
 		bgMusic.play();
 		
 	}

@@ -79,9 +79,9 @@ public class Building extends GameObject {
 	public static void loadImages(int width, int height) {
 		try {
 
-			img1 = ImageIO.read(Building.class.getResourceAsStream("/leftFace.png"));
-			img2 = ImageIO.read(Building.class.getResourceAsStream("/rightFace.png"));
-			img3 = ImageIO.read(Building.class.getResourceAsStream("/topFace.png"));
+			img1 = ImageIO.read(Building.class.getResourceAsStream("/textures/leftFace.png"));
+			img2 = ImageIO.read(Building.class.getResourceAsStream("/textures/rightFace.png"));
+			img3 = ImageIO.read(Building.class.getResourceAsStream("/textures/topFace.png"));
 			
 			img1 = resizeBuffImage(img1, img1.getWidth() + width, img1.getHeight()+ height);
 			img2 = resizeBuffImage(img2, img2.getWidth()+ width, img2.getHeight()+ height);

@@ -12,6 +12,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -72,6 +73,7 @@ public class Stacker extends GamePanel {
 	private int startTopMiddleX, startTopMiddleY;
 	
 	private int perfectDrops;
+	Random rand;
 
 	public static void main(String[] args) {
 
@@ -91,14 +93,15 @@ public class Stacker extends GamePanel {
 
 	public void getImages() {
 		try {
-			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
-			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
-			rope = ImageIO.read(getClass().getResourceAsStream("/blueCgain.png"));
 
+			iGround = ImageIO.read(getClass().getResourceAsStream("/textures/IceBlock.png"));
+			background = ImageIO.read(getClass().getResourceAsStream("/textures/background.png"));
+			rope = ImageIO.read(getClass().getResourceAsStream("/textures/blueCgain.png"));
+			iBuilding = ImageIO.read(getClass().getResourceAsStream("/textures/building1.png"));
 			
 			int newWidth = 150; // New width of the scaled image
 			int newHeight = 100; // New height of the scaled image
-			Image heart = ImageIO.read(getClass().getResourceAsStream("/Health.png")).getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+			Image heart = ImageIO.read(getClass().getResourceAsStream("/textures/Health.png")).getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 			heartIcon = new ImageIcon(heart);
 
 		} catch (IOException e) {
@@ -212,12 +215,21 @@ public class Stacker extends GamePanel {
 		
 		
 		setUpJLabel();
+//		bgMusic.setFile((int)(Math.random() * 2));
+		bgMusic.setFile(1);
+		bgMusic.play();
+		bgMusic.setVolume((float) 0.7);
 		
+		
+		rand= new Random();
+
 		
 	}
 
 	
 	public void update() {
+		
+
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);
 			openPausedMenu();
@@ -269,9 +281,7 @@ public class Stacker extends GamePanel {
 				System.out.println("you failed");
 				currentBuilding = null;
 			}
-			
-
-			
+				
 
 	}
 }
@@ -283,36 +293,72 @@ public class Stacker extends GamePanel {
 	public boolean checkCollision(double xo, double yo) {
 		int[] collisionValues = currentBuilding.collides(xo, yo, cable.getMode());
 		if(collisionValues != null) {
-			collisionUpdate(collisionValues);
-			return true;
+			return collisionUpdate(collisionValues);
+			 
 		}
 		return false;
 	}
 	
-	public void collisionUpdate(int[] collisionValues) {
-		if(collisionValues != null) {
+	public boolean collisionUpdate(int[] collisionValues) {
 			
 			if(collisionValues[0]+collisionValues[1]+collisionValues[2]+collisionValues[3]<10) {
 				perfectDrops++;
 				System.out.println(perfectDrops);
+				if(perfectDrops >= 2) {
+					//add Sound
+					boolean test = true;
+					for(int i = 0; i<currentBuilding.totalCutValues.length; i++) {
+						if(currentBuilding.totalCutValues[i]>10) {
+							currentBuilding.totalCutValues[i] -=10;
+							test = false;
+							break;
+						}
+					}
+					if(test) {
+						for(int i = 0; i<currentBuilding.totalCutValues.length; i++) {
+							if(currentBuilding.totalCutValues[i]>0) {
+								currentBuilding.totalCutValues[i] -= currentBuilding.totalCutValues[i];
+								break;
+							}
+						}
+					}
+			
+				}
+				
 			}else {
-				currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3]);
 				perfectDrops =0;
+				
+			
 			}
-			currentBuilding.setDrop(false);
-			currentBuilding.setY(
-					currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
-			currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2
-					+ collisionValues[0] * Math.sqrt(3) / 2);
-	
-			stack.add(currentBuilding);
-			numBuildings++;
-	
-			prev = stack.get(numBuildings - 1);
-			currentBuilding = null;
-	
-			buildingMovementY = (int) prev.rightFaceHeight;
-		}
+			
+			
+			
+			
+			if(currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3])) {
+				currentBuilding.setY(currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
+				currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2+ collisionValues[0] * Math.sqrt(3) / 2);
+				currentBuilding.setDrop(false);
+				stack.add(currentBuilding);
+				numBuildings++;
+		
+				prev = stack.get(numBuildings - 1);
+				currentBuilding = null;
+		
+				buildingMovementY = (int) prev.rightFaceHeight;
+				System.out.println("great sucsess");
+				return true;
+			}else {
+				System.out.println("you tried to cut too much");
+			}
+			System.out.println("wat");
+			return false;
+
+		
+			
+			
+			
+		
+		
 	}
 	
 	public void animateGround() {
@@ -368,7 +414,6 @@ public class Stacker extends GamePanel {
 						startY + (int) (j * groundHeight * .20), groundWidth, groundHeight, iGround, 180 / depth * j);
 				add(ground, 0);
 				list.add(ground);
-				System.out.println(this.getComponentZOrder(ground));
 				repaint();
 			}
 		}
@@ -382,7 +427,9 @@ public class Stacker extends GamePanel {
 		soundEffects.play();
 	}
 	
-	
+	/**
+	 * Draws the starting menu 
+	 */
 	public void drawMenu() {
 		JPanel overlay = new JPanel() {
 			@Override
@@ -435,7 +482,10 @@ public class Stacker extends GamePanel {
 		remove(overlay);
 		remove(title);
 	}
-
+	/**
+	 * Opens the paused menu and enters a new loop (this way we don't have to track the gamestate and have an if statement that evaluates every tick)
+	 * Displays the score and dialogue
+	 */
 	public void openPausedMenu() {
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
 		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 15)));
@@ -443,7 +493,7 @@ public class Stacker extends GamePanel {
 		int labelWidth = (int) (pausedMenu.getWidth() / 2);
 		int labelHeight = (int) (pausedMenu.getHeight() / 3);
 		int lx = (int) ((pausedMenu.getWidth() - labelWidth) / 2);
-		int ly = (int) (50);
+		int ly = 50;
 		
 		pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
 
@@ -453,6 +503,17 @@ public class Stacker extends GamePanel {
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
 		while (!keyH.isEscape()) {
+			
+			if(keyH.isUp()) {
+				System.out.println("up");
+				keyH.setUp(false);
+				bgMusic.increaseVolume(0.1f);
+			}
+			if(keyH.isDown()) {
+				System.out.println("down");
+				keyH.setDown(false);
+				bgMusic.decreaseVolume(0.1f);
+			}
 			
 			if(keyH.isDelete())
 				System.exit(0);
@@ -469,7 +530,9 @@ public class Stacker extends GamePanel {
 		repaint();
 
 	}
-	
+	/**
+	 * Creates the JLabels for the pausing menu and adds an translucent overlay
+	 */
 	public void setUpJLabel() {
 		pausedMenu = new JPanel() {
 			@Override
@@ -484,8 +547,9 @@ public class Stacker extends GamePanel {
 		
 		
 		
-		pausedMenu.setOpaque(false); // Making the panel non-opaque
+		pausedMenu.setOpaque(false); // Making the panel non-opaque to remove corners
 		pausedMenu.setLayout(null);
+		// Dynamically calculating the width and height and positioning it in the middle of the panel
 		int mWidth = (int) (screenWidth / 2);
 		int mHeight = (int) (screenHeight / 2);
 		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);

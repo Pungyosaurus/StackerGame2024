@@ -24,6 +24,7 @@ public class Building extends GameObject {
 	private static int  TOP_WIDTH, TOP_HEIGHT;
 
 	private int backLeft, frontLeft , frontRight, backRight;
+	public int[] totalCutValues = new int[4];
 
 
 
@@ -79,9 +80,9 @@ public class Building extends GameObject {
 	public static void loadImages(int width, int height) {
 		try {
 
-			img1 = ImageIO.read(Building.class.getResourceAsStream("/leftFace.png"));
-			img2 = ImageIO.read(Building.class.getResourceAsStream("/rightFace.png"));
-			img3 = ImageIO.read(Building.class.getResourceAsStream("/topFace.png"));
+			img1 = ImageIO.read(Building.class.getResourceAsStream("/textures/leftFace.png"));
+			img2 = ImageIO.read(Building.class.getResourceAsStream("/textures/rightFace.png"));
+			img3 = ImageIO.read(Building.class.getResourceAsStream("/textures/topFace.png"));
 			
 			img1 = resizeBuffImage(img1, img1.getWidth() + width, img1.getHeight()+ height);
 			img2 = resizeBuffImage(img2, img2.getWidth()+ width, img2.getHeight()+ height);
@@ -142,7 +143,7 @@ public class Building extends GameObject {
 				double b =  y +1/Math.sqrt(3)*x;
 				if(bo-b <20 && bo-b >-20) {
 		
-					System.out.println(b+ " "+ bo);
+//					System.out.println(b+ " "+ bo);
 					int[] offsetValues = new int[6];
 	
 					if(Math.sqrt(Math.pow(x-xo,2)+Math.pow(y-yo,2)) < rightFaceWidth/Math.sqrt(3)*2) {
@@ -156,7 +157,7 @@ public class Building extends GameObject {
 						offsetValues[4] = (int) (bo-b);
 						offsetValues[5] = (int) (rightFaceHeight+minYAdjustment);
 						
-						System.out.println("collides");
+//						System.out.println("collides");
 						return offsetValues;
 					}
 				}
@@ -180,7 +181,7 @@ public class Building extends GameObject {
 						offsetValues[5] = (int) (rightFaceHeight+minYAdjustment);
 
 						
-						System.out.println("collides");
+//						System.out.println("collides");
 						return offsetValues;
 					}
 				}
@@ -233,21 +234,14 @@ public class Building extends GameObject {
 			int y1 = topFace.getHeight();
 			setTopMiddleX(x1);
 			setTopMiddleY(y1- minYAdjustment);
+			combined.setRGB(x1,y1, Color.pink.getRGB());
+
 				
-//				
-//				for(int i =0; i<10;i++) {
-//					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
-//
-//				}
-//				
 			y1 = combined.getHeight();
 			setBottomMiddleX(x1);
 			setBottomMiddleY(y1- minYAdjustment);
-				
-//				 for(int i =0; i<10;i++) {
-//					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
-//
-//				}
+			combined.setRGB(x1,y1-1, Color.pink.getRGB());
+
 		    
 		    
 		    
@@ -270,15 +264,25 @@ public class Building extends GameObject {
 
 		}
 
-		public void cut( int backLeftP, int frontLeftP, int frontRightP, int backRightP) {
+		public boolean cut( int backLeftP, int frontLeftP, int frontRightP, int backRightP) {
 
-			// 
+		
+			totalCutValues[0] +=  backLeftP;
+			totalCutValues[1] +=  frontLeftP;
+			totalCutValues[2] +=  frontRightP;
+			totalCutValues[3] +=  backRightP;
+
+			
+			
 			backLeft += backLeftP;
 			frontLeft += frontLeftP;
 			frontRight += frontRightP;
 			backRight += backRightP;
 
-			
+			if(backLeftP>leftFaceWidth/Math.sqrt(3)*2 ||  frontLeftP>leftFaceWidth/Math.sqrt(3)*2 || frontRightP>rightFaceWidth/Math.sqrt(3)*2 ||  backRightP>rightFaceWidth/Math.sqrt(3)*2 ) {
+				System.out.println("CUT IS TOOO MUCH");
+				return false;
+			}
 			int startX = (int) (backLeft / 2 * Math.sqrt(3));
 			int startY = (int) (backLeft / 2) ;
 			int width = (int) (img1.getWidth()- backLeft/ 2 * Math.sqrt(3) - frontLeft/ 2 * Math.sqrt(3));
@@ -340,8 +344,8 @@ public class Building extends GameObject {
 			
 			
 
-			BufferedImage croppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-			
+				BufferedImage croppedcroppedTopFace = new BufferedImage(TOP_WIDTH, TOP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+				
 			Graphics2D g2d2 = croppedcroppedTopFace.createGraphics();
 
 			g2d2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -361,6 +365,8 @@ public class Building extends GameObject {
 			topPath2.lineTo(TOP_WIDTH,TOP_HEIGHT);
 			
 			topPath2.lineTo(0,TOP_HEIGHT);
+
+			topPath2.lineTo(backLeft/2*Math.sqrt(3), TOP_HEIGHT/2+backLeft/2); // gud
 
 
 			
@@ -412,7 +418,7 @@ public class Building extends GameObject {
 			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
 			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
 
-			    System.out.println("Image saved successfully at: " + desktopPath);
+//			    System.out.println("Image saved successfully at: " + desktopPath);
 			} catch (IOException e) {
 			    System.out.println("Error saving image: " + e.getMessage());
 			}
@@ -423,6 +429,8 @@ public class Building extends GameObject {
 			
 			
 			setSprite(combineImages(croppedLeftFace,croppedRightFace, croppedImage));
+//			System.out.println("its been cut");
+			return true;
 		}
 
 		private int leftAdjustmentY;
@@ -489,9 +497,9 @@ public class Building extends GameObject {
 		    try {
 		        File outputFile = new File("highlightedBoundingBox.png");
 		        ImageIO.write(image, "PNG", outputFile);
-		        System.out.println("Highlighted image saved successfully.");
+//		        System.out.println("Highlighted image saved successfully.");
 		    } catch (IOException e) {
-		        System.out.println("Error saving highlighted image: " + e.getMessage());
+//		        System.out.println("Error saving highlighted image: " + e.getMessage());
 		    }
 		}
 		

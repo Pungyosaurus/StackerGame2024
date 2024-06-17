@@ -1,2 +1,13 @@
-<h1>Welcome to Chaos Constructor!</h1>
-<p>You have 5 chances to make the best building you can!</p>
+  <h1>Welcome to Chaos Constructor!</h1>
+    <p>Get ready to stack blocks and challenge your timing skills. Here's how to play:</p>
+    <ul>
+        <li><strong>Starting the Game:</strong> Simply click button to begin.</li>
+        <li><strong>Playing the Game:</strong> A block will swing back and forth across the screen.</li>
+        <li><strong>Dropping the Block:</strong> Press the <em>spacebar</em> or click the <em>mouse button</em> to drop the block.</li>
+        <li><strong>Lives:</strong> You have 5 lives to start with. Each time you miss the blocks, you lose a life.</li>
+        <li><strong>Pausing the Game:</strong> Press the <em>Escape key</em> at any time to pause the game.</li>
+        <li><strong>Adjusting Volume:</strong> Use the volume keys in the menu to adjust the game's volume to your liking.</li>
+        <li><strong>Game Over:</strong> The game ends when you run out of lives. Aim for a high score!</li>
+    </ul>
+    <p>Have fun, and good luck!</p>
+</body>

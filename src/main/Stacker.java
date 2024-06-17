@@ -200,29 +200,18 @@ public class Stacker extends GamePanel {
 
 		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 2.2), groundObjectList1);
 
-		// Building groundZero = new Building((int) -(screenWidth / 2) -
-		// groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5,
-		// groundHeight * 5);
-		// add(groundZero);
-		//
-		// groundZero.cut(0, 0, 0, 0);
-		// stack.add(groundZero);
-		// numBuildings++;
-		//
-		// prev = stack.get(numBuildings - 1);
-
 		setUpJLabel();
 		bgMusic.setFile(0);
 		bgMusic.play();
 		bgMusic.setVolume((float) 0.7);
-
+		bgMusic.loop();
 		initHearts();
 		rand = new Random();
 
 	}
 
 	public void readAndDisplayInstructions() {
-		StringBuffer instructions = new StringBuffer();
+		StringBuffer instructions = new StringBuffer("<html>");
 
 		try {
 			InputStream is = getClass().getResourceAsStream("/dialogue/instructions.txt");
@@ -235,12 +224,10 @@ public class Stacker extends GamePanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		instructions.insert(0, "<html>");
 		instructions.append("</html>");
-		System.out.println(instructions);
 
 		instructionsLabel = new JLabel(instructions.toString());
-		instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+		instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 		instructionsLabel.setForeground(Color.WHITE);
 		instructionsLabel.setVerticalAlignment(SwingConstants.TOP);
 
@@ -249,7 +236,6 @@ public class Stacker extends GamePanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 				g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black
 														// color
 				g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -271,7 +257,7 @@ public class Stacker extends GamePanel {
 
 		}
 		mouseH.setClicked(false);
-		remove(instructionsLabel);
+		remove(instructionsPanel);
 	}
 
 	public void update() {
@@ -496,8 +482,7 @@ public class Stacker extends GamePanel {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
 				g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-				g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black
-														// color
+				g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black													// color
 				g2d.fillRect(0, 0, getWidth(), getHeight());
 			}
 		};

@@ -190,6 +190,7 @@ public class Building extends GameObject {
 			return null;
 
 		}
+		
 		public BufferedImage combineImages(BufferedImage leftFace, BufferedImage rightFace, BufferedImage topFace) {
 
 
@@ -202,7 +203,7 @@ public class Building extends GameObject {
 			leftFaceWidth = leftFace.getWidth();
 			
 			int combinedHeight =(int) ( img1.getHeight() - img1.getWidth()/Math.sqrt(3) + topFace.getHeight());
-			rightFaceHeight = (int) ( combinedHeight - topFace.getHeight());
+			rightFaceHeight = (int) ( combinedHeight  - TOP_HEIGHT-topFace.getHeight() );
 
 			
 			BufferedImage combined = new BufferedImage(combinedWidth, combinedHeight, BufferedImage.TYPE_INT_ARGB);
@@ -274,10 +275,10 @@ public class Building extends GameObject {
 
 			
 			
-			backLeft += backLeftP;
-			frontLeft += frontLeftP;
-			frontRight += frontRightP;
-			backRight += backRightP;
+			backLeft  = totalCutValues[0] ;
+			frontLeft = totalCutValues[1];
+			frontRight = totalCutValues[2];
+			backRight = totalCutValues[3];
 
 			if(backLeftP>leftFaceWidth/Math.sqrt(3)*2 ||  frontLeftP>leftFaceWidth/Math.sqrt(3)*2 || frontRightP>rightFaceWidth/Math.sqrt(3)*2 ||  backRightP>rightFaceWidth/Math.sqrt(3)*2 ) {
 				System.out.println("CUT IS TOOO MUCH");
@@ -432,7 +433,84 @@ public class Building extends GameObject {
 //			System.out.println("its been cut");
 			return true;
 		}
+		
+		
+		
+		
+		   public BufferedImage getSprite() {
+		        return sprite;
+		    }
 
+		    public void setSprite(BufferedImage sprite) {
+		        this.sprite = sprite;
+		    }
+
+		    public void addBorder(int borderWidth, Color borderColor) {
+		        int width = sprite.getWidth();
+		        int height = sprite.getHeight();
+		        BufferedImage imageWithBorder = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+		        // Create a Graphics2D object to draw on the BufferedImage
+		        Graphics2D g2d = imageWithBorder.createGraphics();
+
+		        // Draw the original image
+		        g2d.drawImage(sprite, 0, 0, null);
+
+		        // Dispose the Graphics2D object
+		        g2d.dispose();
+
+		        // Apply edge detection and add border
+		        for (int y = 0; y < height; y++) {
+		            for (int x = 0; x < width; x++) {
+		                if (isEdgePixel(x, y, borderWidth)) {
+		                    setBorderPixels(imageWithBorder, x, y, borderWidth, borderColor);
+		                }
+		            }
+		        }
+
+		        setSprite(imageWithBorder);
+		        System.out.println("Added border");
+		    }
+
+		    private boolean isEdgePixel(int x, int y, int borderWidth) {
+		        int currentPixel = sprite.getRGB(x, y);
+		        if (isTransparentOrEmpty(currentPixel)) {
+		            return false;
+		        }
+
+		        for (int i = -1; i <= 1; i++) {
+		            for (int j = -1; j <= 1; j++) {
+		                if (i == 0 && j == 0) continue;
+		                int neighborX = x + i;
+		                int neighborY = y + j;
+		                if (neighborX < 0 || neighborY < 0 || neighborX >= sprite.getWidth() || neighborY >= sprite.getHeight()) {
+		                    return true; // Edge of the image
+		                }
+		                if (isTransparentOrEmpty(sprite.getRGB(neighborX, neighborY))) {
+		                    return true;
+		                }
+		            }
+		        }
+		        return false;
+		    }
+
+		    private void setBorderPixels(BufferedImage image, int x, int y, int borderWidth, Color borderColor) {
+		        for (int i = -borderWidth; i <= borderWidth; i++) {
+		            for (int j = -borderWidth; j <= borderWidth; j++) {
+		                int newX = x + i;
+		                int newY = y + j;
+		                if (newX >= 0 && newX < image.getWidth() && newY >= 0 && newY < image.getHeight()) {
+		                    image.setRGB(newX, newY, borderColor.getRGB());
+		                }
+		            }
+		        }
+		    }
+
+		    private boolean isTransparentOrEmpty(int pixel) {
+		        Color color = new Color(pixel, true);
+		        return color.getAlpha() == 0; // checks if the pixel is transparent
+		    }
+		
 		private int leftAdjustmentY;
 		private int RightAdjustmentY;
 		private int minYAdjustment;

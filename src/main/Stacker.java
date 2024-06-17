@@ -114,7 +114,7 @@ public class Stacker extends GamePanel {
 	
 	
 	public void initHearts() {
-		int startLocation = getWidth()/2;
+		int startLocation = (int) (screenWidth/4);
 		int distance = 50;
 		
 		
@@ -201,11 +201,11 @@ public class Stacker extends GamePanel {
 		
 		
 		startTopMiddleX = (int) (screenWidth / 2+groundWidth/2);
-		startTopMiddleY = (int) (screenHeight / 4 * 3 + groundHeight*6*.4);
+		startTopMiddleY = (int) (screenHeight / 4 * 2.2 + groundHeight*6*.4);
 		Dot dot = new Dot(startTopMiddleX, startTopMiddleY, 50,50);
 		add(dot);
 		
-		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
+		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 2.2), groundObjectList1);
 
 //		Building groundZero = new Building((int) -(screenWidth / 2) - groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5);
 //		add(groundZero);
@@ -222,7 +222,7 @@ public class Stacker extends GamePanel {
 		bgMusic.play();
 		bgMusic.setVolume((float) 0.7);
 		
-		
+		initHearts();
 		rand= new Random();
 
 		
@@ -266,12 +266,18 @@ public class Stacker extends GamePanel {
 
 		// move buildings down smoothly
 		if (buildingMovementY != 0) {
+			
 			for (int i = 0; i < stack.size(); i++) {
 				Building building = stack.get(i);
 				building.setY(building.getY() + BUILDING_MOVEMENT_Y_SPEED);
 			}
+		
+				for(Ground ground : groundObjectList1) {
+					ground.setY(ground.getY() + BUILDING_MOVEMENT_Y_SPEED);
+				}
+			
 			buildingMovementY -= BUILDING_MOVEMENT_Y_SPEED;
-			if (buildingMovementY < 0) {
+			if (BUILDING_MOVEMENT_Y_SPEED > buildingMovementY) {
 				buildingMovementY = 0;
 			}
 		}
@@ -294,10 +300,13 @@ public class Stacker extends GamePanel {
 			if(firstBuilding) {
 				if(checkCollision(startTopMiddleX,startTopMiddleY)) {
 					firstBuilding = false;
+				}else if(currentBuilding.getY() > 2000) {
+					currentBuilding.setDrop(false);
 				}
 			}else if(!checkCollision(prev.getX()+ prev.getTopMiddleX(), prev.getY()+ prev.getTopMiddleY()) && (currentBuilding.getY() > 2000)) {
 				System.out.println("you failed");
-				currentBuilding = null;
+				updateHearts(-1);
+				currentBuilding.setDrop(false);
 			}
 				
 
@@ -318,57 +327,71 @@ public class Stacker extends GamePanel {
 	}
 	
 	public boolean collisionUpdate(int[] collisionValues) {
+			boolean addedBorder = false;
+
 			
-			if(collisionValues[0]+collisionValues[1]+collisionValues[2]+collisionValues[3]<10) {
+			if(collisionValues[0]+collisionValues[1]+collisionValues[2]+collisionValues[3]<30 && !firstBuilding) {
 				perfectDrops++;
 				System.out.println(perfectDrops);
-				if(perfectDrops >= 2) {
+				System.out.println("made it 0");		
+				
+				if(perfectDrops>=2) {
+					if(perfectDrops>4) {
+						updateHearts(1);
+					}
 					//add Sound
-					boolean test = true;
-					for(int i = 0; i<currentBuilding.totalCutValues.length; i++) {
-						if(currentBuilding.totalCutValues[i]>10) {
-							currentBuilding.totalCutValues[i] -=10;
-							test = false;
+					int rando = rand.nextInt(3);
+					System.out.println(currentBuilding.totalCutValues.length);
+					for(int i = rando; i<currentBuilding.totalCutValues.length; i++) {
+
+						if(currentBuilding.totalCutValues[i]>=30) {
+							currentBuilding.totalCutValues[i] -=30;
+							addedBorder = true;
 							break;
 						}
+						i = rand.nextInt(3);
 					}
-					if(test) {
+					
+					if(!addedBorder) {
+						System.out.println("made it 2");
+
 						for(int i = 0; i<currentBuilding.totalCutValues.length; i++) {
 							if(currentBuilding.totalCutValues[i]>0) {
 								currentBuilding.totalCutValues[i] -= currentBuilding.totalCutValues[i];
+								addedBorder = true;
 								break;
 							}
 						}
 					}
-			
+					System.out.println("perfect");
+					}
+				}else {
+					perfectDrops = 0;
 				}
 				
-			}else {
-				perfectDrops =0;
-				
-			
-			}
 			
 			
-			
+
 			
 			if(currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3])) {
+				if(addedBorder) {
+					currentBuilding.addBorder(perfectDrops*2,Color.white);
+				}
 				currentBuilding.setY(currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
 				currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2+ collisionValues[0] * Math.sqrt(3) / 2);
 				currentBuilding.setDrop(false);
+				buildingMovementY = (int)( startTopMiddleY -  currentBuilding.getY());
 				stack.add(currentBuilding);
 				numBuildings++;
-		
+
 				prev = stack.get(numBuildings - 1);
 				currentBuilding = null;
 		
-				buildingMovementY = (int) prev.rightFaceHeight;
-				System.out.println("great sucsess");
+				score++;
 				return true;
 			}else {
 				System.out.println("you tried to cut too much");
 			}
-			System.out.println("wat");
 			return false;
 
 		

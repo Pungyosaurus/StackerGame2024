@@ -209,8 +209,7 @@ public class Stacker extends GamePanel {
 		
 		
 		setUpJLabel();
-//		bgMusic.setFile((int)(Math.random() * 2));
-		bgMusic.setFile(1);
+		bgMusic.setFile(0);
 		bgMusic.play();
 		bgMusic.setVolume((float) 0.7);
 		
@@ -428,6 +427,11 @@ public class Stacker extends GamePanel {
 	 * Displays the score and dialogue
 	 */
 	public void openPausedMenu() {
+		bgMusic.pause();
+		bgMusic.setFile(1);
+		bgMusic.play();
+		bgMusic.setVolume((float) 0.7);
+
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
 		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 15)));
 		pausedScoreDisplay.setForeground(Color.white);
@@ -448,12 +452,12 @@ public class Stacker extends GamePanel {
 			if(keyH.isUp()) {
 				System.out.println("up");
 				keyH.setUp(false);
-				bgMusic.increaseVolume(0.1f);
+				bgMusic.setVolume(bgMusic.getVolume() + 0.1f);
 			}
 			if(keyH.isDown()) {
 				System.out.println("down");
 				keyH.setDown(false);
-				bgMusic.decreaseVolume(0.1f);
+				bgMusic.setVolume((bgMusic.getVolume() - 0.1f));
 			}
 			
 			if(keyH.isDelete())
@@ -469,6 +473,10 @@ public class Stacker extends GamePanel {
 		keyH.setEscape(false);
 		remove(pausedMenu);
 		repaint();
+		bgMusic.close();
+		bgMusic.setFile(0);
+		bgMusic.play();
+		bgMusic.setVolume((float) 0.7);
 
 	}
 	/**

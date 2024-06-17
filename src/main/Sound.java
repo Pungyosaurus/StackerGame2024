@@ -85,30 +85,9 @@ public class Sound {
     }
 
     /**
-     * Increases the volume 
-     * @param amt the amount to increase the volume
+     * Closes the clip
      */
-    public void increaseVolume(float amt) {
-        if (clip != null) {
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float newVolume = gainControl.getValue() + amt;
-            newVolume = Math.min(newVolume, gainControl.getMaximum());
-            gainControl.setValue(newVolume);
-            volume = (newVolume - gainControl.getMinimum()) / (gainControl.getMaximum() - gainControl.getMinimum());
-        }
-    }
-
-    /**
-     * Decreases the volume
-     * @param amt the amount to decrease the volume
-     */
-    public void decreaseVolume(float amt) {
-        if (clip != null) {
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float newVolume = gainControl.getValue() - amt;
-            newVolume = Math.max(newVolume, gainControl.getMinimum());
-            gainControl.setValue(newVolume);
-            volume = (newVolume - gainControl.getMinimum()) / (gainControl.getMaximum() - gainControl.getMinimum());
-        }
-    }
+	public void close() {
+		clip.close();
+	}
 }

@@ -28,6 +28,7 @@ import entities.Cable;
 import entities.Dot;
 import entities.GameObject;
 import entities.Ground;
+import listeners.InstructionReader;
 import listeners.KeyHandler;
 import listeners.MouseHandler;
 
@@ -46,16 +47,17 @@ public class Stacker extends GamePanel {
 	private Building currentBuilding;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
+    private InstructionReader reader = new InstructionReader();
 	private BufferedImage background, iGround, rope, iBuilding;
 	
-	ImageIcon heartIcon;
+	private ImageIcon heartIcon;
 	private final int TOTAL_HEARTS  =5;
 	private int heartCount = TOTAL_HEARTS;
 	private JLabel[] heartList = new JLabel[TOTAL_HEARTS];
 	
 	
 	private JPanel pausedMenu;
-	private JLabel pausedScoreDisplay, resume, quit;
+	private JLabel pausedScoreDisplay, resume, quit, instructionsLabel;
 	public static int score;
 	private boolean s1, s2; // going to be used to play different sound effects after consecutive successful
 							// placements
@@ -191,7 +193,8 @@ public class Stacker extends GamePanel {
 		
 		drawMenu();
 
-
+		readAndDisplayInstructions();
+		
 		cable = new Cable((int) screenWidth / 2, -100, 550, 550, rope);
 		add(cable);
 
@@ -215,8 +218,7 @@ public class Stacker extends GamePanel {
 		
 		
 		setUpJLabel();
-//		bgMusic.setFile((int)(Math.random() * 2));
-		bgMusic.setFile(1);
+		bgMusic.setFile(0);
 		bgMusic.play();
 		bgMusic.setVolume((float) 0.7);
 		
@@ -225,7 +227,23 @@ public class Stacker extends GamePanel {
 
 		
 	}
+	 public void readAndDisplayInstructions() {
+	        String instructions = reader.readInstructions("/dialogue/instructions.txt");
 
+	        instructionsLabel = new JLabel(instructions);
+	        instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+	        instructionsLabel.setForeground(Color.WHITE);
+	        instructionsLabel.setVerticalAlignment(SwingConstants.TOP);
+
+	        JPanel instructionsPanel = new JPanel(new BorderLayout());
+	        instructionsPanel.setOpaque(false); // Transparent background
+	        instructionsPanel.add(instructionsLabel, BorderLayout.CENTER);
+	        instructionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margin around the text
+
+	        this.setLayout(new BorderLayout());
+	        this.add(instructionsPanel, BorderLayout.NORTH);
+	        revalidate();
+	    }
 	
 	public void update() {
 		
@@ -487,6 +505,11 @@ public class Stacker extends GamePanel {
 	 * Displays the score and dialogue
 	 */
 	public void openPausedMenu() {
+		bgMusic.pause();
+		bgMusic.setFile(1);
+		bgMusic.play();
+		bgMusic.setVolume((float) 0.7);
+
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
 		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 15)));
 		pausedScoreDisplay.setForeground(Color.white);
@@ -505,14 +528,12 @@ public class Stacker extends GamePanel {
 		while (!keyH.isEscape()) {
 			
 			if(keyH.isUp()) {
-				System.out.println("up");
 				keyH.setUp(false);
-				bgMusic.increaseVolume(0.1f);
+				bgMusic.setVolume(bgMusic.getVolume() + 0.1f);
 			}
 			if(keyH.isDown()) {
-				System.out.println("down");
 				keyH.setDown(false);
-				bgMusic.decreaseVolume(0.1f);
+				bgMusic.setVolume((bgMusic.getVolume() - 0.1f));
 			}
 			
 			if(keyH.isDelete())
@@ -528,6 +549,10 @@ public class Stacker extends GamePanel {
 		keyH.setEscape(false);
 		remove(pausedMenu);
 		repaint();
+		bgMusic.close();
+		bgMusic.setFile(0);
+		bgMusic.play();
+		bgMusic.setVolume((float) 0.7);
 
 	}
 	/**

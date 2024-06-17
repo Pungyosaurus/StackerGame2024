@@ -11,7 +11,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -57,12 +56,12 @@ public class Stacker extends GamePanel {
 	private int heartCount = TOTAL_HEARTS;
 	private JLabel[] heartList = new JLabel[TOTAL_HEARTS];
 
-	private JPanel pausedMenu, instructionsPanel ;
+	private JPanel pausedMenu,instructionsPanel;
 	private JLabel pausedScoreDisplay, resume, quit, instructionsLabel;
 	public static int score;
 	private boolean s1, s2; // going to be used to play different sound effects
 							// after consecutive successful
-							// placements
+	// placements
 	private int counter = 0;
 	private int counter2 = 11;
 	private int numBuildings;
@@ -201,13 +200,22 @@ public class Stacker extends GamePanel {
 
 		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 2.2), groundObjectList1);
 
-
+		// Building groundZero = new Building((int) -(screenWidth / 2) -
+		// groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5,
+		// groundHeight * 5);
+		// add(groundZero);
+		//
+		// groundZero.cut(0, 0, 0, 0);
+		// stack.add(groundZero);
+		// numBuildings++;
+		//
+		// prev = stack.get(numBuildings - 1);
 
 		setUpJLabel();
 		bgMusic.setFile(0);
 		bgMusic.play();
 		bgMusic.setVolume((float) 0.7);
-		bgMusic.loop();
+
 		initHearts();
 		rand = new Random();
 
@@ -230,9 +238,14 @@ public class Stacker extends GamePanel {
 		instructions.insert(0, "<html>");
 		instructions.append("</html>");
 		System.out.println(instructions);
-		
-		 instructionsLabel = new JLabel(instructions.toString()){;
-		 @Override
+
+		instructionsLabel = new JLabel(instructions.toString());
+		instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+		instructionsLabel.setForeground(Color.WHITE);
+		instructionsLabel.setVerticalAlignment(SwingConstants.TOP);
+
+		JPanel instructionsPanel = new JPanel() {
+			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
@@ -241,30 +254,24 @@ public class Stacker extends GamePanel {
 														// color
 				g2d.fillRect(0, 0, getWidth(), getHeight());
 			}
-		 };
-		 instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-		 instructionsLabel.setForeground(Color.WHITE);
-		 instructionsLabel.setVerticalAlignment(SwingConstants.TOP);
-		
-		 instructionsPanel = new JPanel(new BorderLayout());
-		 instructionsPanel.setOpaque(false); // Transparent background
-		 instructionsPanel.add(instructionsLabel, BorderLayout.CENTER);
-		 instructionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margin 		
-		 this.add(instructionsPanel, BorderLayout.NORTH);
-		 instructionsLabel.requestFocusInWindow();
-		 repaint();
-//		 revalidate();
-		 while (!mouseH.isClicked()) {
-				try {
-					TimeUnit.MILLISECONDS.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+		};		instructionsPanel.setOpaque(false); // Transparent background
+		instructionsPanel.add(instructionsLabel, BorderLayout.CENTER);
+		instructionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margin
+		this.add(instructionsPanel, BorderLayout.NORTH);
+		instructionsLabel.requestFocusInWindow();
+		repaint();
+		 revalidate();
+		while (!mouseH.isClicked()) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			mouseH.setClicked(false);
-			remove(instructionsLabel);		 
+
+		}
+		mouseH.setClicked(false);
+		remove(instructionsLabel);
 	}
 
 	public void update() {
@@ -348,18 +355,29 @@ public class Stacker extends GamePanel {
 			System.out.println(perfectDrops);
 			System.out.println("made it 0");
 
-			if (perfectDrops >= 2) {
+			if (perfectDrops >= 1) {
 				if (perfectDrops > 4) {
 					updateHearts(1);
 				}
 				// add Sound
 				int rando = rand.nextInt(3);
 				System.out.println(currentBuilding.totalCutValues.length);
+				int counter = 0;
 				for (int i = rando; i < currentBuilding.totalCutValues.length; i++) {
 
 					if (currentBuilding.totalCutValues[i] >= 30) {
 						currentBuilding.totalCutValues[i] -= 30;
+						for (int y = 0; y < currentBuilding.totalCutValues.length; y++) {
+							if (y != i) {
+								collisionValues[i] = 0;
+							}
+						}
 						addedBorder = true;
+						break;
+					}
+					System.out.println("im stuck daddy");
+					counter++;
+					if (counter > 10) {
 						break;
 					}
 					i = rand.nextInt(3);

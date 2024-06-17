@@ -1,2 +1,2 @@
-Welcome to Chaos Constructor!
-Hi dave
+<h1>Welcome to Chaos Constructor!</h1>
+<p>You have 5 chances to make the best building you can!</p>

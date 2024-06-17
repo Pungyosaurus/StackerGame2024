@@ -70,6 +70,8 @@ public class Stacker extends GamePanel {
 	
 	private boolean firstBuilding = true;
 	private int startTopMiddleX, startTopMiddleY;
+	
+	private int perfectDrops;
 
 	public static void main(String[] args) {
 
@@ -92,7 +94,7 @@ public class Stacker extends GamePanel {
 			iGround = ImageIO.read(getClass().getResourceAsStream("/IceBlock.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("/background.png"));
 			rope = ImageIO.read(getClass().getResourceAsStream("/blueCgain.png"));
-			iBuilding = ImageIO.read(getClass().getResourceAsStream("/building1.png"));
+
 			
 			int newWidth = 150; // New width of the scaled image
 			int newHeight = 100; // New height of the scaled image
@@ -199,13 +201,14 @@ public class Stacker extends GamePanel {
 		
 		makePlatform(12, (int) (screenWidth / 2), (int) (screenHeight / 4 * 3), groundObjectList1);
 
-		Building groundZero = new Building((int) -(screenWidth / 2) - groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5);
-		add(groundZero);
-		groundZero.cut(0, 0, 0, 0);
-		stack.add(groundZero);
-		numBuildings++;	
-
-		prev = stack.get(numBuildings - 1);
+//		Building groundZero = new Building((int) -(screenWidth / 2) - groundWidth*5/2, (int) (screenHeight / 4 * 3), groundWidth * 5, groundHeight * 5);
+//		add(groundZero);
+//		
+//		groundZero.cut(0, 0, 0, 0);
+//		stack.add(groundZero);
+//		numBuildings++;	
+//
+//		prev = stack.get(numBuildings - 1);
 		
 		
 		setUpJLabel();
@@ -288,8 +291,15 @@ public class Stacker extends GamePanel {
 	
 	public void collisionUpdate(int[] collisionValues) {
 		if(collisionValues != null) {
+			
+			if(collisionValues[0]+collisionValues[1]+collisionValues[2]+collisionValues[3]<10) {
+				perfectDrops++;
+				System.out.println(perfectDrops);
+			}else {
+				currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3]);
+				perfectDrops =0;
+			}
 			currentBuilding.setDrop(false);
-			currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3]);
 			currentBuilding.setY(
 					currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
 			currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2
@@ -322,8 +332,14 @@ public class Stacker extends GamePanel {
 	public Building addBuilding() {
 
 		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5);
-		temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
-		add(temp, this.getComponentZOrder(prev) - 1);
+		if(prev != null) {
+			temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
+			add(temp, this.getComponentZOrder(prev) );
+			
+		}else {
+			temp.cut(0,0,0,0);
+			add(temp, 0);
+		}
 		
 //		Building temp = new Building(prev);
 		return temp;
@@ -350,8 +366,9 @@ public class Stacker extends GamePanel {
 
 				Ground ground = new Ground(startX + (groundWidth - 30) * i - ((groundWidth - 30) / 2) * amount,
 						startY + (int) (j * groundHeight * .20), groundWidth, groundHeight, iGround, 180 / depth * j);
-				add(ground, 1);
+				add(ground, 0);
 				list.add(ground);
+				System.out.println(this.getComponentZOrder(ground));
 				repaint();
 			}
 		}

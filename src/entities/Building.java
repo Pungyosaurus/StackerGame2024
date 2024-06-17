@@ -234,20 +234,20 @@ public class Building extends GameObject {
 			setTopMiddleX(x1);
 			setTopMiddleY(y1- minYAdjustment);
 				
-				
-				for(int i =0; i<10;i++) {
-					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
-
-				}
-				
+//				
+//				for(int i =0; i<10;i++) {
+//					combined.setRGB(x1-i,y1-i, Color.pink.getRGB());
+//
+//				}
+//				
 			y1 = combined.getHeight();
 			setBottomMiddleX(x1);
 			setBottomMiddleY(y1- minYAdjustment);
 				
-				 for(int i =0; i<10;i++) {
-					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
-
-				}
+//				 for(int i =0; i<10;i++) {
+//					 combined.setRGB(x1-i,y1-i-1, Color.pink.getRGB());
+//
+//				}
 		    
 		    
 		    

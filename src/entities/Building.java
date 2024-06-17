@@ -288,6 +288,9 @@ public class Building extends GameObject {
 			int startY = (int) (backLeft / 2) ;
 			int width = (int) (img1.getWidth()- backLeft/ 2 * Math.sqrt(3) - frontLeft/ 2 * Math.sqrt(3));
 			int height = img1.getHeight() - backLeft /2 - frontLeft/2;
+			if(width <= 0 || height <=0){
+				return false;
+			}
 			BufferedImage croppedLeftFace = img1.getSubimage(startX,startY,width,height);
 
 			
@@ -297,6 +300,9 @@ public class Building extends GameObject {
 			startY = (int) (backRight/2) ;
 			width = (int) (img2.getWidth()  - frontRight/2*Math.sqrt(3) - backRight/2*Math.sqrt(3));
 			height = img2.getHeight() - frontRight/2 - backRight/2;
+			if(width <= 0 || height <=0){
+				return false;
+			}
 			BufferedImage croppedRightFace = img2.getSubimage(startX,startY,width,height);
 
 			
@@ -414,16 +420,16 @@ public class Building extends GameObject {
 			File outputFile2 = new File(desktopPath2);
 
 
-			try {
-			    ImageIO.write( croppedImage, "PNG", outputFile);
-			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
-			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
-
-//			    System.out.println("Image saved successfully at: " + desktopPath);
-			} catch (IOException e) {
-			    System.out.println("Error saving image: " + e.getMessage());
-			}
-			
+//			try {
+//			    ImageIO.write( croppedImage, "PNG", outputFile);
+//			    ImageIO.write(croppedLeftFace, "PNG", outputFile1);
+//			    ImageIO.write(croppedRightFace, "PNG", outputFile2);
+//
+////			    System.out.println("Image saved successfully at: " + desktopPath);
+//			} catch (IOException e) {
+//			    System.out.println("Error saving image: " + e.getMessage());
+//			}
+//			
 		
 			
 			

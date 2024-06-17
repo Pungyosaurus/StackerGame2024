@@ -335,18 +335,29 @@ public class Stacker extends GamePanel {
 				System.out.println(perfectDrops);
 				System.out.println("made it 0");		
 				
-				if(perfectDrops>=2) {
+				if(perfectDrops>=1 ) {
 					if(perfectDrops>4) {
 						updateHearts(1);
 					}
 					//add Sound
 					int rando = rand.nextInt(3);
 					System.out.println(currentBuilding.totalCutValues.length);
+					int counter =0;
 					for(int i = rando; i<currentBuilding.totalCutValues.length; i++) {
 
 						if(currentBuilding.totalCutValues[i]>=30) {
 							currentBuilding.totalCutValues[i] -=30;
+							for(int y =0 ; y<currentBuilding.totalCutValues.length; y++){
+								if(y!= i){
+									collisionValues[i] = 0;
+								}
+							}
 							addedBorder = true;
+							break;
+						}
+						System.out.println("im stuck daddy");
+						counter++;
+						if(counter>10){
 							break;
 						}
 						i = rand.nextInt(3);

@@ -27,6 +27,7 @@ import entities.Cable;
 import entities.Dot;
 import entities.GameObject;
 import entities.Ground;
+import listeners.InstructionReader;
 import listeners.KeyHandler;
 import listeners.MouseHandler;
 
@@ -45,16 +46,17 @@ public class Stacker extends GamePanel {
 	private Building currentBuilding;
 	private KeyHandler keyH;
 	private MouseHandler mouseH;
+    private InstructionReader reader = new InstructionReader();
 	private BufferedImage background, iGround, rope, iBuilding;
 	
-	ImageIcon heartIcon;
+	private ImageIcon heartIcon;
 	private final int TOTAL_HEARTS  =5;
 	private int heartCount = TOTAL_HEARTS;
 	private JLabel[] heartList = new JLabel[TOTAL_HEARTS];
 	
 	
 	private JPanel pausedMenu;
-	private JLabel pausedScoreDisplay, resume, quit;
+	private JLabel pausedScoreDisplay, resume, quit, instructionsLabel;
 	public static int score;
 	private boolean s1, s2; // going to be used to play different sound effects after consecutive successful
 							// placements
@@ -186,7 +188,8 @@ public class Stacker extends GamePanel {
 		
 		drawMenu();
 
-
+		readAndDisplayInstructions();
+		
 		cable = new Cable((int) screenWidth / 2, -100, 550, 550, rope);
 		add(cable);
 
@@ -214,7 +217,23 @@ public class Stacker extends GamePanel {
 		bgMusic.setVolume((float) 0.7);
 		
 	}
+	 public void readAndDisplayInstructions() {
+	        String instructions = reader.readInstructions("/dialogue/instructions.txt");
 
+	        instructionsLabel = new JLabel(instructions);
+	        instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+	        instructionsLabel.setForeground(Color.WHITE);
+	        instructionsLabel.setVerticalAlignment(SwingConstants.TOP);
+
+	        JPanel instructionsPanel = new JPanel(new BorderLayout());
+	        instructionsPanel.setOpaque(false); // Transparent background
+	        instructionsPanel.add(instructionsLabel, BorderLayout.CENTER);
+	        instructionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margin around the text
+
+	        this.setLayout(new BorderLayout());
+	        this.add(instructionsPanel, BorderLayout.NORTH);
+	        revalidate();
+	    }
 	
 	public void update() {
 		
@@ -450,12 +469,10 @@ public class Stacker extends GamePanel {
 		while (!keyH.isEscape()) {
 			
 			if(keyH.isUp()) {
-				System.out.println("up");
 				keyH.setUp(false);
 				bgMusic.setVolume(bgMusic.getVolume() + 0.1f);
 			}
 			if(keyH.isDown()) {
-				System.out.println("down");
 				keyH.setDown(false);
 				bgMusic.setVolume((bgMusic.getVolume() - 0.1f));
 			}

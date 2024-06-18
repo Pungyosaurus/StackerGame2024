@@ -303,18 +303,18 @@ public class Stacker extends GamePanel {
 
 		// move buildings down smoothly
 		if (buildingMovementY != 0) {
-
+			// moving the arraylist of buildings down
 			for (int i = 0; i < stack.size(); i++) {
 				Building building = stack.get(i);
 				building.setY(building.getY() + BUILDING_MOVEMENT_Y_SPEED);
-				// Sliding the background
+				// Sliding the background by a smaller amount
 				setBackgroundY(getBackgroundY() + BUILDING_MOVEMENT_Y_SPEED / 5);
 			}
-
+			// for each loop to move down the ground objects
 			for (Ground ground : groundObjectList1) {
 				ground.setY(ground.getY() + BUILDING_MOVEMENT_Y_SPEED);
 			}
-
+			
 			buildingMovementY -= BUILDING_MOVEMENT_Y_SPEED;
 			if (BUILDING_MOVEMENT_Y_SPEED > buildingMovementY) {
 				buildingMovementY = 0;
@@ -325,7 +325,7 @@ public class Stacker extends GamePanel {
 		if (!currentBuilding.getDrop()) {
 			currentBuilding.setX(cable.getEndX() - currentBuilding.getSize().getWidth() / 2);
 			currentBuilding.setY(cable.getEndY() - currentBuilding.getSize().getHeight() / 2 - cable.getScale());
-
+			// Dropping the block if a click is detected
 			if (mouseH.isClicked() == true || keyH.isSpacebar()) {
 				keyH.setSpacebar(false);
 				mouseH.setClicked(false);
@@ -333,9 +333,11 @@ public class Stacker extends GamePanel {
 
 			}
 		} else {
+			// dropping the block and checking for collisions
 			currentBuilding.act();
 			if (firstBuilding) {
 				if (checkCollision(startTopMiddleX, startTopMiddleY)) {
+					// sound when collides
 					playSE(3);
 					firstBuilding = false;
 				} else if (currentBuilding.getY() > 2000) {

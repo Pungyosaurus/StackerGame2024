@@ -124,6 +124,10 @@ public class Stacker extends GamePanel {
 		}
 	}
 	
+	
+	/**
+	 * init the hearts with the correct amount and location
+	 */
 	public void initHearts() {
 		int startLocation = (int) (screenWidth / 4);
 		int distance = 50;
@@ -187,6 +191,7 @@ public class Stacker extends GamePanel {
 		return true;
 
 	}
+	
 	/**
 	 * Initializes objects, adds them to the frame, runs the images, calls the menu and instructions screens, and starts the background music
 	 */
@@ -286,16 +291,20 @@ public class Stacker extends GamePanel {
 	 * Updates the location of the cable, buildings
 	 */
 	public void update() {
+		
+		//open pause menu
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);
 			openPausedMenu();
 			return; // not sure if this does anything
 		}
 
+		//add a new building any time it becomes null, try to replace with copy constructor
 		if (currentBuilding == null) {
 			currentBuilding = addBuilding();
 			cable.changeMode();
 		}
+		
 		// Swinging the cable
 		cable.act();
 		animateGround();
@@ -316,6 +325,8 @@ public class Stacker extends GamePanel {
 			}
 			
 			buildingMovementY -= BUILDING_MOVEMENT_Y_SPEED;
+			
+			//if the building is moved to the correct location stop moving
 			if (BUILDING_MOVEMENT_Y_SPEED > buildingMovementY) {
 				buildingMovementY = 0;
 			}
@@ -343,12 +354,16 @@ public class Stacker extends GamePanel {
 				} else if (currentBuilding.getY() > 2000) {
 					currentBuilding.setDrop(false);
 				}
-			} else if (!checkCollision(prev.getX() + prev.getTopMiddleX(), prev.getY() + prev.getTopMiddleY())
-					&& (currentBuilding.getY() > 2000)) {
+			} 
+			//checks if collision was a fail
+			else if (!checkCollision(prev.getX() + prev.getTopMiddleX(), prev.getY() + prev.getTopMiddleY()) && (currentBuilding.getY() > 2000)) {
 				System.out.println("you failed");
+				
+				//remove hearts if failed
 				if (!updateHearts(-1)) {
 					drawFinished();
 				}
+				// reset the block
 				currentBuilding.setDrop(false);
 			}
 
@@ -454,85 +469,132 @@ public class Stacker extends GamePanel {
 		two.startGameThread();
 	}
 	
-	public boolean checkCollision(double xo, double yo) {
-		int[] collisionValues = currentBuilding.collides(xo, yo, cable.getMode());
+	
+	/**
+	 * Checks collision for previous block and current block
+	 * @param previousX
+	 * @param previousY
+	 * @return boolean
+	  * @author Dave Singh
+	 */
+	public boolean checkCollision(double previousX, double previousY) {
+		//if collision works return the cut values
+		int[] collisionValues = currentBuilding.collides(previousX, previousY, cable.getMode());
 		if (collisionValues != null) {
 			playSE(3);
+			//send cut values to update the blocks
 			return collisionUpdate(collisionValues);
 
 		}
 		return false;
 	}
+	
+	/**
+	 * check if the drop was perfect and use random values to add to the side as a reward
+	 * @param collisionValues
+	 * @return return if drop was perfect
+	  * @author Dave Singh
+	 */
+	public boolean perfectDropCheck(int[] collisionValues) {
+		// add border only if it was a perfect landing
+				boolean addedBorder = false;
 
-	public boolean collisionUpdate(int[] collisionValues) {
-		boolean addedBorder = false;
+				//check if the total offset of all cuts was less than thirty to ensure it was almost a perfect cut
+				if (collisionValues[0] + collisionValues[1] + collisionValues[2] + collisionValues[3] < 30 && !firstBuilding) {
+					perfectDrops++;
+					System.out.println(perfectDrops);
+					
+					
+					if (perfectDrops >= 1) {
+						
+						//get health for 4 perfect drops in a row
+						if (perfectDrops > 4) {
+							updateHearts(1);
+						}
 
-		if (collisionValues[0] + collisionValues[1] + collisionValues[2] + collisionValues[3] < 30 && !firstBuilding) {
-			perfectDrops++;
-			System.out.println(perfectDrops);
-			System.out.println("made it 0");
+						
+						
+						int rando = rand.nextInt(3);
+						int counter = 0;
+						
+						//loop through the cut values starting at a random location, then add size to the block to reward perfect drops
+						for (int i = rando; i < currentBuilding.getTotalCutValues().length; i++) {
 
-			if (perfectDrops >= 1) {
-				if (perfectDrops > 4) {
-					updateHearts(1);
-				}
-				// add Sound
-				int rando = rand.nextInt(3);
-				System.out.println(currentBuilding.getTotalCutValues().length);
-				int counter = 0;
-				for (int i = rando; i < currentBuilding.getTotalCutValues().length; i++) {
+							if (currentBuilding.getTotalCutValues()[i] >= 30) {
+								currentBuilding.getTotalCutValues()[i] -= 30;
+								for (int y = 0; y < currentBuilding.getTotalCutValues().length; y++) {
+									if (y != i) {
+										collisionValues[i] = 0;
+									}
+								}
+								addedBorder = true;
+								break;
+							}
+							counter++;
+							if (counter > 10) {
+								break;
+							}
+							i = rand.nextInt(3);
+						}
 
-					if (currentBuilding.getTotalCutValues()[i] >= 30) {
-						currentBuilding.getTotalCutValues()[i] -= 30;
-						for (int y = 0; y < currentBuilding.getTotalCutValues().length; y++) {
-							if (y != i) {
-								collisionValues[i] = 0;
+						// if none of the values were greater than thirty add to one side by its full amount
+						if (!addedBorder) {
+							for (int i = 0; i < currentBuilding.getTotalCutValues().length; i++) {
+								if (currentBuilding.getTotalCutValues()[i] > 0) {
+									currentBuilding.getTotalCutValues()[i] -= currentBuilding.getTotalCutValues()[i];
+									addedBorder = true;
+									break;
+								}
 							}
 						}
-						addedBorder = true;
-						break;
 					}
-					System.out.println("stuck ");
-					counter++;
-					if (counter > 10) {
-						break;
-					}
-					i = rand.nextInt(3);
+				} 
+				//reset perfect Drops
+				else {
+					perfectDrops = 0;
 				}
+				
+				return addedBorder;
+	}
 
-				if (!addedBorder) {
-					System.out.println("made it 2");
+	/**
+	 * update the current block to show new cut size
+	 * @param collisionValues
+	 * @return boolean
+	 * @author Dave Singh
+	 */
+	public boolean collisionUpdate(int[] collisionValues) {
+		
+		//check for perfect drop and if border should be added
+		boolean addedBorder = perfectDropCheck(collisionValues);
 
-					for (int i = 0; i < currentBuilding.getTotalCutValues().length; i++) {
-						if (currentBuilding.getTotalCutValues()[i] > 0) {
-							currentBuilding.getTotalCutValues()[i] -= currentBuilding.getTotalCutValues()[i];
-							addedBorder = true;
-							break;
-						}
-					}
-				}
-				System.out.println("perfect");
-			}
-		} else {
-			perfectDrops = 0;
-		}
-
+		//ensure face can be cut without breakign the game
 		if (currentBuilding.cut(collisionValues[0], collisionValues[1], collisionValues[2], collisionValues[3])) {
+			//add border now
 			if (addedBorder) {
 				currentBuilding.addBorder(perfectDrops * 2, Color.white);
 			}
+			//stop the building from falling
+			currentBuilding.setDrop(false);
+			
+			//set x and y to new locations\
 			currentBuilding.setY(
 					currentBuilding.getY() + collisionValues[3] / 2 + collisionValues[4] + collisionValues[1] / 2);
 			currentBuilding.setX(currentBuilding.getX() + collisionValues[2] * Math.sqrt(3) / 2
 					+ collisionValues[0] * Math.sqrt(3) / 2);
-			currentBuilding.setDrop(false);
+			
+			// check how much to move screen down
 			buildingMovementY = (int) (startTopMiddleY - currentBuilding.getY());
+			
+			// add current building to stack
 			stack.add(currentBuilding);
 			numBuildings++;
 
+			//set previous to last item in stack;
 			prev = stack.get(numBuildings - 1);
 			currentBuilding = null;
 
+			//increase score
 			score++;
 			return true;
 		} else {
@@ -543,11 +605,15 @@ public class Stacker extends GamePanel {
 	}
 	/**
 	 * Animates the ground by calling ground act methods and passing counter
+	 * @author Dave Singh
 	 */
 	public void animateGround() {
+		
+		// loop through and move each block
 		groundObjectList1.get(counter).act();
 		groundObjectList1.get(counter2).act();
 
+		// create two waves of movement
 		if (counter == groundObjectList1.size() - 1) {
 			counter = -1;
 		}
@@ -558,17 +624,21 @@ public class Stacker extends GamePanel {
 		counter2++;
 	}
 	/**
-	 * Creates a new building object and cuts it into the previous ones size
+	 * Creates a new building object and cuts it into the previous ones size 
 	 * @return the new building object with the adjusted size
+	 * @author Dave Singh
 	 */
 	public Building addBuilding() {
-
+		
+		// add building
 		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5);
 		if (prev != null) {
+			//cut first building to previous buildigns size;
 			temp.cut(prev.getBackLeft(), prev.getFrontLeft(), prev.getFrontRight(), prev.getBackRight());
 			add(temp, this.getComponentZOrder(prev));
 
 		} else {
+			//cut by 0000 no matter what to ensure proper sprite
 			temp.cut(0, 0, 0, 0);
 			add(temp, 0);
 		}
@@ -578,15 +648,19 @@ public class Stacker extends GamePanel {
 	}
 	/**
 	 * 
+	 * Create starting platforms
 	 * @param depth
 	 * @param startX
 	 * @param startY
 	 * @param list
+	 *
+	 * @author Dave Singh
 	 */
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
 		int amount = -1;
 		setLayout(null);
 
+		// put block in correct place
 		for (int j = 0; j < depth; j++) {
 
 			if (j >= (depth + 1) / 2) {
@@ -596,6 +670,7 @@ public class Stacker extends GamePanel {
 
 			}
 
+			//add ground objects
 			for (int i = 0; i <= amount; i++) {
 
 				Ground ground = new Ground(startX + (groundWidth - 30) * i - ((groundWidth - 30) / 2) * amount,
@@ -606,6 +681,8 @@ public class Stacker extends GamePanel {
 			}
 		}
 	}
+	
+	
 	/**
 	 * Sets the sound file and plays it
 	 * @param i is an element of the array in Sound.java

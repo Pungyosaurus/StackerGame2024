@@ -3,14 +3,23 @@ package listeners;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
-
+/**
+ * 
+ * @author Jason Wong June 2024
+ * Listens for keyboard input and passes them to the mainframe
+ *
+ */
 public class KeyHandler implements KeyListener {
 
 	private boolean spacebar, escape, delete, up, down, r;
-
+	/**
+	 * Sets booleans true if a key is pressed
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
+		
 		switch (e.getKeyChar()) {
 		case ' ':
 			spacebar = true;
@@ -21,13 +30,15 @@ public class KeyHandler implements KeyListener {
 		case 127:
 			delete = true;
 			break;
-		case 114:
+		case 114: // casting to an int would work too
 			r = true;
 			break;
 
 		}
 	}
-
+	/**
+	 * Detects when the up and down arrow keys are pressed (used for volume control)
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub

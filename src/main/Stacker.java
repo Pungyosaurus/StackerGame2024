@@ -36,28 +36,9 @@ import listeners.MouseHandler;
 
 public class Stacker extends GamePanel {
 
-	private static final JLabel[][] JLabel = null;
-	private int groundWidth = 90;
-	private int groundHeight = 80;
-
-	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
-	private ArrayList<Building> stack = new ArrayList<Building>();
-
-	private Cable cable;
-	private Sound soundEffects = new Sound();
-	private Sound bgMusic = new Sound();
-	private Building currentBuilding;
-	private KeyHandler keyH;
-	private MouseHandler mouseH;
-	private BufferedImage background, iGround, rope, iBuilding;
-
-	private ImageIcon heartIcon;
 	private final int TOTAL_HEARTS = 7;
 	private int heartCount = TOTAL_HEARTS;
-	private JLabel[] heartList = new JLabel[TOTAL_HEARTS];
 
-	private JPanel pausedMenu;
-	private JLabel pausedScoreDisplay, resume, quit, instructionsLabel;
 	public static int score;
 	private boolean s1, s2; // going to be used to play different sound effects
 							// after consecutive successful
@@ -66,8 +47,6 @@ public class Stacker extends GamePanel {
 	private int counter2 = 11;
 	private int numBuildings;
 
-	private Building prev;
-
 	private int buildingMovementY;
 	private final int BUILDING_MOVEMENT_Y_SPEED = 5;
 
@@ -75,9 +54,35 @@ public class Stacker extends GamePanel {
 	private int startTopMiddleX, startTopMiddleY;
 
 	private int perfectDrops;
+	private static final JLabel[][] JLabel = null;
+	private int groundWidth = 90;
+	private int groundHeight = 80;
+
+	private ArrayList<Ground> groundObjectList1 = new ArrayList<Ground>();
+	private ArrayList<Building> stack = new ArrayList<Building>();
+
+	private Cable cable;
+
+	private Sound soundEffects = new Sound();
+	private Sound bgMusic = new Sound();
+
+	private Building currentBuilding;
+	private Building prev;
+
+	private KeyHandler keyH;
+	private MouseHandler mouseH;
+
+	private BufferedImage background, iGround, rope, iBuilding;
+	private JPanel pausedMenu;
+	private JLabel[] heartList = new JLabel[TOTAL_HEARTS];
+	private JLabel pausedScoreDisplay, resume, quit, instructionsLabel;
+	private ImageIcon heartIcon;
 	private Random rand = new Random();
 
-
+	/**
+	 * Starts the game and adds a new Stacker object
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		JFrame window = new JFrame();
@@ -92,7 +97,9 @@ public class Stacker extends GamePanel {
 		window.setVisible(true);
 		stacker.startGameThread();
 	}
-
+	/**
+	 * Loads the images in from the resource folder
+	 */
 	public void getImages() {
 		try {
 
@@ -100,9 +107,9 @@ public class Stacker extends GamePanel {
 			background = ImageIO.read(getClass().getResourceAsStream("/textures/latest.jpg"));
 			rope = ImageIO.read(getClass().getResourceAsStream("/textures/blueCgain.png"));
 			iBuilding = ImageIO.read(getClass().getResourceAsStream("/textures/building1.png"));
-
-			int newWidth = 150; // New width of the scaled image
-			int newHeight = 100; // New height of the scaled image
+			// scaling the heart images
+			int newWidth = 150;
+			int newHeight = 100;
 			Image heart = ImageIO.read(getClass().getResourceAsStream("/textures/Health.png"))
 					.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 			heartIcon = new ImageIcon(heart);
@@ -111,7 +118,7 @@ public class Stacker extends GamePanel {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void initHearts() {
 		int startLocation = (int) (screenWidth / 4);
 		int distance = 50;
@@ -158,7 +165,8 @@ public class Stacker extends GamePanel {
 
 		// remove heart
 		if (change == -1) {
-			if(heartCount - 1 < 0) return false;
+			if (heartCount - 1 < 0)
+				return false;
 			JLabel heart = heartList[heartCount - 1];
 			heart.setVisible(false);
 			heartCount--;
@@ -170,11 +178,13 @@ public class Stacker extends GamePanel {
 			heart.setVisible(true);
 			heartCount++;
 		}
-		
+
 		return true;
 
 	}
-
+	/**
+	 * Initializes objects, adds them to the frame, runs the images, calls the menu and instructions screens, and starts the background music
+	 */
 	public void setup() {
 		keyH = new KeyHandler();
 		mouseH = new MouseHandler();
@@ -207,11 +217,13 @@ public class Stacker extends GamePanel {
 		initHearts();
 
 	}
+
 	/**
 	 * Reading the instructions text file and displaying it onto a JPanel
 	 * 
 	 */
 	public void readAndDisplayInstructions() {
+		// Making it HTML
 		StringBuffer instructions = new StringBuffer("<html>");
 
 		try {
@@ -247,7 +259,7 @@ public class Stacker extends GamePanel {
 		this.add(instructionsPanel, BorderLayout.NORTH);
 		instructionsLabel.requestFocusInWindow();
 		repaint();
-		revalidate();
+		revalidate(); // used to ensure the panel displays
 		while (!mouseH.isClicked()) {
 			try {
 				TimeUnit.MILLISECONDS.sleep(100);
@@ -260,7 +272,10 @@ public class Stacker extends GamePanel {
 		mouseH.setClicked(false);
 		remove(instructionsPanel);
 	}
-
+	/**
+	 * Run 60 times a second
+	 * Updates the location of the cable, buildings
+	 */
 	public void update() {
 		if (keyH.isEscape()) {
 			keyH.setEscape(false);
@@ -319,7 +334,7 @@ public class Stacker extends GamePanel {
 			} else if (!checkCollision(prev.getX() + prev.getTopMiddleX(), prev.getY() + prev.getTopMiddleY())
 					&& (currentBuilding.getY() > 2000)) {
 				System.out.println("you failed");
-				if(!updateHearts(-1)) {
+				if (!updateHearts(-1)) {
 					drawFinished();
 				}
 				currentBuilding.setDrop(false);
@@ -327,98 +342,97 @@ public class Stacker extends GamePanel {
 
 		}
 	}
+	/**
+	 * Draws the finished menu and displays the final score
+	 */
 	public void drawFinished() {
-	    JPanel doneScreen = new JPanel() {
-	        @Override
-	        protected void paintComponent(Graphics g) {
-	            super.paintComponent(g);
-	            Graphics2D g2d = (Graphics2D) g.create();
-	            g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black
-	            g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
-	        }
-	    };
+		JPanel doneScreen = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g.create();
+				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black
+				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
+			}
+		};
 
-	    doneScreen.setOpaque(false); // Making the panel non-opaque to remove corners
-	    doneScreen.setLayout(null);
+		doneScreen.setOpaque(false); // Making the panel non-opaque to remove corners
+		doneScreen.setLayout(null);
 
-	    int mWidth = (int) (screenWidth / 2);
-	    int mHeight = (int) (screenHeight / 2);
-	    doneScreen.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
+		int mWidth = (int) (screenWidth / 2);
+		int mHeight = (int) (screenHeight / 2);
+		doneScreen.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);
 
-	    JLabel r = new JLabel("R to restart!");
-	    r.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 30)));
-	    r.setForeground(Color.white);
+		JLabel r = new JLabel("R to restart!");
+		r.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 30)));
+		r.setForeground(Color.white);
 
-	    int labelWidth = r.getPreferredSize().width;
-	    int labelHeight = r.getPreferredSize().height;
-	    int lx = (doneScreen.getWidth() - labelWidth) / 2;
-	    int ly = (doneScreen.getHeight() - labelHeight) / 2;
-	    r.setBounds(lx, ly, labelWidth, labelHeight);
+		int labelWidth = r.getPreferredSize().width;
+		int labelHeight = r.getPreferredSize().height;
+		int lx = (doneScreen.getWidth() - labelWidth) / 2;
+		int ly = (doneScreen.getHeight() - labelHeight) / 2;
+		r.setBounds(lx, ly, labelWidth, labelHeight);
 
-	    doneScreen.add(r);
+		doneScreen.add(r);
 
-	    add(doneScreen);
-	    doneScreen.requestFocus(true); // Request focus for keyboard input
-	    repaint(); 
-	    doneScreen.addKeyListener(keyH);
-	    while (!keyH.isR()) {
-	    	System.out.println("n loop");
+		add(doneScreen);
+		doneScreen.requestFocus(true); // Request focus for keyboard input
+		repaint();
+		doneScreen.addKeyListener(keyH); // adding the listener to ensure it works
+		while (!keyH.isR()) {
 			if (keyH.isDelete())
 				System.exit(0);
-			
-	    }
-	    keyH.setR(false);
-	    doneScreen.remove(r);
-	    repaint();
-	    resetAll();
-	    
+
+		}
+		keyH.setR(false);
+		doneScreen.remove(r);
+		repaint();
+		resetAll();
+
 	}
+	/**
+	 * Displays the final score, deletes the old window and creates a new Stacker object
+	 */
 	public void resetAll() {
-	    pausedScoreDisplay = new JLabel("Your Score: " + score);
-	    pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 23)));
-	    pausedScoreDisplay.setForeground(Color.white);
-	    
-	    // Calculate label dimensions
-	    int labelWidth = pausedScoreDisplay.getPreferredSize().width;
-	    int labelHeight = pausedScoreDisplay.getPreferredSize().height;
-	    
-	    // Calculate label position
-	    int lx = (int) ((screenWidth - labelWidth) / 2);
-	    int ly = (int) ((screenHeight - labelHeight) / 2);
+		pausedScoreDisplay = new JLabel("Your Score: " + score);
+		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 23)));
+		pausedScoreDisplay.setForeground(Color.white);
 
-	    pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
+		int labelWidth = pausedScoreDisplay.getPreferredSize().width;
+		int labelHeight = pausedScoreDisplay.getPreferredSize().height;
+		int lx = (int) ((screenWidth - labelWidth) / 2);
+		int ly = (int) ((screenHeight - labelHeight) / 2);
 
-	    add(pausedScoreDisplay);
+		pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
 
-	    setComponentZOrder(pausedScoreDisplay, 0); // Bring to front
-	    repaint();
-	    try {
-	        TimeUnit.SECONDS.sleep(4);
+		add(pausedScoreDisplay);
 
-	    } catch (Exception e) {
+		setComponentZOrder(pausedScoreDisplay, 0); // Bring to front
+		repaint();
+		try {
+			TimeUnit.SECONDS.sleep(4);
 
-	    }
+		} catch (Exception e) {
 
-	    bgMusic.close();
-	    JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-	    currentFrame.dispose();
+		}
 
-	    JFrame window = new JFrame();
-	    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    window.setResizable(false);
-	    window.setTitle("Chaos Constructor");
-	    window.setUndecorated(true);
-	    Stacker two = new Stacker();
-	    window.add(two);
-	    window.pack();
-	    window.setLocationRelativeTo(null);
-	    window.setVisible(true);
-	    two.startGameThread();
+		bgMusic.close();
+		JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		currentFrame.dispose();
+		// remaking the frame to restart the game
+		JFrame window = new JFrame();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setResizable(false);
+		window.setTitle("Chaos Constructor");
+		window.setUndecorated(true);
+		Stacker two = new Stacker();
+		window.add(two);
+		window.pack();
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+		two.startGameThread();
 	}
-
-
-
-
+	
 	public boolean checkCollision(double xo, double yo) {
 		int[] collisionValues = currentBuilding.collides(xo, yo, cable.getMode());
 		if (collisionValues != null) {
@@ -506,7 +520,9 @@ public class Stacker extends GamePanel {
 		return false;
 
 	}
-
+	/**
+	 * Animates the ground by calling ground act methods and passing counter
+	 */
 	public void animateGround() {
 		groundObjectList1.get(counter).act();
 		groundObjectList1.get(counter2).act();
@@ -520,7 +536,10 @@ public class Stacker extends GamePanel {
 		counter++;
 		counter2++;
 	}
-
+	/**
+	 * Creates a new building object and cuts it into the previous ones size
+	 * @return the new building object with the adjusted size
+	 */
 	public Building addBuilding() {
 
 		Building temp = new Building((int) cable.getEndX(), (int) cable.getEndY(), groundWidth * 5, groundHeight * 5);
@@ -536,7 +555,13 @@ public class Stacker extends GamePanel {
 		return temp;
 
 	}
-
+	/**
+	 * 
+	 * @param depth
+	 * @param startX
+	 * @param startY
+	 * @param list
+	 */
 	public void makePlatform(int depth, int startX, int startY, ArrayList<Ground> list) {
 		int amount = -1;
 		setLayout(null);
@@ -560,7 +585,10 @@ public class Stacker extends GamePanel {
 			}
 		}
 	}
-
+	/**
+	 * Sets the sound file and plays it
+	 * @param i is an element of the array in Sound.java
+	 */
 	public void playSE(int i) {
 
 		soundEffects.setFile(i);
@@ -568,7 +596,7 @@ public class Stacker extends GamePanel {
 	}
 
 	/**
-	 * Draws the starting menu
+	 * Draws the starting menu, plays the menu music
 	 */
 	public void drawMenu() {
 		bgMusic.setFile(2);
@@ -702,7 +730,7 @@ public class Stacker extends GamePanel {
 		pausedMenu.setOpaque(false); // Making the panel non-opaque to remove
 										// corners
 		pausedMenu.setLayout(null);
-		// calculating the width and height 
+		// calculating the width and height
 		int mWidth = (int) (screenWidth / 2);
 		int mHeight = (int) (screenHeight / 2);
 		pausedMenu.setBounds((int) (screenWidth - mWidth) / 2, (int) (screenHeight - mHeight) / 2, mWidth, mHeight);

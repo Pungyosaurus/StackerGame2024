@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
 /**
  * 
  * @author Jason Wong June 2024 A cable with pendulum movement!
- *
  */
 public class Cable extends GameObject {
 
 	private final int WIDTH, HEIGHT;
+	// DA = change in angle
 	private final double DA = 30, STARTINGANGLE = Math.PI / 4, d2a = 1;
 
 	private double da = DA;
@@ -50,11 +50,17 @@ public class Cable extends GameObject {
 		setSize(WIDTH, HEIGHT);
 		spriteAngle = STARTINGANGLE;
 		da = DA;
-		mode = (mode == 1) ? 0 : 1;
+		if (mode == 1) {
+			mode = 0;
+		} else {
+			mode = 1;
+		}
 		sizeChanger *= -1;
 		return false;
 	}
+
 	private double totalDa;
+
 	/**
 	 * Calculates the end position of the cable using Pythagorean Theorem with some
 	 * degree of error
@@ -63,7 +69,7 @@ public class Cable extends GameObject {
 //		getBoundingBox();
 
 		double diagonalLength = Math.sqrt(Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2));
-		double endAngle = spriteAngle + Math.PI / 4 ; // Starting angle position is 45 degrees
+		double endAngle = spriteAngle + Math.PI / 4; // Starting angle position is 45 degrees
 //		endX = getX() + getWidth() * Math.cos(endAngle) - getHeight() * Math.sin(endAngle);
 //		endY = getY() + getHeight() * Math.cos(endAngle) + getWidth() * Math.sin(endAngle);
 
@@ -160,8 +166,7 @@ public class Cable extends GameObject {
 		} catch (Exception e) {
 			g.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 		}
-		
-	
+
 	}
 
 	/**

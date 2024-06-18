@@ -7,7 +7,9 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 /**
- * Plays music and sound effects!
+ * 
+ * @author Jason Wong June 2024
+ * Plays music and sound effects
  */
 public class Sound {
 
@@ -67,8 +69,7 @@ public class Sound {
 	}
 
 	/**
-	 * Sets the volume
-	 * 
+	 * Checks the parameter and sets the volume
 	 * @param volume the desired volume level (0.0 to 1.0)
 	 */
 	public void setVolume(float volume) {

@@ -9,32 +9,43 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+/**
+ * 
+ * @author Jason Wong June 2024
+ * A runnable panel with paint and background features!
+ */
 public class GamePanel extends JPanel implements Runnable {
 
 	private static final int FPS = 60;
 	private JFrame frame;
 	private Thread gameThread;
-	protected boolean isPaused = false;
+	protected boolean isPaused = false; // not used
 
 	// Screen Settings
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public final static double screenWidth = screenSize.getWidth();
 	public static double screenHeight = screenSize.getHeight();
-
+	
+	// Background image
 	private BufferedImage backgroundImage;
 	private double backgroundY; // Y-coordinate for scrolling
-
+	/**
+	 * Setting up the panel
+	 */
 	public GamePanel() {
 		this.setPreferredSize(screenSize);
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.setFocusable(true);
 	}
-
+	/**
+	 * Meant to be overridden
+	 */
 	public void setup() {
 	}
-
+	/**
+	 * Starts the game thread, runs setup, and initializes the JFrame
+	 */
 	public void startGameThread() {
 		this.frame = new JFrame();
 		gameThread = new Thread(this);
@@ -42,6 +53,9 @@ public class GamePanel extends JPanel implements Runnable {
 		gameThread.start();
 	}
 
+	/**
+	 * Loops the game
+	 */
 	@Override
 	public void run() {
 		// Setting the frame cap to 60
@@ -68,12 +82,17 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 
 	}
-
+	/**
+	 * Sets the background image to be displayed and initializes backgroundY
+	 * @param backgroundImage is not a null BufferedImage
+	 */
 	public void setBackgroundImage(BufferedImage backgroundImage) {
 		this.backgroundImage = backgroundImage;
 		backgroundY = screenHeight - backgroundImage.getHeight();
 	}
-
+	/**
+	 * Paints the background image and scrolling feature
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 	    super.paintComponent(g);
@@ -81,10 +100,10 @@ public class GamePanel extends JPanel implements Runnable {
 	    if (backgroundImage != null) {
 	        int imageHeight = backgroundImage.getHeight();
 
-	        // If the image doesn't cover the entire screen vertically, fill the arear
+	        // If the image doesn't cover the entire screen vertically, fill the area
 	        if (backgroundY >= screenHeight) {
 	            g2.setColor(new Color(184, 147, 165, 255));
-	            g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
+	            g2.fillRect(0, 0, (int) screenWidth, (int) ((int) screenHeight + backgroundY));
 	        }
 
 	        g2.drawImage(backgroundImage, 0, (int) backgroundY, (int) screenWidth, (int) backgroundY + imageHeight, 0,
@@ -93,16 +112,24 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 
-
+	/**
+	 * 
+	 * @return the backgroundY
+	 */
 	public double getBackgroundY() {
 		return this.backgroundY;
 	}
-
+	/**
+	 * Sets the backgroundY to d
+	 * @param d should be a double
+	 */
 	public void setBackgroundY(double d) {
 		backgroundY = d;
 
 	}
-	
+	/**
+	 * Meant to be overridden (loops the game)
+	 */
 	public void update() {
 
 	}

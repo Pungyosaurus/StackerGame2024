@@ -461,13 +461,13 @@ public class Stacker extends GamePanel {
 				}
 				// add Sound
 				int rando = rand.nextInt(3);
-				System.out.println(currentBuilding.totalCutValues.length);
+				System.out.println(currentBuilding.getTotalCutValues().length);
 				int counter = 0;
-				for (int i = rando; i < currentBuilding.totalCutValues.length; i++) {
+				for (int i = rando; i < currentBuilding.getTotalCutValues().length; i++) {
 
-					if (currentBuilding.totalCutValues[i] >= 30) {
-						currentBuilding.totalCutValues[i] -= 30;
-						for (int y = 0; y < currentBuilding.totalCutValues.length; y++) {
+					if (currentBuilding.getTotalCutValues()[i] >= 30) {
+						currentBuilding.getTotalCutValues()[i] -= 30;
+						for (int y = 0; y < currentBuilding.getTotalCutValues().length; y++) {
 							if (y != i) {
 								collisionValues[i] = 0;
 							}
@@ -486,9 +486,9 @@ public class Stacker extends GamePanel {
 				if (!addedBorder) {
 					System.out.println("made it 2");
 
-					for (int i = 0; i < currentBuilding.totalCutValues.length; i++) {
-						if (currentBuilding.totalCutValues[i] > 0) {
-							currentBuilding.totalCutValues[i] -= currentBuilding.totalCutValues[i];
+					for (int i = 0; i < currentBuilding.getTotalCutValues().length; i++) {
+						if (currentBuilding.getTotalCutValues()[i] > 0) {
+							currentBuilding.getTotalCutValues()[i] -= currentBuilding.getTotalCutValues()[i];
 							addedBorder = true;
 							break;
 						}

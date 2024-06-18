@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
@@ -16,14 +15,15 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final int FPS = 60;
 	private JFrame frame;
 	private Thread gameThread;
-    protected boolean isPaused = false;
+	protected boolean isPaused = false;
 
 	// Screen Settings
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public final static double screenWidth = screenSize.getWidth();
 	public static double screenHeight = screenSize.getHeight();
-	
-    private BufferedImage backgroundImage;
+
+	private BufferedImage backgroundImage;
+	private double backgroundY; // Y-coordinate for scrolling
 
 	public GamePanel() {
 		this.setPreferredSize(screenSize);
@@ -33,7 +33,6 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void setup() {
-
 	}
 
 	public void startGameThread() {
@@ -41,7 +40,6 @@ public class GamePanel extends JPanel implements Runnable {
 		gameThread = new Thread(this);
 		setup();
 		gameThread.start();
-
 	}
 
 	@Override
@@ -62,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
 			lastTime = currentTime;
 
 			if (delta >= 1) {
-                update();
+				update();
 				repaint();
 				delta--;
 				drawCount++;
@@ -70,25 +68,43 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 
 	}
-	
+
 	public void setBackgroundImage(BufferedImage backgroundImage) {
-        this.backgroundImage = backgroundImage;
-    }
-	
-	
-	
+		this.backgroundImage = backgroundImage;
+		backgroundY = screenHeight - backgroundImage.getHeight();
+	}
+
+	@Override
 	public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+	    super.paintComponent(g);
+	    Graphics2D g2 = (Graphics2D) g;
+	    if (backgroundImage != null) {
+	        int imageHeight = backgroundImage.getHeight();
 
-        if (backgroundImage != null) {
-            g2.drawImage(backgroundImage, 0, 0, (int)screenWidth, (int)screenHeight, null);
-        }
-        
+	        // If the image doesn't cover the entire screen vertically, fill the arear
+	        if (backgroundY >= screenHeight) {
+	            g2.setColor(new Color(184, 147, 165, 255));
+	            g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
+	        }
+
+	        g2.drawImage(backgroundImage, 0, (int) backgroundY, (int) screenWidth, (int) backgroundY + imageHeight, 0,
+	                0, backgroundImage.getWidth(), imageHeight, null);
+	    }
+	}
+
+
+
+	public double getBackgroundY() {
+		return this.backgroundY;
+	}
+
+	public void setBackgroundY(double d) {
+		backgroundY = d;
 
 	}
+	
 	public void update() {
-		// TODO Auto-generated method stub
-		
+
 	}
+
 }

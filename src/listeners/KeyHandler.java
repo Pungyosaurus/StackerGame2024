@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 
 public class KeyHandler implements KeyListener {
 
-	private boolean spacebar, escape, delete, up, down;
+	private boolean spacebar, escape, delete, up, down, r;
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -21,7 +21,9 @@ public class KeyHandler implements KeyListener {
 		case 127:
 			delete = true;
 			break;
-		
+		case 114:
+			r = true;
+			break;
 
 		}
 	}
@@ -113,6 +115,20 @@ public class KeyHandler implements KeyListener {
 	 */
 	public void setUp(boolean up) {
 		this.up = up;
+	}
+
+	/**
+	 * @return the r
+	 */
+	public boolean isR() {
+		return r;
+	}
+
+	/**
+	 * @param r the r to set
+	 */
+	public void setR(boolean r) {
+		this.r = r;
 	}
 
 }

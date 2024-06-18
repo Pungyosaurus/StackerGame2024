@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 /**
  * 
- * @author Jason and Dave
+ * @author Dave
  * June 2024
  * Small blocks that form a platform for the game to be played on
  *

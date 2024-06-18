@@ -2,7 +2,11 @@ package listeners;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+/**
+ * 
+ * @author Jason Wong June 2024
+ * Tracks user mouse movement and clicks
+ */
 public class MouseHandler implements MouseListener{
 
 	private boolean clicked, pressed, released;

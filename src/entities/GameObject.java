@@ -14,7 +14,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
-
+/**
+ * 
+ * @author Refactored for Jason's and Dave's use
+ *
+ */
 public abstract class GameObject extends JComponent {
 	private Color c = Color.white;
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

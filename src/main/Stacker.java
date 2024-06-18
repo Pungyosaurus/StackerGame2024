@@ -141,8 +141,6 @@ public class Stacker extends GamePanel {
 
 	/**
 	 * Reset hearts if player wants to play again
-	 * 
-	 * @param paddle
 	 */
 	public void resetHearts() {
 		for (int i = 0; i < TOTAL_HEARTS; i++) {
@@ -167,7 +165,6 @@ public class Stacker extends GamePanel {
 	/**
 	 * Add and remove hearts depending on score
 	 * 
-	 * @param paddle
 	 * @param change pre: change must be either 1 or -1;
 	 */
 	public boolean updateHearts(int change) {

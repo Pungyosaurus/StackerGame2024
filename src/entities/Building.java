@@ -152,7 +152,7 @@ public class Building extends GameObject {
 	}
 	
 	/**
-	 * overloaded constructor that does'nt include direction for setting drop speed and location
+	 * overloaded constructor that doesn't include direction for setting drop speed and location
 	 * @param dx
 	 * @param dy
 	 */

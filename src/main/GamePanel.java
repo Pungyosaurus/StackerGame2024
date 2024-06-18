@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 	/**
-	 * Meant to be overridden
+	 * Called before the game starts, meant to be overridden
 	 */
 	public void setup() {
 	}

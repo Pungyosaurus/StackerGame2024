@@ -65,12 +65,13 @@ public class Cable extends GameObject {
 	 * degree of error
 	 */
 	public void calculateEndPosition() {
-
+		// Calculating the diagonal using pythagorean theorem
 		double diagonalLength = Math.sqrt(Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2));
 		double endAngle = spriteAngle + Math.PI / 4; // Starting angle position is 45 degrees
 //		endX = getX() + getWidth() * Math.cos(endAngle) - getHeight() * Math.sin(endAngle);
 //		endY = getY() + getHeight() * Math.cos(endAngle) + getWidth() * Math.sin(endAngle);
 
+		// translating the points
 		endX = getX() + diagonalLength * Math.cos(endAngle);
 		endY = getY() + diagonalLength * Math.sin(endAngle);
 
@@ -82,19 +83,20 @@ public class Cable extends GameObject {
 	 */
 	@Override
 	public void act() {
+		
 		if (da < 0) {
 			direction = true;
-			if (spriteAngle < Math.PI / 4)
+			if (spriteAngle < Math.PI / 4) // if the cable is going against gravity, slow down
 				da += d2a;
-			else
+			else			// if the cable is going with gravity, speed up
 				da -= d2a;
 		} else if (da > 0) {
 			direction = false;
 			if (spriteAngle > Math.PI / 4)
-				da -= d2a;
-			else
+				da -= d2a; // if the cable is going against gravity, slow down
+			else			// if the cable is going with gravity, speed up
 				da += d2a;
-		} else if (!direction)
+		} else if (!direction) // accounting for all cases, da may = 0
 			da -= d2a;
 		else
 			da += d2a;
@@ -102,12 +104,13 @@ public class Cable extends GameObject {
 		setSize(getWidth() + sizeChanger * (int) (da / 2), getHeight());
 		// Rotating the image
 		spriteAngle += Math.toRadians(da / 15);
+		// getting the end position after movement to update the building position
 		calculateEndPosition();
 
 	}
 
 	/**
-	 * Overriding the paint method because AffineTransform bounds were not working
+	 * Overriding the paint method because AffineTransform bounds were not working 
 	 * Uses graphics to rotate the image
 	 */
 	@Override
@@ -115,10 +118,12 @@ public class Cable extends GameObject {
 		Graphics2D g2d = (Graphics2D) g;
 		try {
 			if (spriteAngle != 0) {
+				// using a temporary rotation to get the updated bounds
 				AffineTransform rotation = AffineTransform.getRotateInstance(spriteAngle);
 				Rectangle rotatedBounds = rotation
 						.createTransformedShape(new Rectangle(0, 0, sprite.getWidth(), sprite.getHeight())).getBounds();
 				g2d.setClip(rotatedBounds);
+				// using graphics to rotate the image
 				g2d.rotate(spriteAngle);
 				g2d.drawImage(sprite, 0, 0, getWidth(), getHeight(), this);
 			}

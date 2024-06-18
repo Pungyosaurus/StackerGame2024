@@ -69,7 +69,7 @@ public class Sound {
 	}
 
 	/**
-	 * Checks the parameter and sets the volume
+	 * Checks if parameter is in range and sets the volume
 	 * @param volume the desired volume level (0.0 to 1.0)
 	 */
 	public void setVolume(float volume) {

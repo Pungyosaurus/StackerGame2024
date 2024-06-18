@@ -382,8 +382,12 @@ public class Stacker extends GamePanel {
 		while (!keyH.isR()) {
 			if (keyH.isDelete())
 				System.exit(0);
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
 
-		}
+			} catch (Exception e) {
+
+			}		}
 		keyH.setR(false);
 		doneScreen.remove(r);
 		repaint();

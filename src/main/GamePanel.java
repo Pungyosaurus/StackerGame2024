@@ -23,8 +23,8 @@ public class GamePanel extends JPanel implements Runnable {
 
 	// Screen Settings
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public final static double screenWidth = screenSize.getWidth();
-	public static double screenHeight = screenSize.getHeight();
+	public static final  double screenWidth = screenSize.getWidth();
+	public static final double screenHeight = screenSize.getHeight();
 	
 	// Background image
 	private BufferedImage backgroundImage;
@@ -64,7 +64,6 @@ public class GamePanel extends JPanel implements Runnable {
 		long lastTime = System.nanoTime();
 		long currentTime;
 		long timer = 0;
-		int drawCount = 0;
 
 		// Game loop
 		while (gameThread != null) {
@@ -77,7 +76,6 @@ public class GamePanel extends JPanel implements Runnable {
 				update();
 				repaint();
 				delta--;
-				drawCount++;
 			}
 		}
 

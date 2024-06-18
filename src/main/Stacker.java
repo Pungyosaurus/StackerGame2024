@@ -33,7 +33,12 @@ import entities.GameObject;
 import entities.Ground;
 import listeners.KeyHandler;
 import listeners.MouseHandler;
-
+/**
+ * 
+ * @author Jason and Dave June 2024
+ * A fun, simple isometric stacker game
+ *
+ */
 public class Stacker extends GamePanel {
 
 	private final int TOTAL_HEARTS = 7;
@@ -256,11 +261,13 @@ public class Stacker extends GamePanel {
 		instructionsPanel.setOpaque(false);
 		instructionsPanel.add(instructionsLabel, BorderLayout.CENTER);
 		instructionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.add(instructionsPanel, BorderLayout.NORTH);
+		// using borderlayout to center it instead of doing math
+		add(instructionsPanel, BorderLayout.NORTH);
 		instructionsLabel.requestFocusInWindow();
 		repaint();
 		revalidate(); // used to ensure the panel displays
 		while (!mouseH.isClicked()) {
+			// breaking out when mouse is clicked
 			try {
 				TimeUnit.MILLISECONDS.sleep(100);
 			} catch (InterruptedException e) {
@@ -287,7 +294,7 @@ public class Stacker extends GamePanel {
 			currentBuilding = addBuilding();
 			cable.changeMode();
 		}
-
+		// Swinging the cable
 		cable.act();
 		animateGround();
 		animateGround();
@@ -298,6 +305,7 @@ public class Stacker extends GamePanel {
 			for (int i = 0; i < stack.size(); i++) {
 				Building building = stack.get(i);
 				building.setY(building.getY() + BUILDING_MOVEMENT_Y_SPEED);
+				// Sliding the background
 				setBackgroundY(getBackgroundY() + BUILDING_MOVEMENT_Y_SPEED / 2);
 			}
 
@@ -413,6 +421,7 @@ public class Stacker extends GamePanel {
 
 		setComponentZOrder(pausedScoreDisplay, 0); // Bring to front
 		repaint();
+		// Displaying the final score before removing
 		try {
 			TimeUnit.SECONDS.sleep(4);
 
@@ -606,6 +615,7 @@ public class Stacker extends GamePanel {
 		bgMusic.setFile(2);
 		bgMusic.play();
 		bgMusic.loop();
+		// blurring the background 
 		JPanel overlay = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -686,11 +696,12 @@ public class Stacker extends GamePanel {
 		setComponentZOrder(pausedMenu, 0); // Bring to front
 		repaint();
 		while (!keyH.isEscape()) {
-
+			// volume up
 			if (keyH.isUp()) {
 				keyH.setUp(false);
 				bgMusic.setVolume(bgMusic.getVolume() + 0.1f);
 			}
+			// volume down
 			if (keyH.isDown()) {
 				keyH.setDown(false);
 				bgMusic.setVolume((bgMusic.getVolume() - 0.1f));
@@ -731,8 +742,7 @@ public class Stacker extends GamePanel {
 			}
 		};
 
-		pausedMenu.setOpaque(false); // Making the panel non-opaque to remove
-										// corners
+		pausedMenu.setOpaque(false); // Making the panel non-opaque to remove corners
 		pausedMenu.setLayout(null);
 		// calculating the width and height
 		int mWidth = (int) (screenWidth / 2);

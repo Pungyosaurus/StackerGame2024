@@ -237,18 +237,20 @@ public class Stacker extends GamePanel {
 
 			String line;
 			while ((line = br.readLine()) != null) {
+				// adding a line break so it displays properly
 				instructions.append(line).append("<br>");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		instructions.append("</html>");
-
+		// adding the instructions into a JLabel
 		instructionsLabel = new JLabel(instructions.toString());
 		instructionsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 		instructionsLabel.setForeground(Color.WHITE);
 		instructionsLabel.setVerticalAlignment(SwingConstants.TOP);
-
+		
+		// Panel with grey overlay to read instructions
 		JPanel instructionsPanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -306,7 +308,7 @@ public class Stacker extends GamePanel {
 				Building building = stack.get(i);
 				building.setY(building.getY() + BUILDING_MOVEMENT_Y_SPEED);
 				// Sliding the background
-				setBackgroundY(getBackgroundY() + BUILDING_MOVEMENT_Y_SPEED / 2);
+				setBackgroundY(getBackgroundY() + BUILDING_MOVEMENT_Y_SPEED / 5);
 			}
 
 			for (Ground ground : groundObjectList1) {
@@ -430,6 +432,8 @@ public class Stacker extends GamePanel {
 		}
 
 		bgMusic.close();
+		
+		// getting the current frame and deleting it
 		JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 		currentFrame.dispose();
 		// remaking the frame to restart the game
@@ -438,6 +442,8 @@ public class Stacker extends GamePanel {
 		window.setResizable(false);
 		window.setTitle("Chaos Constructor");
 		window.setUndecorated(true);
+		
+		// restarting the game from scratch
 		Stacker two = new Stacker();
 		window.add(two);
 		window.pack();
@@ -612,6 +618,8 @@ public class Stacker extends GamePanel {
 	 * Draws the starting menu, plays the menu music
 	 */
 	public void drawMenu() {
+		
+		// Playing loading music
 		bgMusic.setFile(2);
 		bgMusic.play();
 		bgMusic.loop();
@@ -622,7 +630,7 @@ public class Stacker extends GamePanel {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
 				g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-				g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black // color
+				g2d.setColor(new Color(0, 0, 0, 190)); // Semi-transparent black color
 				g2d.fillRect(0, 0, getWidth(), getHeight());
 			}
 		};
@@ -630,6 +638,7 @@ public class Stacker extends GamePanel {
 		overlay.setBounds(0, 0, (int) screenWidth, (int) screenHeight);
 		add(overlay);
 
+		// Adding and positioning the title
 		JLabel title = new JLabel("Chaos Constructor");
 		title.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 21)));
 		title.setForeground(Color.white);
@@ -640,6 +649,7 @@ public class Stacker extends GamePanel {
 		title.setBounds(lx, ly, labelWidth, labelHeight);
 		overlay.add(title);
 
+		// positioning click to play labels
 		JLabel click = new JLabel("Click to play!");
 		click.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 30)));
 		click.setForeground(Color.white);
@@ -675,11 +685,14 @@ public class Stacker extends GamePanel {
 	 * the score and dialogue
 	 */
 	public void openPausedMenu() {
+		
+		// Changing adio
 		bgMusic.pause();
 		bgMusic.setFile(1);
 		bgMusic.play();
 		bgMusic.setVolume((float) 0.7);
 
+		// Adding the score display and positioning it
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
 		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 15)));
 		pausedScoreDisplay.setForeground(Color.white);
@@ -693,7 +706,8 @@ public class Stacker extends GamePanel {
 		pausedMenu.add(pausedScoreDisplay);
 
 		add(pausedMenu);
-		setComponentZOrder(pausedMenu, 0); // Bring to front
+		// Bringing the menu to the front (not sure if this does anything, it varies per computer)
+		setComponentZOrder(pausedMenu, 0); 
 		repaint();
 		while (!keyH.isEscape()) {
 			// volume up
@@ -720,6 +734,7 @@ public class Stacker extends GamePanel {
 		keyH.setEscape(false);
 		remove(pausedMenu);
 		repaint();
+		// Changing audio tracks
 		bgMusic.close();
 		bgMusic.setFile(0);
 		bgMusic.play();
@@ -736,8 +751,7 @@ public class Stacker extends GamePanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black
-														// color
+				g2d.setColor(new Color(0, 0, 0, 210)); // Semi-transparent black color
 				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
 			}
 		};
@@ -751,7 +765,8 @@ public class Stacker extends GamePanel {
 
 		int labelWidth = (int) (pausedMenu.getWidth() / 2);
 		int labelHeight = (int) (pausedMenu.getHeight() / 4);
-
+		
+		// adding options to unpause and quit the game
 		resume = new JLabel("Esc to Resume");
 		resume.setFont(new Font("Arial", Font.BOLD, (int) (pausedMenu.getWidth() / 25)));
 		resume.setForeground(Color.white);

@@ -33,7 +33,9 @@ public class MouseHandler implements MouseListener{
 	}
 
 	
-	
+	/**
+	 * Detects when the mouse is clicked
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		setClicked(true);

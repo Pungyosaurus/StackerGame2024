@@ -70,13 +70,14 @@ public class Sound {
 
 	/**
 	 * Checks if parameter is in range and sets the volume
-	 * @param volume the desired volume level (0.0 to 1.0)
+	 * @param v the desired volume level (0.0 to 1.0)
 	 */
-	public void setVolume(float volume) {
+	public void setVolume(float v) {
 		// Checking if volume is in range
-		this.volume = Math.max(0.0f, Math.min(1.0f, volume));
+		this.volume = Math.max(0.0f, Math.min(1.0f, v));
 
 		if (clip != null) {
+			// Changing the volume
 			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 			float range = gainControl.getMaximum() - gainControl.getMinimum();
 			float gain = (range * this.volume) + gainControl.getMinimum();

@@ -369,6 +369,7 @@ public class Stacker extends GamePanel {
 		};
 
 		doneScreen.setOpaque(false); // Making the panel non-opaque to remove corners
+		// Manually setting the bounds and positioning
 		doneScreen.setLayout(null);
 
 		int mWidth = (int) (screenWidth / 2);
@@ -378,7 +379,7 @@ public class Stacker extends GamePanel {
 		JLabel r = new JLabel("R to restart!");
 		r.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 30)));
 		r.setForeground(Color.white);
-
+		// Sizing the label
 		int labelWidth = r.getPreferredSize().width;
 		int labelHeight = r.getPreferredSize().height;
 		int lx = (doneScreen.getWidth() - labelWidth) / 2;
@@ -391,17 +392,23 @@ public class Stacker extends GamePanel {
 		doneScreen.requestFocus(true); // Request focus for keyboard input
 		repaint();
 		doneScreen.addKeyListener(keyH); // adding the listener to ensure it works
+		
 		while (!keyH.isR()) {
+			// closing the game if delete is pressed
 			if (keyH.isDelete())
 				System.exit(0);
+			
+			// adding a delay to reduce the cpu usage (doesn't have to be checked 1000 times a second)
 			try {
 				TimeUnit.MILLISECONDS.sleep(100);
 
 			} catch (Exception e) {
 
-			}		}
+			}	
+		}
 		keyH.setR(false);
 		doneScreen.remove(r);
+		// Repainting to update the screen
 		repaint();
 		resetAll();
 
@@ -410,6 +417,7 @@ public class Stacker extends GamePanel {
 	 * Displays the final score, deletes the old window and creates a new Stacker object
 	 */
 	public void resetAll() {
+		// Reusing the same scoredisplay object
 		pausedScoreDisplay = new JLabel("Your Score: " + score);
 		pausedScoreDisplay.setFont(new Font("Arial", Font.BOLD, (int) (screenWidth / 23)));
 		pausedScoreDisplay.setForeground(Color.white);
@@ -422,8 +430,8 @@ public class Stacker extends GamePanel {
 		pausedScoreDisplay.setBounds(lx, ly, labelWidth, labelHeight);
 
 		add(pausedScoreDisplay);
-
-		setComponentZOrder(pausedScoreDisplay, 0); // Bring to front
+		// Bring to front so it displays
+		setComponentZOrder(pausedScoreDisplay, 0); 
 		repaint();
 		// Displaying the final score before removing
 		try {
@@ -657,6 +665,7 @@ public class Stacker extends GamePanel {
 		click.setForeground(Color.white);
 		labelWidth = (int) (screenWidth / 4.5);
 		lx = (int) ((screenWidth - labelWidth) / 2);
+		// Moving this label down
 		ly += screenHeight / 3;
 		click.setBounds(lx, ly, labelWidth, labelHeight);
 		overlay.add(click);
@@ -667,6 +676,7 @@ public class Stacker extends GamePanel {
 		// Add ground objects and wait for input
 		// revalidate(); // May be needed on some systems
 		while (!mouseH.isClicked()) {
+			// waiting until the user clicks mouse
 			try {
 				TimeUnit.MILLISECONDS.sleep(100);
 			} catch (InterruptedException e) {
@@ -688,7 +698,7 @@ public class Stacker extends GamePanel {
 	 */
 	public void openPausedMenu() {
 		
-		// Changing adio
+		// Changing audio
 		bgMusic.pause();
 		bgMusic.setFile(1);
 		bgMusic.play();
@@ -745,7 +755,8 @@ public class Stacker extends GamePanel {
 	}
 
 	/**
-	 * Creates the JLabels for the pausing menu and adds an translucent overlay
+	 * Creates the JLabels for the pausing menu and adds an translucent overlay 
+	 * The objects don't need to be recreated each time they are used
 	 */
 	public void setUpJLabel() {
 		pausedMenu = new JPanel() {
@@ -757,8 +768,8 @@ public class Stacker extends GamePanel {
 				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 120, 120);
 			}
 		};
-
-		pausedMenu.setOpaque(false); // Making the panel non-opaque to remove corners
+		// Making the panel non-opaque to remove corners
+		pausedMenu.setOpaque(false); 
 		pausedMenu.setLayout(null);
 		// calculating the width and height
 		int mWidth = (int) (screenWidth / 2);
